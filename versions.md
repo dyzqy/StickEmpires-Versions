@@ -1,3 +1,8 @@
+## version 1.17
+- Modifications to armory screen items.
+- Now if FPS is very low, the game will automatically change size(only on web).
+- Screen can't go out of bounds anymore.
+
 ## version 1.16
 - New Halloween map!
 

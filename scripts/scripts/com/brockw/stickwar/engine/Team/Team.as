@@ -1022,10 +1022,8 @@ package com.brockw.stickwar.engine.Team
                   var isDebug:Boolean = false;
                   var queue:Array = null;
                   var m2:Number = NaN;
-                  var time2:int = 0;
                   var unit:String = null;
                   var controllingTeam:Team = null;
-                  var time:int = getTimer();
                   if(game.map.hills.length != 0)
                   {
                         controllingTeam = game.map.hills[0].getControllingTeam(game);
@@ -1096,7 +1094,6 @@ package com.brockw.stickwar.engine.Team
                   this._castleDefence.update(game);
                   this._ai.update(game);
                   this.statue.update(game);
-                  time2 = getTimer();
                   if(this._units.length != 0)
                   {
                         this._forwardUnit = null;
@@ -1124,7 +1121,6 @@ package com.brockw.stickwar.engine.Team
                   {
                         this._forwardUnit = null;
                   }
-                  trace("Unit updates: ",getTimer() - time2);
                   for(unit in this._deadUnits)
                   {
                         this._deadUnits[unit].update(game);
@@ -1143,7 +1139,6 @@ package com.brockw.stickwar.engine.Team
                   u.arg0 = this.homeX - this.direction * game.map.screenWidth / 3;
                   u.arg1 = game.map.height / 2;
                   u.execute(game);
-                  trace("Team update:",getTimer() - time);
             }
             
             public function drawTimerOverlay(mc:MovieClip, overlay:MovieClip, fraction:Number) : void

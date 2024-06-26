@@ -188,11 +188,18 @@ package com.brockw.stickwar.engine.units
                               isDead = true;
                         }
                   }
-                  if(!isDead && MovieClip(_mc.mc).currentFrame == MovieClip(_mc.mc).totalFrames)
+                  if(isDead)
                   {
-                        MovieClip(_mc.mc).gotoAndStop(1);
+                        Util.animateMovieClip(_mc,0);
                   }
-                  Util.animateMovieClip(_mc,0);
+                  else
+                  {
+                        if(MovieClip(_mc.mc).currentFrame == MovieClip(_mc.mc).totalFrames)
+                        {
+                              MovieClip(_mc.mc).gotoAndStop(1);
+                        }
+                        MovieClip(_mc.mc).nextFrame();
+                  }
                   Swordwrath.setItem(_swordwrath(mc),team.loadout.getItem(this.type,MarketItem.T_WEAPON),"","");
             }
             

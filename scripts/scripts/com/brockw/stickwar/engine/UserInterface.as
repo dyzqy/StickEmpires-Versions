@@ -359,6 +359,24 @@ package com.brockw.stickwar.engine
                         speed = (this.gameScreen.game.targetScreenX - this.gameScreen.game.screenX) * 0.05 * 1;
                   }
                   this.gameScreen.game.screenX += speed;
+                  if(this.gameScreen.game.screenX > this.gameScreen.game.background.maxScreenX())
+                  {
+                        this.gameScreen.game.screenX = this.gameScreen.game.targetScreenX = this.gameScreen.game.background.maxScreenX();
+                  }
+                  if(this.gameScreen.game.screenX < this.gameScreen.game.background.minScreenX())
+                  {
+                        this.gameScreen.game.screenX = this.gameScreen.game.targetScreenX = this.gameScreen.game.background.minScreenX();
+                  }
+                  if(this.gameScreen.game.inEconomy)
+                  {
+                        this.gameScreen.game.screenX = this.gameScreen.team.homeX - this.gameScreen.team.direction * this.gameScreen.game.map.screenWidth;
+                  }
+                  this.gameScreen.game.battlefield.x = -this.gameScreen.game.screenX;
+                  this.gameScreen.game.fogOfWar.update(this.gameScreen.game);
+                  this.gameScreen.game.cursorSprite.x = -this.gameScreen.game.screenX;
+                  this.gameScreen.game.fogOfWar.x = -this.gameScreen.game.screenX;
+                  this.gameScreen.game.bloodManager.x = -this.gameScreen.game.screenX;
+                  this.gameScreen.game.background.update(this.gameScreen.game);
                   if(Math.abs(this.lastSentScreenPosition - this.gameScreen.game.screenX) > 100)
                   {
                         m = new ScreenPositionUpdateMove();

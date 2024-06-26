@@ -218,7 +218,7 @@ package com.brockw.stickwar.engine
                   this.tipBox.mouseEnabled = false;
                   this._rain.mouseChildren = false;
                   ++main.loadingFraction;
-                  this._spatialHash = new SpatialHash(this,this.map.width,this.map.height,this.map.width / 50,this.map.height / 5,100);
+                  this._spatialHash = new SpatialHash(this,this.map.width,this.map.height,25,this.map.height / 10,100);
                   ++main.loadingFraction;
                   if(!this._unitFactory)
                   {
@@ -464,24 +464,6 @@ package com.brockw.stickwar.engine
                         this.mouseOverUnit.mouseIsOver = true;
                   }
                   this.sortZ(this.battlefield);
-                  if(this.screenX > this._background.maxScreenX())
-                  {
-                        this.screenX = this.targetScreenX = this._background.maxScreenX();
-                  }
-                  if(this.screenX < this._background.minScreenX())
-                  {
-                        this.screenX = this.targetScreenX = this._background.minScreenX();
-                  }
-                  if(this.inEconomy)
-                  {
-                        this.screenX = gameScreen.team.homeX - gameScreen.team.direction * this.map.screenWidth;
-                  }
-                  this._battlefield.x = -this.screenX;
-                  this.fogOfWar.update(this);
-                  this._cursorSprite.x = -this.screenX;
-                  this.fogOfWar.x = -this.screenX;
-                  this._bloodManager.x = -this.screenX;
-                  this._background.update(this);
                   this._teamA.update(this);
                   this._teamB.update(this);
                   this.team.updateButtonOverPost(this);
@@ -908,6 +890,16 @@ package com.brockw.stickwar.engine
             public function set soundManager(value:SoundManager) : void
             {
                   this._soundManager = value;
+            }
+            
+            public function get cursorSprite() : Entity
+            {
+                  return this._cursorSprite;
+            }
+            
+            public function set cursorSprite(value:Entity) : void
+            {
+                  this._cursorSprite = value;
             }
       }
 }

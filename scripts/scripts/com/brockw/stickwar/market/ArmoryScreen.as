@@ -170,7 +170,7 @@ package com.brockw.stickwar.market
                               {
                                     rate = 0.3;
                               }
-                              unitCard.y += (157 + (this.visibleCount++ - this.scrollIndex) * 147 - unitCard.y) * rate;
+                              unitCard.y += (143 + (this.visibleCount++ - this.scrollIndex) * 147 - unitCard.y) * rate;
                               unitCard.visible = true;
                         }
                         else
@@ -187,6 +187,34 @@ package com.brockw.stickwar.market
                   var unitCard:ArmoryUnitCard = null;
                   var t:int = 0;
                   var card:ArmoryUnitCard = null;
+                  var newIndex:int = 0;
+                  this.mc.downButton.enabled = true;
+                  this.mc.upButton.enabled = true;
+                  this.mc.upButton.mouseEnabled = true;
+                  this.mc.downButton.mouseEnabled = true;
+                  this.mc.downButton.visible = true;
+                  this.mc.upButton.visible = true;
+                  this.mc.upDisabled.visible = false;
+                  this.mc.downDisabled.visible = false;
+                  newIndex = this.scrollIndex + 2;
+                  newIndex = Math.min(this.visibleCount - 3,newIndex);
+                  newIndex = Math.max(newIndex,0);
+                  if(newIndex == this.scrollIndex)
+                  {
+                        this.mc.downButton.enabled = false;
+                        this.mc.downButton.mouseEnabled = false;
+                        this.mc.downButton.visible = false;
+                        this.mc.downDisabled.visible = true;
+                  }
+                  newIndex = this.scrollIndex - 2;
+                  newIndex = Math.max(newIndex,0);
+                  if(newIndex == this.scrollIndex)
+                  {
+                        this.mc.upButton.enabled = false;
+                        this.mc.upButton.mouseEnabled = false;
+                        this.mc.upButton.visible = false;
+                        this.mc.upDisabled.visible = true;
+                  }
                   this.mc.empiresPoints.text = "" + Math.round(this.empirePointsToShow);
                   this.empirePointsToShow += (this.main.empirePoints - this.empirePointsToShow) * 0.1;
                   this.updateUnitCards(true);

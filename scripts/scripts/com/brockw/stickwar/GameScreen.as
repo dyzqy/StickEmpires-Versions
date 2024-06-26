@@ -178,10 +178,11 @@ package com.brockw.stickwar
                         {
                               if(this.slowLevel == S_REALLY_SLOW)
                               {
-                                    if(this.skipHeuristic < 5)
+                                    if(this.skipHeuristic < 5 && getTimer() - this.lastSwitchInQuality > 60000)
                                     {
                                           this.slowLevel = S_SLOW;
                                           this.hasChanged = true;
+                                          this.lastSwitchInQuality = getTimer();
                                     }
                               }
                               else if(this.slowLevel == S_SLOW)
@@ -190,56 +191,52 @@ package com.brockw.stickwar
                                     {
                                           this.slowLevel = S_REALLY_SLOW;
                                           this.hasChanged = true;
+                                          this.lastSwitchInQuality = getTimer();
                                     }
-                                    if(this.skipHeuristic < 1)
+                                    if(this.skipHeuristic < 1 && getTimer() - this.lastSwitchInQuality > 60000)
                                     {
                                           this.slowLevel = S_GOOD;
                                           this.hasChanged = true;
+                                          this.lastSwitchInQuality = getTimer();
                                     }
                               }
                               else if(this.skipHeuristic > 5)
                               {
                                     this.slowLevel = S_SLOW;
                                     this.hasChanged = true;
+                                    this.lastSwitchInQuality = getTimer();
                               }
                         }
-                        if(this.hasChanged && getTimer() - this.lastSwitchInQuality > 15 * 1000)
+                        if(this.game.frame == 30 * 15)
                         {
-                              if(this.isFirstSwitch)
+                              if(this.slowLevel == S_REALLY_SLOW)
                               {
                                     if(ExternalInterface.available)
                                     {
-                                          result = ExternalInterface.call("changeSize",false);
+                                          result = ExternalInterface.call("changeSize",true);
                                     }
-                                    trace("JUDGEMENT IS: ",this.slowLevel);
+                                    this._hasMovingBackground = false;
+                                    this.hasScreenReduction = true;
                               }
+                              else if(ExternalInterface.available)
+                              {
+                                    result = ExternalInterface.call("changeSize",false);
+                              }
+                        }
+                        if(this.hasChanged)
+                        {
                               this.hasChanged = false;
                               if(this.slowLevel == S_GOOD)
                               {
                                     this._hasEffects = true;
                                     stage.quality = "HIGH";
-                                    this.lastSwitchInQuality = getTimer();
                               }
                               else
                               {
                                     stage.quality = "LOW";
                                     this._hasEffects = false;
-                                    this.lastSwitchInQuality = getTimer();
-                                    if(this.isFirstSwitch)
-                                    {
-                                          if(this.slowLevel == S_REALLY_SLOW)
-                                          {
-                                                if(ExternalInterface.available)
-                                                {
-                                                      result = ExternalInterface.call("changeSize",true);
-                                                }
-                                                this._hasMovingBackground = false;
-                                                this.hasScreenReduction = true;
-                                          }
-                                    }
                               }
                               trace("QUALITY: ",this.slowLevel);
-                              this.isFirstSwitch = false;
                         }
                         evt.updateAfterEvent();
                         this.consecutiveSkips = 0;
