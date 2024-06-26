@@ -93,29 +93,32 @@ package com.brockw.stickwar.engine
                   var piece:int = 0;
                   for(var i:int = 0; i < this.layers.length; i++)
                   {
-                        p = game.screenX / (this.mapLength - stage.stageWidth);
-                        dest = -p * (this.layers[i].width - stage.stageWidth);
-                        piece = Math.floor(game.screenX / this.mapLength * this.splitLayers[i].length);
-                        if(piece >= this.splitLayers[i].length)
+                        if(game.gameScreen.hasMovingBackground || i == this.layers.length - 1)
                         {
-                              piece = this.splitLayers[i].length - 1;
-                        }
-                        if(piece < 0)
-                        {
-                              piece = 0;
-                        }
-                        if(piece != this.splitLayersOnScreen[i])
-                        {
-                              if(this.splitLayersOnScreen[i] != -1)
+                              p = game.screenX / (this.mapLength - stage.stageWidth);
+                              dest = -p * (this.layers[i].width - stage.stageWidth);
+                              piece = Math.floor(game.screenX / this.mapLength * this.splitLayers[i].length);
+                              if(piece >= this.splitLayers[i].length)
                               {
-                                    this.removeAround(i,this.splitLayersOnScreen[i]);
+                                    piece = this.splitLayers[i].length - 1;
                               }
-                              this.addAround(i,piece,dest);
-                              this.splitLayersOnScreen[i] = piece;
-                        }
-                        else
-                        {
-                              this.moveAround(i,piece,dest);
+                              if(piece < 0)
+                              {
+                                    piece = 0;
+                              }
+                              if(piece != this.splitLayersOnScreen[i])
+                              {
+                                    if(this.splitLayersOnScreen[i] != -1)
+                                    {
+                                          this.removeAround(i,this.splitLayersOnScreen[i]);
+                                    }
+                                    this.addAround(i,piece,dest);
+                                    this.splitLayersOnScreen[i] = piece;
+                              }
+                              else
+                              {
+                                    this.moveAround(i,piece,dest);
+                              }
                         }
                   }
             }

@@ -45,7 +45,6 @@ package com.brockw.stickwar.engine.Team.Order
                   this.addNewUpgrade(CASTLE_ARCHER_1,game.xml.xml.Order.Tech.castleArchers1,new Bitmap(new castleArcherLevel1Bitmap()),81);
                   this.addNewUpgrade(CASTLE_ARCHER_2,game.xml.xml.Order.Tech.castleArchers2,new Bitmap(new castleArcherLevel2Bitmap()),81);
                   this.addNewUpgrade(CASTLE_ARCHER_3,game.xml.xml.Order.Tech.castleArchers3,new Bitmap(new castleArcherLevel3Bitmap()),81);
-                  this.addNewUpgrade(CASTLE_ARCHER_4,game.xml.xml.Order.Tech.castleArchers4,new Bitmap(new castleArcherLevel4Bitmap()),81);
                   this.addNewUpgrade(SHIELD_BASH,game.xml.xml.Order.Tech.speartonShieldBash,new Bitmap(new shieldHitBitmap()),81);
                   this.addNewUpgrade(STATUE_HEALTH,game.xml.xml.Order.Tech.statueHealth,new Bitmap(new statueHealthBitmap()),81);
                   this.addNewUpgrade(MINER_SPEED,game.xml.xml.Order.Tech.minerSpeed,new Bitmap(new minerBagBitmap()),81);

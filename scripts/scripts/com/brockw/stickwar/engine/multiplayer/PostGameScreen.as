@@ -21,6 +21,8 @@ package com.brockw.stickwar.engine.multiplayer
             public static const M_MULTIPLAYER:int = 1;
             
             public static const M_SINGLEPLAYER:int = 2;
+            
+            public static const M_SYNC_ERROR:int = 3;
              
             
             private var main:BaseMain;
@@ -105,6 +107,15 @@ package com.brockw.stickwar.engine.multiplayer
                   if(this.mode == PostGameScreen.M_CAMPAIGN)
                   {
                         this.mc.exit.text.text = "Continue";
+                  }
+                  else if(this.mode == PostGameScreen.M_SYNC_ERROR)
+                  {
+                        this.mc.exit.text.text = "Continue";
+                        this.mc.replay.text = "If this continues to happen try installing the latest version of flash player";
+                        this.displayGraph.graphics.clear();
+                        this.mc.saveReplay.visible = false;
+                        this.mc.gameStatus.gotoAndStop("syncError");
+                        this.mc.background.gotoAndStop("chaosVictory");
                   }
                   else
                   {
@@ -248,7 +259,7 @@ package com.brockw.stickwar.engine.multiplayer
             
             private function btnConnectLogin(evt:Event) : void
             {
-                  if(this.mode == PostGameScreen.M_MULTIPLAYER)
+                  if(this.mode == PostGameScreen.M_MULTIPLAYER || this.mode == PostGameScreen.M_SYNC_ERROR)
                   {
                         this.main.showScreen("lobby");
                   }

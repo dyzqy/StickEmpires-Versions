@@ -6,14 +6,14 @@
 <campaignDifficulty>1</campaignDifficulty>
 <isFogOfWar>1</isFogOfWar>
 <debugTeamA>Chaos</debugTeamA>
-<debugTeamB>Chaos</debugTeamB>
-<version>1.13</version>
+<debugTeamB>Order</debugTeamB>
+<version>1.14</version>
 <gravity>0.45</gravity>
 <worldScale>1</worldScale>
 <frontScale>.8</frontScale>
 <backScale>.5</backScale>
 <goldAtStartOfMap>3500</goldAtStartOfMap>
-<sandboxMap>7</sandboxMap>
+<sandboxMap>4</sandboxMap>
 
 
 <mainServer>23.23.246.201</mainServer>
@@ -1065,7 +1065,7 @@
 </minerWall>
 
 <crossbowFire>
-<name>Blazing Blots</name>
+<name>Blazing Bolts</name>
 <cost>400</cost>
 <mana>0</mana>
 <effect>1</effect>

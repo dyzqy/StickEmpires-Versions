@@ -15,6 +15,7 @@ package com.brockw.stickwar.engine.Ai
             
             override public function update(game:StickWar) : void
             {
+                  checkNextMove(game);
                   super.update(game);
             }
       }

@@ -104,7 +104,7 @@ package com.brockw.stickwar
                               break;
                         case "registerUser":
                               trace("Register user response: ",extParams.getBool("success"));
-                              this.signUpScreen.signUpForm.registerResponse(extParams.getBool("success"),extParams.getBool("usernameUnique"),extParams.getBool("emailUnique"));
+                              this.signUpScreen.signUpForm.registerResponse(extParams.getBool("success"),extParams.getBool("usernameUnique"),extParams.getBool("emailUnique"),extParams.getBool("emailValid"));
                   }
             }
             

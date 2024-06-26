@@ -21,6 +21,8 @@ package com.brockw.stickwar.engine
             
             internal var fog:_fog;
             
+            internal var fogLowQuality:_fogLowQuality;
+            
             internal var fogBlur:_fogFade;
             
             internal var xPos:Number;
@@ -41,6 +43,12 @@ package com.brockw.stickwar.engine
                   addChild(this.fog);
                   this.VISION_LENGTH = game.xml.xml.visionSize;
                   this.fog.cacheAsBitmap = true;
+                  this.fogLowQuality = new _fogLowQuality();
+                  this.fogLowQuality.y = 0;
+                  this.fogLowQuality.alpha = 1;
+                  addChild(this.fogLowQuality);
+                  this.VISION_LENGTH = game.xml.xml.visionSize;
+                  this.fogLowQuality.cacheAsBitmap = true;
             }
             
             internal function setTint(displayObject:DisplayObject, tintColor:uint, tintMultiplier:Number) : void
@@ -55,14 +63,6 @@ package com.brockw.stickwar.engine
             
             public function update(game:StickWar) : void
             {
-                  if(game.team == game.teamB)
-                  {
-                        this.fog.scaleX = -1;
-                  }
-                  else
-                  {
-                        this.fog.scaleX = 1;
-                  }
                   var forwardPosition:* = game.team.getVisionRange();
                   if(!this.isFogOn)
                   {
@@ -73,13 +73,59 @@ package com.brockw.stickwar.engine
                         this.xPos = forwardPosition;
                   }
                   this.xPos += (forwardPosition - this.xPos) * 1;
-                  if(game.team.direction == 1)
+                  if(game.gameScreen.hasAlphaOnFogOfWar)
                   {
-                        this.fog.x = Math.max(this.xPos,game.screenX);
+                        if(!contains(this.fog))
+                        {
+                              addChild(this.fog);
+                        }
+                        if(contains(this.fogLowQuality))
+                        {
+                              removeChild(this.fogLowQuality);
+                        }
+                        if(game.team == game.teamB)
+                        {
+                              this.fog.scaleX = -1;
+                        }
+                        else
+                        {
+                              this.fog.scaleX = 1;
+                        }
+                        if(game.team.direction == 1)
+                        {
+                              this.fog.x = Math.max(this.xPos,game.screenX);
+                        }
+                        else
+                        {
+                              this.fog.x = Math.min(this.xPos,game.screenX + game.map.screenWidth);
+                        }
                   }
                   else
                   {
-                        this.fog.x = Math.min(this.xPos,game.screenX + game.map.screenWidth);
+                        if(!contains(this.fogLowQuality))
+                        {
+                              addChild(this.fogLowQuality);
+                        }
+                        if(contains(this.fog))
+                        {
+                              removeChild(this.fog);
+                        }
+                        if(game.team == game.teamB)
+                        {
+                              this.fogLowQuality.scaleX = -1;
+                        }
+                        else
+                        {
+                              this.fogLowQuality.scaleX = 1;
+                        }
+                        if(game.team.direction == 1)
+                        {
+                              this.fogLowQuality.x = Math.max(this.xPos,game.screenX);
+                        }
+                        else
+                        {
+                              this.fogLowQuality.x = Math.min(this.xPos,game.screenX + game.map.screenWidth);
+                        }
                   }
             }
       }

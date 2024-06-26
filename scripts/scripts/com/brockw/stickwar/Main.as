@@ -110,6 +110,8 @@ package com.brockw.stickwar
                   this.connectionScreen = new ConnectionScreen(this);
                   this._itemMap = new ItemMap();
                   this._loadout = new Loadout();
+                  this._itemMap = new ItemMap();
+                  this._loadout = new Loadout();
                   sfs.debug = false;
                   seed = 0;
                   sfs.addEventListener(SFSEvent.SOCKET_ERROR,this.connectRetry);

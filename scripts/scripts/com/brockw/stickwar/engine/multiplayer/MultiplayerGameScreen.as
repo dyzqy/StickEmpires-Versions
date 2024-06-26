@@ -25,6 +25,8 @@ package com.brockw.stickwar.engine.multiplayer
       {
              
             
+            private var isOutOfSync:Boolean;
+            
             public function MultiplayerGameScreen(main:Main)
             {
                   super(main);
@@ -42,6 +44,7 @@ package com.brockw.stickwar.engine.multiplayer
                   simulation = new SimulationSyncronizer(game,main,this.endTurn,this.endGame);
                   this.addChild(game);
                   game.initGame(main,this,Main(main).gameRoom.getVariable("map").getIntValue());
+                  this.isOutOfSync = false;
                   a = int(Main(main).gameRoom.playerList[0].id);
                   b = int(Main(main).gameRoom.playerList[1].id);
                   var aLabel:String = "race_" + User(Main(main).gameRoom.playerList[0]).name;
@@ -163,7 +166,10 @@ package com.brockw.stickwar.engine.multiplayer
                               trace("Game finalised");
                               data = new SFSObject();
                               main.gameServer.send(new ExtensionRequest("z",data,Main(main).gameRoom));
-                              main.gameServer.send(new LogoutRequest());
+                              if(main.gameServer != main.sfs)
+                              {
+                                    main.gameServer.send(new LogoutRequest());
+                              }
                               main.showScreen("postGame");
                               break;
                         case "e":
@@ -205,7 +211,9 @@ package com.brockw.stickwar.engine.multiplayer
                               {
                                     trace("Unit: ",unit.type,unit.x,unit.y,unit.px,unit.py);
                               }
+                              this.isOutOfSync = false;
                               showSyncError();
+                              Main(main).postGameScreen.setMode(PostGameScreen.M_SYNC_ERROR);
                   }
             }
             

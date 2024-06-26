@@ -75,7 +75,7 @@ package com.brockw.stickwar.engine.multiplayer
             {
             }
             
-            public function registerResponse(success:Boolean, userUnique:Boolean, emailUnique:Boolean) : void
+            public function registerResponse(success:Boolean, userUnique:Boolean, emailUnique:Boolean, emailValid:Boolean) : void
             {
                   if(success)
                   {
@@ -91,6 +91,11 @@ package com.brockw.stickwar.engine.multiplayer
                         if(!emailUnique)
                         {
                               form.emailConfirm.text = "Email address already in use";
+                              this.form.emailBacking.visible = true;
+                        }
+                        if(!emailValid)
+                        {
+                              form.emailConfirm.text = "Email address is not valid";
                               this.form.emailBacking.visible = true;
                         }
                   }

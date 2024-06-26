@@ -36,7 +36,6 @@ package com.brockw.stickwar.engine.Team.Chaos
                   this.addNewUpgrade(CASTLE_ARCHER_1,game.xml.xml.Chaos.Tech.castleArchers1,new Bitmap(new castleArcherLevel1Bitmap()),81);
                   this.addNewUpgrade(CASTLE_ARCHER_2,game.xml.xml.Chaos.Tech.castleArchers2,new Bitmap(new castleArcherLevel2Bitmap()),81);
                   this.addNewUpgrade(CASTLE_ARCHER_3,game.xml.xml.Chaos.Tech.castleArchers3,new Bitmap(new castleArcherLevel3Bitmap()),81);
-                  this.addNewUpgrade(CASTLE_ARCHER_4,game.xml.xml.Chaos.Tech.castleArchers4,new Bitmap(new castleArcherLevel4Bitmap()),81);
                   this.addNewUpgrade(DEAD_POISON,game.xml.xml.Chaos.Tech.deadPoison,new Bitmap(new poisonGutsBitmap()),81);
                   this.addNewUpgrade(CAT_PACK,game.xml.xml.Chaos.Tech.catPack,new Bitmap(new packMentalityBitmap()),81);
                   this.addNewUpgrade(MEDUSA_POISON,game.xml.xml.Chaos.Tech.medusaPoison,new Bitmap(new poisonPoolBitmap()),81);

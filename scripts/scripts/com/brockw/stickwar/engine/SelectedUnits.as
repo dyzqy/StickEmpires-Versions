@@ -48,17 +48,20 @@ package com.brockw.stickwar.engine
                   var m:MovieClip = null;
                   if(this.profilePic != null)
                   {
-                        for(i = 0; i < this.profilePic.numChildren; i++)
+                        if(game.gameScreen.hasEffects)
                         {
-                              d = this.profilePic.getChildAt(i);
-                              if(d is MovieClip)
+                              for(i = 0; i < this.profilePic.numChildren; i++)
                               {
-                                    m = MovieClip(d);
-                                    if(m.currentFrame == m.totalFrames)
+                                    d = this.profilePic.getChildAt(i);
+                                    if(d is MovieClip)
                                     {
-                                          m.gotoAndStop(1);
+                                          m = MovieClip(d);
+                                          if(m.currentFrame == m.totalFrames)
+                                          {
+                                                m.gotoAndStop(1);
+                                          }
+                                          m.nextFrame();
                                     }
-                                    m.nextFrame();
                               }
                         }
                   }

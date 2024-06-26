@@ -9,6 +9,7 @@ package com.brockw.stickwar
       import com.brockw.stickwar.engine.multiplayer.moves.ScreenPositionUpdateMove;
       import flash.events.Event;
       import flash.events.TimerEvent;
+      import flash.external.ExternalInterface;
       import flash.ui.Mouse;
       import flash.utils.Timer;
       import flash.utils.getTimer;
@@ -19,6 +20,12 @@ package com.brockw.stickwar
             public static const FRAME_RATE:int = 30;
             
             protected static const MAX_SKIPS:int = 3;
+            
+            private static const S_GOOD:int = 0;
+            
+            private static const S_SLOW:int = 1;
+            
+            private static const S_REALLY_SLOW:int = 2;
              
             
             protected var _game:StickWar;
@@ -59,11 +66,25 @@ package com.brockw.stickwar
             
             private var _isPaused:Boolean;
             
-            private var isGoingSlow:Boolean;
+            private var slowLevel:int;
             
             private var skipHeuristic:Number;
             
             private var messagePrompt:inGameMessagePromptMc;
+            
+            private var _hasMovingBackground:Boolean;
+            
+            private var _hasEffects:Boolean;
+            
+            private var _hasAlphaOnFogOfWar:Boolean;
+            
+            private var _hasScreenReduction:Boolean;
+            
+            private var lastSwitchInQuality:int;
+            
+            private var isFirstSwitch:Boolean;
+            
+            private var hasChanged:Boolean;
             
             internal var t:int;
             
@@ -74,11 +95,16 @@ package com.brockw.stickwar
             public function GameScreen(main:BaseMain)
             {
                   super();
+                  this._hasMovingBackground = true;
+                  this._hasEffects = true;
+                  this._hasAlphaOnFogOfWar = true;
+                  this._hasScreenReduction = true;
                   this.main = main;
                   this.isDebug = false;
-                  this.isGoingSlow = false;
+                  this.slowLevel = S_GOOD;
                   this.skipHeuristic = 0;
                   main.loadingFraction = 0;
+                  this.lastSwitchInQuality = getTimer();
             }
             
             override public function enter() : void
@@ -94,6 +120,9 @@ package com.brockw.stickwar
                   this.lastPulse = 0;
                   this.main.setOverlayScreen("");
                   this.messagePrompt = new inGameMessagePromptMc();
+                  this.lastSwitchInQuality = getTimer();
+                  this.isFirstSwitch = true;
+                  this.hasChanged = false;
             }
             
             public function u(evt:Event) : void
@@ -108,6 +137,7 @@ package com.brockw.stickwar
             
             public function updateGameLoop(evt:TimerEvent) : void
             {
+                  var result:uint = 0;
                   if(!stage)
                   {
                         return;
@@ -140,40 +170,79 @@ package com.brockw.stickwar
                   }
                   if(this.overTime < 35 || this.consecutiveSkips > 0)
                   {
-                        if(this.skipHeuristic > 5 && !this.isGoingSlow)
-                        {
-                              this.isGoingSlow = true;
-                        }
-                        else if(this.skipHeuristic <= 1 && this.isGoingSlow)
-                        {
-                              this.isGoingSlow = false;
-                        }
                         if(stage != null)
                         {
-                              if(this.isGoingSlow)
+                              if(this.slowLevel == S_REALLY_SLOW)
                               {
-                                    stage.quality = "LOW";
+                                    if(this.simulation.fps > 25)
+                                    {
+                                          this.slowLevel = S_SLOW;
+                                          this.hasChanged = true;
+                                    }
+                              }
+                              else if(this.slowLevel == S_SLOW)
+                              {
+                                    if(this.simulation.fps < 15)
+                                    {
+                                          this.slowLevel = S_REALLY_SLOW;
+                                          this.hasChanged = true;
+                                    }
+                                    if(this.simulation.fps > 29)
+                                    {
+                                          this.slowLevel = S_GOOD;
+                                          this.hasChanged = true;
+                                    }
+                              }
+                              else if(this.simulation.fps < 25)
+                              {
+                                    this.slowLevel = S_SLOW;
+                                    this.hasChanged = true;
+                              }
+                        }
+                        if(this.hasChanged && getTimer() - this.lastSwitchInQuality > 30 * 1000)
+                        {
+                              if(this.isFirstSwitch)
+                              {
+                                    if(ExternalInterface.available)
+                                    {
+                                          result = ExternalInterface.call("changeSize",false);
+                                    }
+                                    trace("JUDGEMENT IS: ",this.slowLevel);
+                              }
+                              this.hasChanged = false;
+                              if(this.slowLevel == S_GOOD)
+                              {
+                                    this._hasEffects = true;
+                                    stage.quality = "HIGH";
+                                    this.lastSwitchInQuality = getTimer();
                               }
                               else
                               {
-                                    stage.quality = "HIGH";
+                                    stage.quality = "LOW";
+                                    this._hasEffects = false;
+                                    this.lastSwitchInQuality = getTimer();
+                                    if(this.isFirstSwitch)
+                                    {
+                                          if(this.slowLevel == S_REALLY_SLOW)
+                                          {
+                                                if(ExternalInterface.available)
+                                                {
+                                                      result = ExternalInterface.call("changeSize",true);
+                                                }
+                                                this._hasMovingBackground = false;
+                                                this.hasScreenReduction = true;
+                                                this.hasAlphaOnFogOfWar = false;
+                                          }
+                                    }
                               }
+                              trace("QUALITY: ",this.slowLevel);
+                              this.isFirstSwitch = false;
                         }
                         evt.updateAfterEvent();
                         this.consecutiveSkips = 0;
-                        this.skipHeuristic -= 1 / 60;
-                        if(this.skipHeuristic < 0)
-                        {
-                              this.skipHeuristic = 0;
-                        }
                   }
                   else
                   {
-                        ++this.skipHeuristic;
-                        if(this.skipHeuristic > 10)
-                        {
-                              this.skipHeuristic = 10;
-                        }
                         this.overTime = 0;
                         ++this.consecutiveSkips;
                         if(Boolean(this.gameTimer))
@@ -269,6 +338,7 @@ package com.brockw.stickwar
             
             public function cleanUp() : void
             {
+                  var result:uint = 0;
                   this.gameTimer.removeEventListener(TimerEvent.TIMER,this.updateGameLoop);
                   this.gameTimer.stop();
                   this.userInterface.cleanUp();
@@ -279,6 +349,10 @@ package com.brockw.stickwar
                   this.game = null;
                   this.gameTimer = null;
                   this.stage.quality = "HIGH";
+                  if(ExternalInterface.available)
+                  {
+                        result = ExternalInterface.call("changeSize",false);
+                  }
             }
             
             public function get game() : StickWar
@@ -350,6 +424,46 @@ package com.brockw.stickwar
             public function set isDebug(value:Boolean) : void
             {
                   this._isDebug = value;
+            }
+            
+            public function get hasMovingBackground() : Boolean
+            {
+                  return this._hasMovingBackground;
+            }
+            
+            public function set hasMovingBackground(value:Boolean) : void
+            {
+                  this._hasMovingBackground = value;
+            }
+            
+            public function get hasEffects() : Boolean
+            {
+                  return this._hasEffects;
+            }
+            
+            public function set hasEffects(value:Boolean) : void
+            {
+                  this._hasEffects = value;
+            }
+            
+            public function get hasAlphaOnFogOfWar() : Boolean
+            {
+                  return this._hasAlphaOnFogOfWar;
+            }
+            
+            public function set hasAlphaOnFogOfWar(value:Boolean) : void
+            {
+                  this._hasAlphaOnFogOfWar = value;
+            }
+            
+            public function get hasScreenReduction() : Boolean
+            {
+                  return this._hasScreenReduction;
+            }
+            
+            public function set hasScreenReduction(value:Boolean) : void
+            {
+                  this._hasScreenReduction = value;
             }
       }
 }
