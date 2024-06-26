@@ -133,6 +133,11 @@ package com.brockw.stickwar.engine.multiplayer
                   this.main.sfs.send(new ExtensionRequest("buddyStatus",s));
             }
             
+            public function cleanUp() : void
+            {
+                  this._buddyList.cleanUp();
+            }
+            
             private function leaderboardButton(evt:Event) : void
             {
             }
@@ -156,6 +161,7 @@ package com.brockw.stickwar.engine.multiplayer
             
             override public function leave() : void
             {
+                  this.chatOverlay.musicToggle.removeEventListener(MouseEvent.CLICK,this.toggleMusic);
                   this.chatOverlay.termsScreen.acceptButton.removeEventListener(MouseEvent.CLICK,this.acceptTerms);
                   this.statusSelect.removeEventListener(DropDown.ITEM_SELECTED,this.statusChange);
                   this.timer.removeEventListener(TimerEvent.TIMER,this.update);
@@ -208,6 +214,7 @@ package com.brockw.stickwar.engine.multiplayer
                   var data:SFSObject = new SFSObject();
                   this.main.sfs.send(new ExtensionRequest("getPopulation",data));
                   this.main.soundManager.playSoundInBackground("lobbyMusic");
+                  this.chatOverlay.musicToggle.addEventListener(MouseEvent.CLICK,this.toggleMusic);
             }
             
             public function setPopulation(p:int) : void
@@ -315,9 +322,22 @@ package com.brockw.stickwar.engine.multiplayer
                   }
             }
             
+            private function toggleMusic(evt:Event) : void
+            {
+                  this.main.soundManager.isMusic = !this.main.soundManager.isMusic;
+            }
+            
             public function update(evt:Event) : void
             {
                   var data:SFSObject = null;
+                  if(this.main.soundManager.isMusic)
+                  {
+                        this.chatOverlay.musicToggle.gotoAndStop(1);
+                  }
+                  else
+                  {
+                        this.chatOverlay.musicToggle.gotoAndStop(2);
+                  }
                   this.chatOverlay.termsScreen.scrollPane.update();
                   var todaysDate:Date = new Date();
                   this.chatOverlay.timeText.text.text = todaysDate.hours + ":" + todaysDate.minutes;

@@ -46,6 +46,8 @@ package com.brockw.stickwar.engine
                   var newLine:String = sender + ": " + message;
                   newLine = newLine.replace("\n","");
                   newLine = newLine.replace("\r","");
+                  newLine = newLine.replace("<","");
+                  newLine = newLine.replace(">","");
                   if(sender == this.gameScreen.team.realName)
                   {
                         chatOutput.htmlText += "<span class=\'myText\'>" + newLine + "</span><br>";

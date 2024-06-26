@@ -145,6 +145,23 @@ package com.brockw.stickwar.engine.multiplayer
                   this.updateChatContainer();
             }
             
+            public function cleanUp() : void
+            {
+                  var tab:BuddyChatTab = null;
+                  for each(tab in this._chatTabs)
+                  {
+                        tab.chatWindow.closeButton.removeEventListener(MouseEvent.MOUSE_DOWN,this.closeChat);
+                        tab.maximizeButton.removeEventListener(MouseEvent.MOUSE_DOWN,this.toggleChat);
+                        tab.chatWindow.minimizeButton.removeEventListener(MouseEvent.MOUSE_DOWN,this.toggleChat2);
+                        if(this._chatTabs.indexOf(tab) >= 0)
+                        {
+                              this.chatOverlay.chatContainer.removeChild(tab);
+                        }
+                  }
+                  this._chatTabs = [];
+                  this.updateChatTabs();
+            }
+            
             private function closeChat(evt:MouseEvent) : void
             {
                   var tab:BuddyChatTab = BuddyChatTab(evt.currentTarget.parent.parent);

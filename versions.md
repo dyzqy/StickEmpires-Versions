@@ -1,3 +1,8 @@
+## version 1.18
+- You can now toggle music on and off in lobby.
+- Buddy list now cleans up when closed.
+- Players cannot use images in chat anymore.
+
 ## version 1.17
 - Modifications to armory screen items.
 - Now if FPS is very low, the game will automatically change size(only on web).

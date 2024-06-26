@@ -13,6 +13,7 @@ package com.brockw.stickwar
       import com.smartfoxserver.v2.requests.*;
       import flash.display.*;
       import flash.events.*;
+      import flash.utils.Dictionary;
       import flash.utils.Timer;
       
       [Frame(factoryClass="com.brockw.stickwar.Preloader")]
@@ -385,6 +386,11 @@ package com.brockw.stickwar
             
             private function onConnectionLost(evt:SFSEvent) : void
             {
+                  this._chatOverlay.cleanUp();
+                  this.loadout.data = new Dictionary();
+                  this.itemMap.data = new Dictionary();
+                  this.marketItems = [];
+                  this.purchases = [];
                   this.inQueue = false;
                   trace("Connection lost");
                   trace("Currently on screen: ",currentScreen());
