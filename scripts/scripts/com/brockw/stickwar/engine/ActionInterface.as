@@ -4,6 +4,7 @@ package com.brockw.stickwar.engine
       import com.brockw.stickwar.engine.Ai.command.*;
       import com.brockw.stickwar.engine.Team.Team;
       import com.brockw.stickwar.engine.Team.TechItem;
+      import com.brockw.stickwar.engine.units.Unit;
       import flash.display.*;
       import flash.ui.Mouse;
       import flash.utils.Dictionary;
@@ -264,7 +265,21 @@ package com.brockw.stickwar.engine
                                           this._currentMove.team = gameScreen.team;
                                           if(gameScreen.game.mouseOverUnit != null)
                                           {
-                                                this._currentMove.targetId = gameScreen.game.mouseOverUnit.id;
+                                                if(gameScreen.game.mouseOverUnit is Unit)
+                                                {
+                                                      if(!Unit(gameScreen.game.mouseOverUnit).isTargetable())
+                                                      {
+                                                            this._currentMove.targetId = -1;
+                                                      }
+                                                      else
+                                                      {
+                                                            this._currentMove.targetId = gameScreen.game.mouseOverUnit.id;
+                                                      }
+                                                }
+                                                else
+                                                {
+                                                      this._currentMove.targetId = gameScreen.game.mouseOverUnit.id;
+                                                }
                                           }
                                           else
                                           {

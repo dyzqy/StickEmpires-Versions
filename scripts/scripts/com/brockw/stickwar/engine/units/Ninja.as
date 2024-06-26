@@ -266,10 +266,13 @@ package com.brockw.stickwar.engine.units
                                     else
                                     {
                                           _mc.gotoAndStop("run");
-                                          _mc.shadow1.x = _mc.mc.x - Math.abs(dx) * 10 * this.ninjaCopyDistance;
-                                          _mc.shadow2.x = _mc.mc.x - Math.abs(dx) * 20 * this.ninjaCopyDistance;
-                                          _mc.shadow1.y = _mc.mc.y - dy * 5 * this.ninjaCopyDistance;
-                                          _mc.shadow2.y = _mc.mc.y - dy * 10 * this.ninjaCopyDistance;
+                                          if(Boolean(_mc.shadow1) && Boolean(_mc.shadow2))
+                                          {
+                                                _mc.shadow1.x = _mc.mc.x - Math.abs(dx) * 10 * this.ninjaCopyDistance;
+                                                _mc.shadow2.x = _mc.mc.x - Math.abs(dx) * 20 * this.ninjaCopyDistance;
+                                                _mc.shadow1.y = _mc.mc.y - dy * 5 * this.ninjaCopyDistance;
+                                                _mc.shadow2.y = _mc.mc.y - dy * 10 * this.ninjaCopyDistance;
+                                          }
                                           this._maxVelocity = this.normalVelocity;
                                     }
                               }

@@ -328,7 +328,7 @@ package com.brockw.stickwar.engine
             
             private function determineIfBetterSelection(e:Entity) : Boolean
             {
-                  if(e is Unit && (Unit(e).isDead || !Unit(e).isTargetable()))
+                  if(e is Unit && Unit(e).isDead)
                   {
                         return false;
                   }

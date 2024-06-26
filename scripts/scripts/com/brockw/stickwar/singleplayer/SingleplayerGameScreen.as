@@ -53,6 +53,10 @@ package com.brockw.stickwar.singleplayer
                   game.teamB.id = b;
                   game.team.realName = "Myself";
                   game.team.enemyTeam.realName = "AI";
+                  game.teamA.gold = 100000;
+                  game.teamB.gold = 100000;
+                  game.teamA.mana = 100000;
+                  game.teamB.mana = 100000;
                   game.teamA.name = a;
                   game.teamB.name = b;
                   this.team.enemyTeam.isEnemy = true;

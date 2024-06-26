@@ -429,7 +429,7 @@ package com.brockw.stickwar.engine.projectile
                   team.game.bloodManager.addAsh(x,y,team.direction,team.game);
             }
             
-            public function initTowerSpawn(x:Number, y:Number, team:Team) : void
+            public function initTowerSpawn(x:Number, y:Number, team:Team, scale:Number = 1) : void
             {
                   var n:TowerSpawn = TowerSpawn(this._projectileMap[Projectile.TOWER_SPAWN].getItem());
                   if(n == null)
@@ -443,6 +443,7 @@ package com.brockw.stickwar.engine.projectile
                   n.y = n.py;
                   Util.animateToNeutral(n.spellMc);
                   n.spellMc.gotoAndStop(1);
+                  n.scale = scale;
                   n.stunTime = 0;
                   this.projectiles.push(n);
                   team.game.battlefield.addChild(n);

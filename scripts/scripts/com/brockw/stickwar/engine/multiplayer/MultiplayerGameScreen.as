@@ -163,6 +163,7 @@ package com.brockw.stickwar.engine.multiplayer
                               trace("Game finalised");
                               data = new SFSObject();
                               main.gameServer.send(new ExtensionRequest("z",data,Main(main).gameRoom));
+                              main.gameServer.send(new LogoutRequest());
                               main.showScreen("postGame");
                               break;
                         case "e":

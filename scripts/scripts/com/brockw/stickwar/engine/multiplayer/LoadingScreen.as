@@ -47,9 +47,14 @@ package com.brockw.stickwar.engine.multiplayer
             
             private var timerStartTime:Number;
             
+            private var isShowingMembershipRequired:Boolean = false;
+            
+            private var hasClicked:Boolean;
+            
             public function LoadingScreen(main:Main)
             {
                   super();
+                  this.hasClicked = true;
                   this.loadingScreen = new pregameScreenMc();
                   this.raceSelectMc = new lobbyScreenMc();
                   addChild(this.loadingScreen);
@@ -65,31 +70,40 @@ package com.brockw.stickwar.engine.multiplayer
                   this.didSelect = false;
             }
             
+            private function mouseUp(evt:Event) : void
+            {
+                  this.hasClicked = true;
+            }
+            
             private function mouseDown(evt:Event) : void
             {
                   var d:Number = NaN;
-                  if(!this.setUpLoadingScreen)
+                  if(this.hasClicked)
                   {
-                        d = Math.sqrt(Math.pow(this.raceSelectMc.orderButton.mouseX,2) + Math.pow(this.raceSelectMc.orderButton.mouseY + 100,2));
-                        if(d < 150)
+                        this.hasClicked = false;
+                        if(!this.setUpLoadingScreen)
                         {
-                              this.main.raceSelected = Team.T_GOOD;
-                              this.raceChange();
-                              this.didSelect = true;
-                        }
-                        d = Math.sqrt(Math.pow(this.raceSelectMc.chaosButton.mouseX,2) + Math.pow(this.raceSelectMc.chaosButton.mouseY + 100,2));
-                        if(this.main.isMember && d < 150)
-                        {
-                              this.main.raceSelected = Team.T_CHAOS;
-                              this.raceChange();
-                              this.didSelect = true;
-                        }
-                        d = Math.sqrt(Math.pow(this.raceSelectMc.randomButton.mouseX,2) + Math.pow(this.raceSelectMc.randomButton.mouseY,2));
-                        if(this.main.isMember && d < 75)
-                        {
-                              this.main.raceSelected = Team.T_RANDOM;
-                              this.raceChange();
-                              this.didSelect = true;
+                              d = Math.sqrt(Math.pow(this.raceSelectMc.orderButton.mouseX,2) + Math.pow(this.raceSelectMc.orderButton.mouseY + 100,2));
+                              if(d < 150)
+                              {
+                                    this.main.raceSelected = Team.T_GOOD;
+                                    this.didSelect = true;
+                                    this.raceChange();
+                              }
+                              d = Math.sqrt(Math.pow(this.raceSelectMc.chaosButton.mouseX,2) + Math.pow(this.raceSelectMc.chaosButton.mouseY + 100,2));
+                              if(this.main.isMember && d < 150)
+                              {
+                                    this.main.raceSelected = Team.T_CHAOS;
+                                    this.didSelect = true;
+                                    this.raceChange();
+                              }
+                              d = Math.sqrt(Math.pow(this.raceSelectMc.randomButton.mouseX,2) + Math.pow(this.raceSelectMc.randomButton.mouseY,2));
+                              if(this.main.isMember && d < 75)
+                              {
+                                    this.main.raceSelected = Team.T_RANDOM;
+                                    this.didSelect = true;
+                                    this.raceChange();
+                              }
                         }
                   }
                   this.update(evt);
@@ -106,6 +120,7 @@ package com.brockw.stickwar.engine.multiplayer
                         params = new SFSObject();
                         params.putInt("race",id);
                         this.main.gameServer.send(new ExtensionRequest("racePick",params,Main(this.main).gameRoom));
+                        this.didSelect = false;
                   }
             }
             
@@ -134,6 +149,8 @@ package com.brockw.stickwar.engine.multiplayer
             
             override public function enter() : void
             {
+                  this.isShowingMembershipRequired = false;
+                  this.raceSelectMc.membershipRequired.y = 740;
                   trace("Select your races!");
                   stage.frameRate = 30;
                   this.timerStartTime = getTimer();
@@ -141,12 +158,14 @@ package com.brockw.stickwar.engine.multiplayer
                   this.loadingScreen.visible = false;
                   this.raceSelectMc.visible = true;
                   this.addEventListener(MouseEvent.MOUSE_DOWN,this.mouseDown);
+                  this.addEventListener(MouseEvent.MOUSE_UP,this.mouseUp);
                   this.isSelectingRace = true;
                   this.main.gameServer.addEventListener(SFSEvent.CONNECTION,this.onConnection);
                   this.timer.addEventListener(TimerEvent.TIMER,this.update);
                   this.timer.start();
                   this.main.gameServer.addEventListener(SFSEvent.LOGIN,this.SFSLogin);
                   this.main.gameServer.addEventListener(SFSEvent.LOGIN_ERROR,this.SFSLoginError);
+                  this.main.gameServer.addEventListener(SFSEvent.LOGOUT,this.SFSLogout);
                   this.minWaitTime = 0;
                   this.main.gameServer.addEventListener(SFSEvent.ROOM_JOIN_ERROR,this.SFSRoomJoinError);
                   this.main.gameServer.addEventListener(SFSEvent.EXTENSION_RESPONSE,this.main.extensionResponse,false,0,true);
@@ -156,7 +175,7 @@ package com.brockw.stickwar.engine.multiplayer
                   this.main.raceSelected = -1;
                   this.raceSelectMc.countdown.text = "" + Math.floor(10);
                   this.initInNFrames = 0;
-                  this.raceSelectMc.chaosLocked.addEventListener(MouseEvent.CLICK,this.openMembershipBuy);
+                  this.raceSelectMc.chaosLocked.addEventListener(MouseEvent.CLICK,this.showMembershipRequired);
                   this.raceSelectMc.chaosLocked.buttonMode = true;
                   this.raceSelectMc.randomButton.buttonMode = true;
                   this.raceSelectMc.orderButton.buttonMode = true;
@@ -175,6 +194,11 @@ package com.brockw.stickwar.engine.multiplayer
                   this.readyTimer.addEventListener(TimerEvent.TIMER,this.readyToPlay);
             }
             
+            private function showMembershipRequired(evt:Event) : void
+            {
+                  this.isShowingMembershipRequired = true;
+            }
+            
             private function openMembershipBuy(evt:Event) : void
             {
                   ArmoryScreen.openPayment("membership",this.main);
@@ -191,8 +215,10 @@ package com.brockw.stickwar.engine.multiplayer
                   this.timer.removeEventListener(TimerEvent.TIMER,this.update);
                   this.main.gameServer.removeEventListener(SFSEvent.CONNECTION,this.onConnection);
                   this.removeEventListener(MouseEvent.MOUSE_DOWN,this.mouseDown);
+                  this.removeEventListener(MouseEvent.MOUSE_UP,this.mouseUp);
                   this.main.gameServer.removeEventListener(SFSEvent.LOGIN_ERROR,this.SFSLoginError);
                   this.main.gameServer.removeEventListener(SFSEvent.ROOM_JOIN_ERROR,this.SFSRoomJoinError);
+                  this.main.gameServer.removeEventListener(SFSEvent.LOGOUT,this.SFSLogout);
                   this.main.gameServer.removeEventListener(SFSEvent.ROOM_JOIN_ERROR,this.SFSRoomJoinError);
                   this.raceSelectMc.chaosLocked.removeEventListener(MouseEvent.CLICK,this.openMembershipBuy);
                   this.readyTimer.removeEventListener(TimerEvent.TIMER,this.readyToPlay);
@@ -200,6 +226,7 @@ package com.brockw.stickwar.engine.multiplayer
             
             public function SFSLogin(evt:SFSEvent) : void
             {
+                  trace("Login successful");
             }
             
             public function receivedRaceSelection(params:SFSObject) : void
@@ -293,6 +320,14 @@ package com.brockw.stickwar.engine.multiplayer
                   {
                         this.raceSelectMc.randomButton.gotoAndStop(1);
                   }
+                  if(this.isShowingMembershipRequired)
+                  {
+                        this.raceSelectMc.membershipRequired.y += (684 - this.raceSelectMc.membershipRequired.y) * 0.1;
+                  }
+                  else
+                  {
+                        this.raceSelectMc.membershipRequired.y += (740 - this.raceSelectMc.membershipRequired.y) * 0.1;
+                  }
                   if(!this.setUpLoadingScreen)
                   {
                         for each(room in this.main.gameServer.roomList)
@@ -346,6 +381,11 @@ package com.brockw.stickwar.engine.multiplayer
                         this.initInNFrames -= 1;
                   }
                   ++this.minWaitTime;
+            }
+            
+            private function SFSLogout(e:Event) : void
+            {
+                  trace("Logout");
             }
             
             private function readyToPlay(e:Event) : void

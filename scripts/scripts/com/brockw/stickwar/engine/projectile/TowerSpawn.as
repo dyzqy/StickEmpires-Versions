@@ -28,8 +28,8 @@ package com.brockw.stickwar.engine.projectile
             override public function update(game:StickWar) : void
             {
                   Util.animateMovieClip(this.spellMc,4);
-                  this.scaleX = 1 * team.direction;
-                  this.scaleY = 1;
+                  this.scaleX = scale * 1 * team.direction;
+                  this.scaleY = scale * 1;
             }
             
             override public function isReadyForCleanup() : Boolean

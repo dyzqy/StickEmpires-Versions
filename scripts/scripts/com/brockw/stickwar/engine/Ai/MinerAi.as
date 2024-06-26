@@ -218,7 +218,7 @@ package com.brockw.stickwar.engine.Ai
             {
                   if(!gold.isMineFull())
                   {
-                        gold.getMiningSpot(miner);
+                        gold.reserveMiningSpot(miner);
                         MinerAi(miner.ai).targetOre = gold;
                         return true;
                   }

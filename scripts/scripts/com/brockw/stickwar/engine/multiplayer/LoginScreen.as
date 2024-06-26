@@ -28,8 +28,6 @@ package com.brockw.stickwar.engine.multiplayer
             
             internal var loginMc:loginMenuMc;
             
-            public var signUpForm:SignUpForm;
-            
             public var forgotPasswordForm:ForgotPasswordForm;
             
             private var justFailed:Boolean;
@@ -42,9 +40,6 @@ package com.brockw.stickwar.engine.multiplayer
                   this.main = main;
                   this.loginMc = new loginMenuMc();
                   addChild(this.loginMc);
-                  this.signUpForm = new SignUpForm(main);
-                  this.addChild(this.signUpForm);
-                  this.signUpForm.visible = false;
                   this.forgotPasswordForm = new ForgotPasswordForm(main);
                   this.addChild(this.forgotPasswordForm);
                   this.forgotPasswordForm.visible = false;
@@ -68,7 +63,7 @@ package com.brockw.stickwar.engine.multiplayer
                   this.loginMc.loginBox.usernameInput.text.addEventListener(Event.CHANGE,this.loginUserEnterButton);
                   this.loginMc.loginBox.passwordInput.text.addEventListener(Event.CHANGE,this.loginUserEnterButton);
                   this.loginMc.signIn.addEventListener(MouseEvent.CLICK,this.btnConnectLogin);
-                  this.loginMc.loginBox.usernameInput.text.text = "username";
+                  this.loginMc.loginBox.usernameInput.text.text = "";
                   this.loginMc.loginBox.passwordInput.text.text = "";
                   stage.frameRate = 30;
                   this.loginMc.loginBox.passwordInput.text.displayAsPassword = true;
@@ -122,7 +117,11 @@ package com.brockw.stickwar.engine.multiplayer
             public function btnSingleplayerClick(evt:MouseEvent) : void
             {
                   var url:URLRequest = null;
-                  if(!evt.ctrlKey)
+                  if(evt.ctrlKey)
+                  {
+                        this.main.showScreen("singleplayerGame");
+                  }
+                  else
                   {
                         url = new URLRequest("http://www.stickempires.com/index.php");
                         navigateToURL(url,"_blank");

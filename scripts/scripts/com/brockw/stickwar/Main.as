@@ -281,11 +281,9 @@ package com.brockw.stickwar
                         case "checkAvailability":
                               trace("Received availability data");
                               trace(extParams.getUtfString("username")," - ",extParams.getBool("available"));
-                              this.loginScreen.signUpForm.usernameAvailable(extParams.getUtfString("username"),extParams.getBool("available"));
                               break;
                         case "registerUser":
                               trace("Register user response: ",extParams.getBool("success"));
-                              this.loginScreen.signUpForm.registerResponse(extParams.getBool("success"),extParams.getBool("usernameUnique"),extParams.getBool("emailUnique"));
                               break;
                         case "forgotPassword":
                               trace("Forgot password response: ",extParams.getBool("success"));
@@ -305,7 +303,7 @@ package com.brockw.stickwar
                         case "raceTimeout":
                               trace("TIMEOUT");
                               this.showScreen("lobby");
-                              this._chatOverlay.addUserResponse("Oponent timed out. Hit find match to try again.",true);
+                              this._chatOverlay.addUserResponse("Opponent timed out. Hit find match to try again.",true);
                               break;
                         case "raceSelectCountdown":
                               this.loadingScreen.setCountdown(extParams.getLong("timeLeft"));
@@ -375,9 +373,6 @@ package com.brockw.stickwar
                         trace("Connection Success!");
                         this.connectRetryTimer.stop();
                         this.loginScreen.isConnecting = false;
-                        if(this.loginScreen.signUpForm.visible == true)
-                        {
-                        }
                   }
                   else
                   {

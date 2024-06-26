@@ -49,7 +49,7 @@ package com.brockw.stickwar.engine.units
                   this._profilePics[new Ninja(game).type] = new profileAssassin();
                   this._profilePics[new Magikill(game).type] = new profileMagikill();
                   this._profilePics[new Monk(game).type] = new profileMonk();
-                  this._profilePics[new EnslavedGiant(game).type] = new profileAssassin();
+                  this._profilePics[new EnslavedGiant(game).type] = new giantProfile();
                   this._profilePics[new Bomber(game).type] = new bomberProfile();
                   this._profilePics[new Skelator(game).type] = new mageProfile();
                   this._profilePics[new Cat(game).type] = new crawlerProfile();

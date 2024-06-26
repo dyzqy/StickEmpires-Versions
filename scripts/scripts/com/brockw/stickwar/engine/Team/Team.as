@@ -1007,13 +1007,19 @@ package com.brockw.stickwar.engine.Team
                   attackMoveCommand.realX = this.enemyTeam.statue.px;
                   attackMoveCommand.realY = game.map.height / 2;
                   newUnit.ai.setCommand(game,attackMoveCommand);
-                  game.projectileManager.initTowerSpawn(game.map.hills[0].px,game.map.height / 2,this);
+                  var scale:Number = 1;
+                  if(this.tech.isResearched(Tech.TOWER_SPAWN_II))
+                  {
+                        scale = 1.5;
+                  }
+                  game.projectileManager.initTowerSpawn(game.map.hills[0].px,game.map.height / 2,this,scale);
                   return newUnit;
             }
             
             public function update(game:StickWar) : void
             {
                   var w:Wall = null;
+                  var isDebug:Boolean = false;
                   var queue:Array = null;
                   var m2:Number = NaN;
                   var unit:String = null;
@@ -1068,11 +1074,12 @@ package com.brockw.stickwar.engine.Team
                         w.update(game);
                   }
                   this.tech.update(game);
+                  isDebug = game.gameScreen is SingleplayerGameScreen;
                   for each(queue in this._unitProductionQueue)
                   {
                         if(queue.length != 0)
                         {
-                              if(queue[0][1] > Unit(queue[0][0]).createTime || game.xml.xml.debug == 1)
+                              if(queue[0][1] > Unit(queue[0][0]).createTime || isDebug)
                               {
                                     this.spawn(Unit(queue[0][0]),game);
                                     this.dequeueUnit(Unit(queue[0][0]).type,false);

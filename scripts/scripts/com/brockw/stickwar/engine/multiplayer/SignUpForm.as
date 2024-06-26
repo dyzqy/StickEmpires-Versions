@@ -1,6 +1,6 @@
 package com.brockw.stickwar.engine.multiplayer
 {
-      import com.brockw.stickwar.BaseMain;
+      import com.brockw.stickwar.RegisterMain;
       import com.smartfoxserver.v2.core.SFSEvent;
       import com.smartfoxserver.v2.entities.*;
       import com.smartfoxserver.v2.entities.data.*;
@@ -9,39 +9,27 @@ package com.brockw.stickwar.engine.multiplayer
       import flash.events.*;
       import flash.text.TextField;
       
-      public class SignUpForm extends signUpScreen
+      public class SignUpForm extends signUpScreenMc
       {
              
             
             private var tryingToConnect:Boolean;
             
-            private var main:BaseMain;
+            private var main:RegisterMain;
             
             private var hasRegistered:Boolean;
             
-            public function SignUpForm(main:BaseMain)
+            public function SignUpForm(main:RegisterMain)
             {
                   super();
                   this.main = main;
-            }
-            
-            private function close(evt:MouseEvent) : void
-            {
-                  this.leave();
-            }
-            
-            public function enter() : void
-            {
-                  this.closeButton.addEventListener(MouseEvent.CLICK,this.close);
                   this.addEventListener(Event.ENTER_FRAME,this.update);
-                  gotoAndStop(1);
                   this.hasRegistered = false;
                   this.visible = true;
                   this.y = -700;
                   this.tryingToConnect = true;
-                  this.main.sfs.send(new LoginRequest("register","","StickEmpiresRegister"));
-                  this.main.sfs.addEventListener(SFSEvent.LOGIN_ERROR,this.SFSLoginError);
-                  this.main.sfs.addEventListener(SFSEvent.LOGIN,this.SFSLogin);
+                  main.sfs.addEventListener(SFSEvent.LOGIN_ERROR,this.SFSLoginError);
+                  main.sfs.addEventListener(SFSEvent.LOGIN,this.SFSLogin);
                   form.usernameField.text.addEventListener(Event.CHANGE,this.usernameChanged);
                   TextField(this.form.passwordField.text).displayAsPassword = true;
                   TextField(this.form.confirmPasswordField.text).displayAsPassword = true;
@@ -65,12 +53,26 @@ package com.brockw.stickwar.engine.multiplayer
                   this.form.passwordField.text.tabIndex = 6;
                   this.form.confirmPasswordField.text.tabIndex = 7;
                   this.form.registerButton.tabIndex = 8;
-                  form.registerButton.addEventListener(MouseEvent.CLICK,this.register);
                   form.availability.text = "";
                   form.firstSanity.text = "";
                   form.lastSanity.text = "";
                   form.emailConfirm.text = "";
                   form.passwordConfirm.text = "";
+                  this.form.usernameBacking.visible = false;
+                  this.form.firstBacking.visible = false;
+                  this.form.lastBacking.visible = false;
+                  this.form.emailBacking.visible = false;
+                  this.form.confirmBacking.visible = false;
+                  form.registerButton.addEventListener(MouseEvent.CLICK,this.register);
+            }
+            
+            private function close(evt:MouseEvent) : void
+            {
+                  this.leave();
+            }
+            
+            public function enter() : void
+            {
             }
             
             public function registerResponse(success:Boolean, userUnique:Boolean, emailUnique:Boolean) : void
@@ -78,24 +80,24 @@ package com.brockw.stickwar.engine.multiplayer
                   if(success)
                   {
                         gotoAndStop(2);
-                        continueButton.addEventListener(MouseEvent.CLICK,this.continueClick);
                   }
                   else
                   {
                         if(!userUnique)
                         {
                               form.availability.text = "Username is already taken";
+                              this.form.usernameBacking.visible = true;
                         }
                         if(!emailUnique)
                         {
                               form.emailConfirm.text = "Email address already in use";
+                              this.form.emailBacking.visible = true;
                         }
                   }
             }
             
             private function continueClick(evt:Event) : void
             {
-                  continueButton.removeEventListener(MouseEvent.CLICK,this.continueClick);
                   gotoAndStop(1);
                   this.leave();
             }
@@ -107,24 +109,33 @@ package com.brockw.stickwar.engine.multiplayer
                   form.lastSanity.text = "";
                   form.emailConfirm.text = "";
                   form.passwordConfirm.text = "";
+                  this.form.usernameBacking.visible = false;
+                  this.form.firstBacking.visible = false;
+                  this.form.lastBacking.visible = false;
+                  this.form.emailBacking.visible = false;
+                  this.form.confirmBacking.visible = false;
                   var success:Boolean = true;
                   if(form.usernameField.text.text.length < 3)
                   {
                         form.availability.text = "Username must be atleast 3 characters";
+                        this.form.usernameBacking.visible = true;
                         success = false;
                   }
                   if(form.firstField.text.text.length < 1)
                   {
                         form.firstSanity.text = "You must enter a first name";
+                        this.form.firstBacking.visible = true;
                         success = false;
                   }
                   if(form.lastField.text.text.length < 1)
                   {
                         form.lastSanity.text = "You must enter a last name";
+                        this.form.lastBacking.visible = true;
                         success = false;
                   }
                   if(form.confirmEmailField.text.text.length < 1)
                   {
+                        this.form.emailBacking.visible = true;
                         form.emailConfirm.text = "You must enter an email address";
                         success = false;
                   }
@@ -135,12 +146,14 @@ package com.brockw.stickwar.engine.multiplayer
                   }
                   if(form.confirmPasswordField.text.text.length < 8)
                   {
-                        form.passwordConfirm.text = "Password must be alteast 8 characters long";
+                        form.passwordConfirm.text = "Password must be alteast 8 characters";
+                        this.form.confirmBacking.visible = true;
                         success = false;
                   }
                   else if(form.confirmPasswordField.text.text != form.passwordField.text.text)
                   {
                         form.passwordConfirm.text = "Passwords must match";
+                        this.form.confirmBacking.visible = true;
                         success = false;
                   }
                   return success;
@@ -168,10 +181,12 @@ package com.brockw.stickwar.engine.multiplayer
                   if(form.confirmEmailField.text.text != form.emailField.text.text)
                   {
                         form.emailConfirm.text = "Emails do not match";
+                        this.form.emailBacking.visible = true;
                   }
                   else
                   {
                         form.emailConfirm.text = "";
+                        this.form.emailBacking.visible = false;
                   }
             }
             
@@ -180,10 +195,12 @@ package com.brockw.stickwar.engine.multiplayer
                   if(form.confirmPasswordField.text.text != form.passwordField.text.text)
                   {
                         form.passwordConfirm.text = "Passwords do not match";
+                        this.form.confirmBacking.visible = true;
                   }
                   else
                   {
                         form.passwordConfirm.text = "";
+                        this.form.confirmBacking.visible = false;
                   }
             }
             
@@ -194,44 +211,23 @@ package com.brockw.stickwar.engine.multiplayer
                   var r:ExtensionRequest = new ExtensionRequest("checkAvailability",params);
                   this.main.sfs.send(r);
                   this.form.availability.text = "";
+                  this.form.usernameBacking.visible = false;
             }
             
             public function usernameAvailable(username:String, available:Boolean) : void
             {
                   if(form.usernameField.text.text == username)
                   {
-                        if(available)
-                        {
-                              this.form.availability.text = "Available";
-                        }
-                        else
+                        if(!available)
                         {
                               this.form.availability.text = "Not Available";
+                              this.form.usernameBacking.visible = true;
                         }
                   }
             }
             
             public function leave() : void
             {
-                  gotoAndStop(1);
-                  this.closeButton.removeEventListener(MouseEvent.CLICK,this.close);
-                  this.removeEventListener(Event.ENTER_FRAME,this.update);
-                  this.visible = false;
-                  this.main.sfs.removeEventListener(SFSEvent.LOGIN_ERROR,this.SFSLoginError);
-                  this.main.sfs.removeEventListener(SFSEvent.LOGIN,this.SFSLogin);
-                  this.main.sfs.send(new LogoutRequest());
-                  form.usernameField.text.removeEventListener(Event.CHANGE,this.usernameChanged);
-                  form.confirmEmailField.text.removeEventListener(Event.CHANGE,this.emailChanged);
-                  form.confirmPasswordField.text.removeEventListener(Event.CHANGE,this.passwordChanged);
-                  form.usernameField.text.tabIndex = -1;
-                  this.form.firstField.text.tabIndex = -1;
-                  this.form.lastField.text.tabIndex = -1;
-                  this.form.emailField.text.tabIndex = -1;
-                  this.form.confirmEmailField.text.tabIndex = -1;
-                  this.form.passwordField.text.tabIndex = -1;
-                  this.form.confirmPasswordField.text.tabIndex = -1;
-                  this.form.registerButton.tabIndex = -1;
-                  form.registerButton.removeEventListener(MouseEvent.CLICK,this.register);
             }
             
             private function SFSLoginError(evt:SFSEvent) : void
@@ -241,8 +237,10 @@ package com.brockw.stickwar.engine.multiplayer
             private function SFSLogin(evt:SFSEvent) : void
             {
                   this.tryingToConnect = false;
+                  trace("logged in");
                   if(this.main.sfs.currentZone == "StickEmpiresRegister")
                   {
+                        this.usernameChanged(null);
                   }
             }
             

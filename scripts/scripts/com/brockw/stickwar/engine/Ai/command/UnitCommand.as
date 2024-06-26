@@ -355,8 +355,11 @@ package com.brockw.stickwar.engine.Ai.command
                   var dposX:Number = NaN;
                   var dposY:Number = NaN;
                   var c:UnitCommand = null;
+                  var distanceNew:Number = NaN;
                   var u:UnitMove = new UnitMove();
                   u.moveType = this.type;
+                  var bestUnit:Unit = null;
+                  var distance:Number = 0;
                   for(unit in gameScreen.team.units)
                   {
                         if(this._isSingleSpell)
@@ -364,11 +367,16 @@ package com.brockw.stickwar.engine.Ai.command
                               c = UnitCommand(gameScreen.game.commandFactory.createCommand(gameScreen.game,this.type,0,0,0,0,0,0,0));
                               if((this.intendedEntityType == -1 || this.intendedEntityType == gameScreen.team.units[unit].type) && Unit(gameScreen.team.units[unit]).selected && (!c.hasCoolDown || c.hasCoolDown && c.coolDownTime(gameScreen.team.units[unit]) == 0) && !Unit(gameScreen.team.units[unit]).isBusy())
                               {
-                                    if(this.intendedEntityType == -1 || this.intendedEntityType == gameScreen.team.units[unit].type)
+                                    distanceNew = Unit(gameScreen.team.units[unit]).px - this.realX * Unit(gameScreen.team.units[unit]).px - this.realX + Unit(gameScreen.team.units[unit]).py - this.realY * Unit(gameScreen.team.units[unit]).py - this.realY;
+                                    if(bestUnit == null)
                                     {
-                                          u.units.push(gameScreen.team.units[unit].id);
+                                          bestUnit = gameScreen.team.units[unit];
+                                          distance = distanceNew;
                                     }
-                                    break;
+                                    else if(distanceNew < distance)
+                                    {
+                                          bestUnit = gameScreen.team.units[unit];
+                                    }
                               }
                         }
                         else if(Unit(gameScreen.team.units[unit]).selected)
@@ -378,6 +386,10 @@ package com.brockw.stickwar.engine.Ai.command
                                     u.units.push(gameScreen.team.units[unit].id);
                               }
                         }
+                  }
+                  if(bestUnit != null)
+                  {
+                        u.units.push(bestUnit.id);
                   }
                   for(unit in gameScreen.team.walls)
                   {

@@ -10,6 +10,8 @@ package com.brockw.stickwar.market
       import flash.events.*;
       import flash.external.ExternalInterface;
       import flash.geom.Rectangle;
+      import flash.net.URLRequest;
+      import flash.net.navigateToURL;
       import flash.text.*;
       
       public class ArmoryScreen extends Screen
@@ -68,11 +70,16 @@ package com.brockw.stickwar.market
             
             public static function openPayment(type:String, main:Main) : void
             {
-                  var payment_URL:String = null;
+                  var url:URLRequest = null;
                   var result:uint = 0;
-                  if(ExternalInterface.available)
+                  var payment_URL:String = "http://www.stickempires.com/paypal/checkout.php?item=" + type + "&userId=" + main.sfs.mySelf.getVariable("dbid").getIntValue();
+                  if(type == "membership")
                   {
-                        payment_URL = "http://www.stickempires.com/paypal/checkout.php?item=" + type + "&userId=" + main.sfs.mySelf.getVariable("dbid").getIntValue();
+                        url = new URLRequest(payment_URL);
+                        navigateToURL(url,"_blank");
+                  }
+                  else if(ExternalInterface.available)
+                  {
                         result = ExternalInterface.call("dg.startFlow",payment_URL);
                   }
             }

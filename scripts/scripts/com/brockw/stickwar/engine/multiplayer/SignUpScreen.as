@@ -1,18 +1,18 @@
 package com.brockw.stickwar.engine.multiplayer
 {
       import com.brockw.game.Screen;
-      import com.brockw.stickwar.BaseMain;
+      import com.brockw.stickwar.RegisterMain;
       
       public class SignUpScreen extends Screen
       {
              
             
-            public var signUpForm:PreRegisterForm;
+            public var signUpForm:SignUpForm;
             
-            public function SignUpScreen(main:BaseMain)
+            public function SignUpScreen(main:RegisterMain)
             {
                   super();
-                  addChild(this.signUpForm = new PreRegisterForm(main));
+                  addChild(this.signUpForm = new SignUpForm(main));
             }
             
             override public function enter() : void

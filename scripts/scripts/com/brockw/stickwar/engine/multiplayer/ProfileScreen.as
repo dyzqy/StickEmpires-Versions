@@ -60,10 +60,7 @@ package com.brockw.stickwar.engine.multiplayer
                   this.mc.changePasswordButton.visible = false;
                   this.mc.addToFriendsButton.visible = false;
                   this.mc.isAMember.visible = false;
-                  if(this.main.isMember)
-                  {
-                        this.mc.isAMember.visible = true;
-                  }
+                  this.mc.isAMember.visible = false;
             }
             
             public function receiveProfile(data:SFSObject) : void
@@ -100,6 +97,10 @@ package com.brockw.stickwar.engine.multiplayer
                   else
                   {
                         this.mc.raceType.gotoAndStop("Random");
+                  }
+                  if(data.containsKey("isMember"))
+                  {
+                        this.mc.isAMember.visible = data.getInt("isMember") == 1;
                   }
             }
             
