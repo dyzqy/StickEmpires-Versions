@@ -35,6 +35,10 @@ package com.brockw.stickwar.campaign
             
             private var _levelXml:XML;
             
+            public var totalTime:int;
+            
+            public var bestTime:int;
+            
             public function Level(xml:XML)
             {
                   var x:* = undefined;
@@ -69,6 +73,21 @@ package com.brockw.stickwar.campaign
                   this.insaneModifier = xml.insane;
                   this.normalHealthScale = xml.normalHealthScale;
                   this.tip = xml.tip;
+                  this.totalTime = 0;
+                  this.bestTime = -1;
+            }
+            
+            public function updateTime(time:Number) : void
+            {
+                  if(this.bestTime == -1)
+                  {
+                        this.bestTime = time;
+                  }
+                  else if(time < this.bestTime)
+                  {
+                        this.bestTime = time;
+                  }
+                  this.totalTime += time;
             }
             
             public function toString() : String

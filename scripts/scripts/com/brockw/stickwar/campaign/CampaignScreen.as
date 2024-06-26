@@ -62,6 +62,7 @@ package com.brockw.stickwar.campaign
             {
                   this.main.campaign.save();
                   this.mc.saveGamePrompt.visible = true;
+                  this.mc.saveGamePrompt.messageText.text = "Game saved at " + this.main.campaign.getCurrentLevel().title;
             }
             
             private function click(evt:MouseEvent) : void

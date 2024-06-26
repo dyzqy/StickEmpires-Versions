@@ -89,7 +89,7 @@ package com.brockw.stickwar.engine
                   this.blackBars.graphics.lineTo(-BAR_WIDTH / 2,-BAR_HEIGHT / 2);
                   if(this._totalHealth < 1600)
                   {
-                        numBoxes = this._totalHealth / BOX_SIZE;
+                        numBoxes = Math.ceil(this._totalHealth / BOX_SIZE);
                         this.blackBars.graphics.lineStyle(0.75,0,1);
                         for(i = 0; i < numBoxes; i++)
                         {

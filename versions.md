@@ -1,3 +1,18 @@
+## version 1.19
+- Added "Miner Hustle" upgrade.(Both values are the same for Eminers and normal miners)
+  - Miner damage 2.5 to 4
+  - Miner damage to armor 1.5 to 2
+  - Miner health 100 to 65
+  - Miner upgraded health is 90
+- Campaign now checks if on last level.
+  - And added "finished game" screen.
+- Some Tutorial level messages are changed.
+  - And can now also compliment the player.
+- You can now see newly unlock units after levels.
+- Added a best time tracker for levels.
+- The center tower now has a bigger range to begin control.
+- Statues now have an animation when losing, and you do not instantly see the post game screen.
+
 ## version 1.18
 - You can now toggle music on and off in lobby.
 - Buddy list now cleans up when closed.

@@ -44,6 +44,7 @@ package com.brockw.stickwar.engine
                   var f:ForfeitMove = new ForfeitMove();
                   gameScreen.doMove(f,gameScreen.team.id);
                   this.isConfirming = false;
+                  this.hideMenu();
             }
             
             private function surrenderButton(evt:Event) : void

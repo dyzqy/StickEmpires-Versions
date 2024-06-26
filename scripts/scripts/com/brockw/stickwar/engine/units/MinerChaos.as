@@ -93,6 +93,7 @@ package com.brockw.stickwar.engine.units
                   this.upgradedMaxVelocity = game.xml.xml.Order.Units.miner.upgradedMaxVelocity;
                   this.createTime = game.xml.xml.Chaos.Units.miner.cooldown;
                   maxHealth = health = game.xml.xml.Chaos.Units.miner.health;
+                  upgradedMaxHealth = game.xml.xml.Order.Units.miner.upgradedHealth;
                   loadDamage(game.xml.xml.Chaos.Units.miner);
                   type = Unit.U_CHAOS_MINER;
                   _mc.stop();
@@ -155,6 +156,15 @@ package com.brockw.stickwar.engine.units
                   var oreMined:* = undefined;
                   var distance:Number = NaN;
                   var t:String = null;
+                  if(team.tech.isResearched(Tech.MINER_SPEED))
+                  {
+                        if(this.maxHealth != this.upgradedMaxHealth)
+                        {
+                              health += upgradedMaxHealth - maxHealth;
+                              maxHealth = upgradedMaxHealth;
+                              healthBar.totalHealth = maxHealth;
+                        }
+                  }
                   updateCommon(game);
                   this.towerSpell.update();
                   if(!team.tech.isResearched(Tech.MINER_SPEED))

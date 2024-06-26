@@ -106,6 +106,8 @@ package com.brockw.stickwar.engine
             
             private var pausedGameMc:gamePausedDisplay;
             
+            private var _showGameOverAnimation:Boolean;
+            
             public function StickWar(main:BaseMain, gameScreen:GameScreen)
             {
                   super();
@@ -114,6 +116,7 @@ package com.brockw.stickwar.engine
             
             public function initGame(main:BaseMain, gameScreen:GameScreen, mapId:int = -1) : void
             {
+                  gameOver = this.showGameOverAnimation = false;
                   super.init(main.seed);
                   ++main.loadingFraction;
                   this.economyRecords = [];
@@ -218,7 +221,7 @@ package com.brockw.stickwar.engine
                   this.tipBox.mouseEnabled = false;
                   this._rain.mouseChildren = false;
                   ++main.loadingFraction;
-                  this._spatialHash = new SpatialHash(this,this.map.width,this.map.height,25,this.map.height / 10,100);
+                  this._spatialHash = new SpatialHash(this,this.map.width,this.map.height,50,this.map.height / 7,100);
                   ++main.loadingFraction;
                   if(!this._unitFactory)
                   {
@@ -349,6 +352,10 @@ package com.brockw.stickwar.engine
                   var unit:String = null;
                   var gold:String = null;
                   var wall:Wall = null;
+                  if(this.showGameOverAnimation)
+                  {
+                        return;
+                  }
                   if(frame % 60 == 0)
                   {
                         this.militaryRecords.push(this.team.population);
@@ -363,12 +370,12 @@ package com.brockw.stickwar.engine
                   this._rain.update(this);
                   if(this.teamA.statue.health <= 0)
                   {
-                        this.gameOver = true;
+                        this.showGameOverAnimation = true;
                         winner = this.teamB;
                   }
                   if(this.teamB.statue.health <= 0)
                   {
-                        this.gameOver = true;
+                        this.showGameOverAnimation = true;
                         winner = this.teamA;
                   }
                   this.projectileManager.update(this);
@@ -900,6 +907,16 @@ package com.brockw.stickwar.engine
             public function set cursorSprite(value:Entity) : void
             {
                   this._cursorSprite = value;
+            }
+            
+            public function get showGameOverAnimation() : Boolean
+            {
+                  return this._showGameOverAnimation;
+            }
+            
+            public function set showGameOverAnimation(value:Boolean) : void
+            {
+                  this._showGameOverAnimation = value;
             }
       }
 }

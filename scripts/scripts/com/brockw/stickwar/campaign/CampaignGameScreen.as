@@ -201,6 +201,7 @@ package com.brockw.stickwar.campaign
                   e.winner = game.winner.id;
                   e.turn = simulation.turn;
                   simulation.processMove(e);
+                  main.campaign.getCurrentLevel().updateTime(game.frame / 30);
                   if(e.winner == team.id)
                   {
                         main.campaign.campaignPoints += main.campaign.getCurrentLevel().points;
@@ -216,11 +217,17 @@ package com.brockw.stickwar.campaign
                   }
                   main.postGameScreen.setWinner(e.winner,team.type,team.realName,team.enemyTeam.realName,team.id);
                   main.postGameScreen.setRecords(game.economyRecords,game.militaryRecords);
-                  for each(u in main.campaign.getCurrentLevel().unlocks)
+                  if(!main.campaign.isGameFinished())
                   {
-                        main.postGameScreen.appendUnitUnlocked(u,game);
+                        for each(u in main.campaign.getCurrentLevel().unlocks)
+                        {
+                              main.postGameScreen.appendUnitUnlocked(u,game);
+                        }
                   }
-                  main.postGameScreen.showNextUnitUnlocked();
+                  if(e.winner == team.id)
+                  {
+                        main.postGameScreen.showNextUnitUnlocked();
+                  }
                   main.postGameScreen.setMode(PostGameScreen.M_CAMPAIGN);
                   if(main.campaign.justTutorial)
                   {

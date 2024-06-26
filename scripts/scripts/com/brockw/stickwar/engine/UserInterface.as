@@ -287,6 +287,7 @@ package com.brockw.stickwar.engine
             public function update(evt:Event, timeDiff:Number) : void
             {
                   var u:Unit = null;
+                  var loser:Team = null;
                   var m:ScreenPositionUpdateMove = null;
                   var mouseWidth:int = 0;
                   var posX:Number = NaN;
@@ -352,6 +353,22 @@ package com.brockw.stickwar.engine
                   {
                         this.gameScreen.game.targetScreenX -= this.SCROLL_SPEED * 1;
                         this.isSlowCamera = false;
+                  }
+                  if(this.gameScreen.game.showGameOverAnimation)
+                  {
+                        this.gameScreen.game.fogOfWar.isFogOn = false;
+                        loser = this.gameScreen.game.teamA;
+                        if(this.gameScreen.game.teamA == this.gameScreen.game.winner)
+                        {
+                              loser = this.gameScreen.game.teamB;
+                        }
+                        this.gameScreen.game.targetScreenX += (loser.statue.px - this.gameScreen.game.map.screenWidth / 2 - this.gameScreen.game.targetScreenX) * 0.3;
+                        loser.statue.mc.nextFrame();
+                        Util.animateMovieClip(loser.statue.mc,0);
+                        if(loser.statue.mc.currentFrame == loser.statue.mc.totalFrames)
+                        {
+                              this.gameScreen.game.gameOver = true;
+                        }
                   }
                   var speed:int = (this.gameScreen.game.targetScreenX - this.gameScreen.game.screenX) * this.SCROLL_GAIN * 1;
                   if(this.isSlowCamera)

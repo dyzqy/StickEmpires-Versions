@@ -57,6 +57,8 @@ package com.brockw.stickwar.engine.multiplayer
             
             private var teamBName:String;
             
+            private var showCard:Boolean;
+            
             public function PostGameScreen(main:BaseMain)
             {
                   super();
@@ -74,6 +76,7 @@ package com.brockw.stickwar.engine.multiplayer
                   this.mc.exit.buttonMode = true;
                   this.mc.exit.mouseChildren = false;
                   this.id = -1;
+                  this.showCard = false;
             }
             
             public function appendUnitUnlocked(u:int, game:StickWar) : void
@@ -90,11 +93,14 @@ package com.brockw.stickwar.engine.multiplayer
                   if(this.unitUnlocked.length == 0)
                   {
                         this.mc.unlockCard.visible = false;
+                        this.showCard = false;
                   }
                   else
                   {
+                        this.showCard = true;
                         nextUnit = this.unitUnlocked.shift();
                         this.mc.unlockCard.visible = true;
+                        this.mc.unlockCard.alpha = 0;
                         this.mc.unlockCard.description.text = nextUnit[1];
                         this.mc.unlockCard.unitName.text = nextUnit[0];
                         this.mc.unlockCard.profilePictureBacking.addChild(nextUnit[2]);
@@ -265,7 +271,14 @@ package com.brockw.stickwar.engine.multiplayer
                   }
                   else if(this.mode == PostGameScreen.M_CAMPAIGN)
                   {
-                        this.main.showScreen("campaignUpgradeScreen",false,true);
+                        if(this.main.campaign.isGameFinished())
+                        {
+                              this.main.showScreen("summary",false,true);
+                        }
+                        else
+                        {
+                              this.main.showScreen("campaignUpgradeScreen",false,true);
+                        }
                   }
                   else if(this.mode == PostGameScreen.M_SINGLEPLAYER)
                   {
@@ -313,11 +326,23 @@ package com.brockw.stickwar.engine.multiplayer
             
             private function closeCard(evt:Event) : void
             {
-                  this.showNextUnitUnlocked();
+                  this.showCard = false;
             }
             
             private function update(evt:Event) : void
             {
+                  if(this.showCard)
+                  {
+                        this.mc.unlockCard.alpha += (1 - this.mc.unlockCard.alpha) * 0.2;
+                  }
+                  else if(this.mc.unlockCard.visible == true)
+                  {
+                        this.mc.unlockCard.alpha += (0 - this.mc.unlockCard.alpha) * 0.3;
+                        if(this.mc.unlockCard.alpha < 0.01)
+                        {
+                              this.showNextUnitUnlocked();
+                        }
+                  }
             }
             
             override public function leave() : void

@@ -19,7 +19,7 @@ package com.brockw.stickwar.campaign
             
             public var xml:XML;
             
-            private var levels:Array;
+            private var _levels:Array;
             
             private var _currentLevel:int;
             
@@ -43,7 +43,7 @@ package com.brockw.stickwar.campaign
                   var file:ByteArray = new Campaign.CampaignConstants();
                   var str:String = file.readUTFBytes(file.length);
                   this.xml = new XML(str);
-                  for each(x in this.xml.children())
+                  for each(x in this.xml.level)
                   {
                         this.levels.push(new Level(x));
                   }
@@ -53,6 +53,12 @@ package com.brockw.stickwar.campaign
                   this.initUpgradeTree();
                   this.difficultyLevel = difficulty;
                   this.justTutorial = false;
+            }
+            
+            public function isGameFinished() : Boolean
+            {
+                  trace(this.currentLevel,this.levels.length);
+                  return this.currentLevel >= this.levels.length;
             }
             
             private function initUpgradeTree() : void
@@ -187,6 +193,16 @@ package com.brockw.stickwar.campaign
             public function set justTutorial(value:Boolean) : void
             {
                   this._justTutorial = value;
+            }
+            
+            public function get levels() : Array
+            {
+                  return this._levels;
+            }
+            
+            public function set levels(value:Array) : void
+            {
+                  this._levels = value;
             }
       }
 }

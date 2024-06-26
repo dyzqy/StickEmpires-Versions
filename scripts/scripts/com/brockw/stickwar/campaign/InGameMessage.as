@@ -26,6 +26,10 @@ package com.brockw.stickwar.campaign
             
             private var game:StickWar;
             
+            private var compliment:Boolean;
+            
+            private var shouldCompliment:Boolean;
+            
             public function InGameMessage(txt:String, game:StickWar)
             {
                   super();
@@ -39,6 +43,7 @@ package com.brockw.stickwar.campaign
                   this.soundToPlay = "";
                   this.length = 0;
                   this.startPlayingTime = 0;
+                  this.shouldCompliment = this.compliment = false;
             }
             
             public function hasFinishedPlayingSound() : Boolean
@@ -46,7 +51,7 @@ package com.brockw.stickwar.campaign
                   return this.mc.text.text == this.newTxt && getTimer() - this.startPlayingTime > this.length;
             }
             
-            public function setMessage(txt:String, step:String, yOffset:* = 0, soundToPlay:String = "") : void
+            public function setMessage(txt:String, step:String, yOffset:* = 0, soundToPlay:String = "", compliment:Boolean = false) : void
             {
                   if(this.mc.text.text != txt && getTimer() - this.startPlayingTime > this.length)
                   {
@@ -54,6 +59,7 @@ package com.brockw.stickwar.campaign
                         this.newStep = step;
                         this.nextYOffset = yOffset;
                         this.soundToPlay = soundToPlay;
+                        this.compliment = compliment;
                   }
             }
             
@@ -65,7 +71,7 @@ package com.brockw.stickwar.campaign
                         {
                               if(this.mc.tick.currentFrame != this.mc.tick.totalFrames && this.mc.step.text != "")
                               {
-                                    if(this.mc.tick.currentFrame == 1)
+                                    if(this.mc.tick.currentFrame == 1 && this.shouldCompliment)
                                     {
                                           this.game.soundManager.playSoundFullVolumeRandom("tutorialGood",4);
                                     }
@@ -93,6 +99,7 @@ package com.brockw.stickwar.campaign
                               this.mc.text.text = this.newTxt;
                               this.mc.step.text = this.newStep;
                               this.mc.y = this.nextYOffset;
+                              this.shouldCompliment = this.compliment;
                               this.mc.tick.gotoAndStop(1);
                               this.mc.x = stage.stageWidth / 2 + this.mc.width / 2;
                               this.length = this.game.soundManager.playSoundFullVolume(this.soundToPlay);

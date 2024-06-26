@@ -164,7 +164,7 @@ package com.brockw.stickwar.campaign.controllers
                         gameScreen.game.targetScreenX = 2200;
                         this.arrow.x = this.s1.x + gameScreen.game.battlefield.x;
                         this.arrow.y = this.s1.y - this.s1.pheight * 0.8 + gameScreen.game.battlefield.y;
-                        this.message.setMessage("Left click and drag a box over units to select them.","Step #1",0,"voiceTutorial1");
+                        this.message.setMessage("Left click and drag a box over units to select them.","Step #1",0,"voiceTutorial1",true);
                   }
                   else if(this.state == S_MOVE_UNITS)
                   {
@@ -205,7 +205,7 @@ package com.brockw.stickwar.campaign.controllers
                               this.s2.selected = true;
                         }
                         gameScreen.game.targetScreenX = 2800;
-                        this.message.setMessage("Right click on this enemy unit to attack.","Step #4",0,"voiceTutorial4");
+                        this.message.setMessage("Right click on this enemy unit to attack.","Step #4",0,"voiceTutorial4",true);
                         this.arrow.x = this.o1.x + gameScreen.game.battlefield.x;
                         this.arrow.y = this.o1.y - this.o1.pheight * 0.8 + gameScreen.game.battlefield.y;
                         this.arrow.rotation = 0;
@@ -218,7 +218,7 @@ package com.brockw.stickwar.campaign.controllers
                               this.s1.selected = false;
                               this.s2.selected = false;
                         }
-                        this.message.setMessage("Click down here on the mini map to quickly navigate back to you castle.","Step #5",0,"voiceTutorial5");
+                        this.message.setMessage("Click down here on the mini map to quickly navigate back to you castle.","Step #5",0,"voiceTutorial5",true);
                         this.arrow.x = gameScreen.game.stage.stageWidth / 2 - 90;
                         this.arrow.y = gameScreen.game.stage.stageHeight - 115;
                   }
@@ -232,7 +232,7 @@ package com.brockw.stickwar.campaign.controllers
                   }
                   else if(this.state == S_PRAY)
                   {
-                        this.message.setMessage("Right click on the statue to begin praying.","Step #7",0,"voiceTutorial8");
+                        this.message.setMessage("Right click the statue to begin praying.","Step #7",0,"voiceTutorial8");
                         gameScreen.userInterface.isSlowCamera = true;
                         gameScreen.game.targetScreenX = gameScreen.team.homeX;
                         this.arrow.x = gameScreen.game.team.statue.x + gameScreen.game.battlefield.x;
@@ -245,12 +245,12 @@ package com.brockw.stickwar.campaign.controllers
                         this.arrow.visible = false;
                         gameScreen.userInterface.isSlowCamera = true;
                         gameScreen.game.targetScreenX = gameScreen.team.homeX;
-                        this.message.setMessage("Praying is used to gather mana. Mana is used to build more advanced units, research technologies and cast spells.","",0,"voiceTutorial7");
+                        this.message.setMessage("Praying gathers mana, which is used to build more advanced units, research technologies and use abilities.","",0,"voiceTutorial7");
                   }
                   else if(this.state == S_START_MINING)
                   {
                         this.arrow.visible = true;
-                        this.message.setMessage("Right click on a gold mine to gather gold.","Step #8",0,"voiceTutorial9");
+                        this.message.setMessage("Right click on a gold mine to gather gold.","Step #8",0,"voiceTutorial9",true);
                         gameScreen.userInterface.isSlowCamera = true;
                         gameScreen.game.targetScreenX = gameScreen.team.homeX;
                         this.arrow.x = gameScreen.game.map.gold[3].x + gameScreen.game.battlefield.x;
@@ -260,7 +260,7 @@ package com.brockw.stickwar.campaign.controllers
                   }
                   else if(this.state == S_GOLD_INFO)
                   {
-                        this.message.setMessage("Your mana, gold and population are shown at the right of the screen.","",75,"voiceTutorial10");
+                        this.message.setMessage("Your gold, mana and population are shown here.","",75,"voiceTutorial10");
                         this.arrow.x = 675;
                         this.arrow.y = 40;
                   }
@@ -268,12 +268,12 @@ package com.brockw.stickwar.campaign.controllers
                   {
                         if(gameScreen.team.buttonInfoMap[Unit.U_SWORDWRATH][3] != 0 || this.arrow.visible == false)
                         {
-                              this.message.setMessage("The Swordwrath is a basic infantry unit. Once finished training, he will appear through your castle\'s gates.","",0,"voiceTutorial12");
+                              this.message.setMessage("The Swordwrath is a basic infantry unit. Once finished training, he will appear from the castle gates.","",0,"voiceTutorial12");
                               this.arrow.visible = false;
                         }
                         else
                         {
-                              this.message.setMessage("Click the icon below to build a Swordwrath unit.","Step #9",0,"voiceTutorial11");
+                              this.message.setMessage("Click the icon below to build a Swordwrath unit.","Step #9",0,"voiceTutorial11",true);
                               this.arrow.x = 95;
                               this.arrow.y = gameScreen.game.stage.stageHeight - 100;
                               this.arrow.visible = true;
@@ -297,14 +297,14 @@ package com.brockw.stickwar.campaign.controllers
                         {
                               g.selected = false;
                         }
-                        this.message.setMessage("Click here to garrison your units inside the castle.","Step #10",0,"voiceTutorial14");
+                        this.message.setMessage("Click here to garrison your units inside the castle.","Step #10",0,"voiceTutorial14",true);
                         this.arrow.x = gameScreen.game.stage.stageWidth / 2 - 90;
                         this.arrow.y = gameScreen.game.stage.stageHeight - 75;
                         this.arrow.visible = true;
                   }
                   else if(this.state == S_GARRISON)
                   {
-                        this.message.setMessage("Your units will now run to the safety of your castle.","",0,"voiceTutorial15");
+                        this.message.setMessage("Your units will now run to the safety of your castle walls.","",0,"voiceTutorial15");
                         this.arrow.visible = false;
                         gameScreen.userInterface.isGlobalsEnabled = false;
                         gameScreen.userInterface.isSlowCamera = true;
@@ -318,7 +318,7 @@ package com.brockw.stickwar.campaign.controllers
                   {
                         gameScreen.userInterface.isSlowCamera = true;
                         gameScreen.game.targetScreenX = 0;
-                        this.message.setMessage("Click on the archery range building.","Step #11",250,"voiceTutorial16");
+                        this.message.setMessage("Click on the Archery Range building.","Step #11",250,"voiceTutorial16");
                         gameScreen.team.gold = 400;
                         this.arrow.x = 537 + gameScreen.game.battlefield.x;
                         this.arrow.y = gameScreen.game.battlefield.y - 150;
@@ -327,7 +327,7 @@ package com.brockw.stickwar.campaign.controllers
                   else if(this.state == S_UPGRADE_CASTLE_ARCHER)
                   {
                         this.message.y = gameScreen.game.stage.stageHeight / 4 - 75;
-                        this.message.setMessage("Click the icon below to build a Castle Archer.","Step #12",0,"voiceTutorial17");
+                        this.message.setMessage("Click the icon below to build a Castle Archer.","Step #12",0,"voiceTutorial17",true);
                         gameScreen.game.targetScreenX = 0;
                         gameScreen.userInterface.selectedUnits.add(Unit(gameScreen.team.buildings["ArcheryBuilding"]));
                         Unit(gameScreen.team.buildings["ArcheryBuilding"]).selected = true;
@@ -350,7 +350,7 @@ package com.brockw.stickwar.campaign.controllers
                         u.arg0 = gameScreen.team.homeX;
                         u.arg1 = gameScreen.team.game.map.height / 2;
                         u.execute(gameScreen.team.game);
-                        this.message.setMessage("Hit the defend button below to send out your units.","Step #13",0,"voiceTutorial19");
+                        this.message.setMessage("Hit the defend button below to send out your units.","Step #13",0,"voiceTutorial19",true);
                         this.message.visible = true;
                         this.arrow.visible = true;
                         this.arrow.x = gameScreen.game.stage.stageWidth / 2;
@@ -359,7 +359,7 @@ package com.brockw.stickwar.campaign.controllers
                   else if(this.state == S_HIT_DEFEND)
                   {
                         gameScreen.userInterface.isGlobalsEnabled = false;
-                        this.message.setMessage("Use your forces to take down the invading Spearton.","Step #14",0,"voiceTutorial20");
+                        this.message.setMessage("Use your forces to defend against the invading Spearton.","Step #14",0,"voiceTutorial20");
                         this.message.visible = true;
                         this.arrow.visible = true;
                         this.arrow.x = this.spearton1.x + gameScreen.game.battlefield.x;
@@ -379,13 +379,13 @@ package com.brockw.stickwar.campaign.controllers
                   }
                   else if(this.state == S_GOOD_LUCK)
                   {
-                        this.message.setMessage("For a full list of commands, hit \'ESC\' or \'P\' for the pause menu.","",0,"voiceTutorial21");
+                        this.message.setMessage("For a full list of commands, hit \'ESC\' or \'P\' for pause menu.","",0,"voiceTutorial21");
                         this.arrow.visible = false;
                         CampaignGameScreen(gameScreen).doAiUpdates = true;
                   }
                   else if(this.state == S_GOOD_LUCK_2)
                   {
-                        this.message.setMessage("Your mission is to destroy the enemy monument before they destroy yours. Good luck.","",0,"voiceTutorial22");
+                        this.message.setMessage("Your objective is to destroy the enemy statue before they destroy yours. Good luck.","",0,"voiceTutorial22");
                         this.arrow.visible = false;
                         CampaignGameScreen(gameScreen).doAiUpdates = true;
                         gameScreen.userInterface.isGlobalsEnabled = true;

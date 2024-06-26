@@ -48,7 +48,6 @@ package com.brockw.stickwar.campaign.controllers
                   {
                         this.message.update();
                   }
-                  gameScreen.team.enemyTeam.statue.health = 100;
                   if(this.state == S_BEFORE_CUTSCENE)
                   {
                         if(gameScreen.team.enemyTeam.statue.health < 750)

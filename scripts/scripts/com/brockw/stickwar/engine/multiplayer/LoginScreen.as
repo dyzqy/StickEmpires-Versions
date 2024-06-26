@@ -158,9 +158,13 @@ package com.brockw.stickwar.engine.multiplayer
                   {
                         this.loginMc.failBox.loginError.text = "Server is full";
                   }
+                  else if(evt.params.errorCode == 10)
+                  {
+                        this.loginMc.failBox.loginError.text = "Please check your email to complete the signup process";
+                  }
                   else
                   {
-                        this.loginMc.failBox.loginError.text = "Login failed";
+                        this.loginMc.failBox.loginError.text = "Error loging in";
                   }
                   this.loginMc.loginBox.usernameInput.buttonMode = true;
                   this.justFailed = true;

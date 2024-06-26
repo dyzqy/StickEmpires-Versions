@@ -2,12 +2,12 @@
 <debug>0</debug>
 <isAlpha>1</isAlpha>
 <hasArmory>1</hasArmory>
-<skipToLevel>0</skipToLevel>
+<skipToLevel>6</skipToLevel>
 <campaignDifficulty>1</campaignDifficulty>
 <isFogOfWar>1</isFogOfWar>
 <debugTeamA>Chaos</debugTeamA>
 <debugTeamB>Order</debugTeamB>
-<version>1.18</version>
+<version>1.19</version>
 <gravity>0.45</gravity>
 <worldScale>1</worldScale>
 <frontScale>.8</frontScale>
@@ -336,10 +336,11 @@
 
 <armoured>0</armoured>
 
-<damage>2.5</damage>
-<toArmour>1.5</toArmour>
+<damage>4</damage>
+<toArmour>2</toArmour>
 <toNotArmour>0</toNotArmour>
-<health>100</health>
+<health>65</health>
+<upgradedHealth>90</upgradedHealth>
 <weaponReach>80</weaponReach>
 <mass>200</mass>
 <maxForce>80</maxForce>
@@ -1465,10 +1466,11 @@
 
 <armoured>0</armoured>
 
-<damage>2.5</damage>
+<damage>4</damage>
 <toArmour>2</toArmour>
 <toNotArmour>0</toNotArmour>
-<health>100</health>
+<health>65</health>
+<upgradedHealth>90</upgradedHealth>
 <weaponReach>80</weaponReach>
 <mass>200</mass>
 <maxForce>80</maxForce>

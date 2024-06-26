@@ -37,6 +37,7 @@ package com.brockw.stickwar.engine
             {
                   var f:ForfeitMove = new ForfeitMove();
                   gameScreen.doMove(f,gameScreen.team.id);
+                  this.hideMenu();
             }
             
             private function restartButton(evt:Event) : void

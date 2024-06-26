@@ -10,7 +10,7 @@ package com.brockw.stickwar.engine
             
             private static const scale:Number = 1;
             
-            private static const statueArea:Number = 50;
+            private static const statueArea:Number = 300;
              
             
             private var teamBar:Number;

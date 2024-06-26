@@ -48,6 +48,8 @@ package com.brockw.stickwar.engine.units
             
             private var upgradedMaxVelocity:Number;
             
+            protected var upgradedMaxHealth:int;
+            
             public function Miner(game:StickWar)
             {
                   super(game);
@@ -97,6 +99,7 @@ package com.brockw.stickwar.engine.units
                   this.upgradedMaxVelocity = game.xml.xml.Order.Units.miner.upgradedMaxVelocity;
                   this.createTime = game.xml.xml.Order.Units.miner.cooldown;
                   maxHealth = health = game.xml.xml.Order.Units.miner.health;
+                  this.upgradedMaxHealth = game.xml.xml.Order.Units.miner.upgradedHealth;
                   this.wallConstructionTime = game.xml.xml.Order.Units.miner.wall.constructionTime;
                   loadDamage(game.xml.xml.Order.Units.miner);
                   type = Unit.U_MINER;
@@ -158,6 +161,15 @@ package com.brockw.stickwar.engine.units
                   var oreMined:* = undefined;
                   var distance:Number = NaN;
                   var t:String = null;
+                  if(team.tech.isResearched(Tech.MINER_SPEED))
+                  {
+                        if(this.maxHealth != this.upgradedMaxHealth)
+                        {
+                              health += this.upgradedMaxHealth - maxHealth;
+                              maxHealth = this.upgradedMaxHealth;
+                              healthBar.totalHealth = maxHealth;
+                        }
+                  }
                   updateCommon(game);
                   this.wallSpell.update();
                   if(!team.tech.isResearched(Tech.MINER_SPEED))
