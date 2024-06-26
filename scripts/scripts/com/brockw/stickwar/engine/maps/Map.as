@@ -24,6 +24,8 @@ package com.brockw.stickwar.engine.maps
             public static const M_GATES:int = 6;
             
             public static const M_CASTLE:int = 7;
+            
+            public static const M_HALLOWEEN:int = 8;
              
             
             private var _width:int;
@@ -81,6 +83,10 @@ package com.brockw.stickwar.engine.maps
                   {
                         return "Castle";
                   }
+                  if(id == M_HALLOWEEN)
+                  {
+                        return "Halloween";
+                  }
                   return "Bad ID";
             }
             
@@ -117,6 +123,10 @@ package com.brockw.stickwar.engine.maps
                   if(id == M_CASTLE)
                   {
                         return new CastleLevel(game);
+                  }
+                  if(id == M_HALLOWEEN)
+                  {
+                        return new Halloween(game);
                   }
                   return new IceWorld(game);
             }

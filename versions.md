@@ -1,3 +1,6 @@
+## version 1.16
+- New Halloween map!
+
 ## version 1.15
 - Changed low performance check from using FPS to using skips in frames.
 
