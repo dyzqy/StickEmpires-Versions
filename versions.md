@@ -1,8 +1,8 @@
 ## version 1.14
 - Registering now checks if the used email is available.
 - While in-game, if FPS is low enough, resolution is automatically changed.
- - added low quality fogOfWar.
- - background will not have parallex effect if on low resolution.
+  - added low quality fogOfWar.
+  - background will not have parallex effect if on low resolution.
 - Removed 4th Castle Archer & Dead.
 - Game shows correct profile of unit selected with selecting a group of diffrent units.
 - Added error mode in Post Game Screen.
