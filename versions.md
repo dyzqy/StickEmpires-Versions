@@ -1,3 +1,6 @@
+## version 1.15
+- Changed low performance check from using FPS to using skips in frames.
+
 ## version 1.14
 - Registering now checks if the used email is available.
 - While in-game, if FPS is low enough, resolution is automatically changed.

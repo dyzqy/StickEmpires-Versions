@@ -123,6 +123,10 @@ package com.brockw.stickwar
                   this.lastSwitchInQuality = getTimer();
                   this.isFirstSwitch = true;
                   this.hasChanged = false;
+                  this._hasMovingBackground = true;
+                  this._hasEffects = true;
+                  this._hasAlphaOnFogOfWar = true;
+                  this._hasScreenReduction = true;
             }
             
             public function u(evt:Event) : void
@@ -174,7 +178,7 @@ package com.brockw.stickwar
                         {
                               if(this.slowLevel == S_REALLY_SLOW)
                               {
-                                    if(this.simulation.fps > 25)
+                                    if(this.skipHeuristic < 5)
                                     {
                                           this.slowLevel = S_SLOW;
                                           this.hasChanged = true;
@@ -182,24 +186,24 @@ package com.brockw.stickwar
                               }
                               else if(this.slowLevel == S_SLOW)
                               {
-                                    if(this.simulation.fps < 15)
+                                    if(this.skipHeuristic > 70)
                                     {
                                           this.slowLevel = S_REALLY_SLOW;
                                           this.hasChanged = true;
                                     }
-                                    if(this.simulation.fps > 29)
+                                    if(this.skipHeuristic < 1)
                                     {
                                           this.slowLevel = S_GOOD;
                                           this.hasChanged = true;
                                     }
                               }
-                              else if(this.simulation.fps < 25)
+                              else if(this.skipHeuristic > 5)
                               {
                                     this.slowLevel = S_SLOW;
                                     this.hasChanged = true;
                               }
                         }
-                        if(this.hasChanged && getTimer() - this.lastSwitchInQuality > 30 * 1000)
+                        if(this.hasChanged && getTimer() - this.lastSwitchInQuality > 15 * 1000)
                         {
                               if(this.isFirstSwitch)
                               {
@@ -231,7 +235,6 @@ package com.brockw.stickwar
                                                 }
                                                 this._hasMovingBackground = false;
                                                 this.hasScreenReduction = true;
-                                                this.hasAlphaOnFogOfWar = false;
                                           }
                                     }
                               }
@@ -240,9 +243,19 @@ package com.brockw.stickwar
                         }
                         evt.updateAfterEvent();
                         this.consecutiveSkips = 0;
+                        this.skipHeuristic -= 0.2;
+                        if(this.skipHeuristic < 0)
+                        {
+                              this.skipHeuristic = 0;
+                        }
                   }
                   else
                   {
+                        ++this.skipHeuristic;
+                        if(this.skipHeuristic > 75)
+                        {
+                              this.skipHeuristic = 75;
+                        }
                         this.overTime = 0;
                         ++this.consecutiveSkips;
                         if(Boolean(this.gameTimer))

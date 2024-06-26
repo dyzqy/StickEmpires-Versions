@@ -7,7 +7,7 @@
 <isFogOfWar>1</isFogOfWar>
 <debugTeamA>Chaos</debugTeamA>
 <debugTeamB>Order</debugTeamB>
-<version>1.14</version>
+<version>1.15</version>
 <gravity>0.45</gravity>
 <worldScale>1</worldScale>
 <frontScale>.8</frontScale>
@@ -25,12 +25,12 @@
 <startingGold>500</startingGold>
 <startingMana>0</startingMana>
 <visionSize>1200</visionSize>
-
+<populationLimit>80</populationLimit>
 <passiveIncome>0</passiveIncome>
 <passiveMana>0</passiveMana>
 <passiveIncomeUpgraded1>5</passiveIncomeUpgraded1>
 <passiveIncomeUpgraded2>10</passiveIncomeUpgraded2>
-<passiveIncomeUpgraded3>20</passiveIncomeUpgraded3><populationLimit>80</populationLimit>
+<passiveIncomeUpgraded3>20</passiveIncomeUpgraded3>
 <passiveManaUpgraded1>3.5</passiveManaUpgraded1>
 <passiveManaUpgraded2>7</passiveManaUpgraded2>
 <passiveManaUpgraded3>14</passiveManaUpgraded3>
