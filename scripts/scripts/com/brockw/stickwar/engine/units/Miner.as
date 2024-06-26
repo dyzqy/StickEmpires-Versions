@@ -210,6 +210,7 @@ package com.brockw.stickwar.engine.units
                                     {
                                           this.attackState = 1;
                                           _mc.gotoAndStop("building");
+                                          game.soundManager.playSound("BuildWall",px,py);
                                     }
                               }
                               else if(this.attackState != 1)

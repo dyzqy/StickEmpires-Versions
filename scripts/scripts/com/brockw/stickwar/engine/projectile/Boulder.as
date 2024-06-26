@@ -40,7 +40,7 @@ package com.brockw.stickwar.engine.projectile
             
             override public function update(game:StickWar) : void
             {
-                  var odz:Number = NaN;
+                  var ody:Number = NaN;
                   var effects:Array = null;
                   var effect:Array = null;
                   var dir:int = 0;
@@ -52,8 +52,8 @@ package com.brockw.stickwar.engine.projectile
                   var ndy:* = undefined;
                   var ndz:* = undefined;
                   var odx:Number = dx;
-                  var ody:Number = dy;
-                  odz = dz;
+                  ody = dy;
+                  var odz:Number = dz;
                   this.stunTime = this.stunTimeBoulder;
                   this.visible = true;
                   this.scaleX = this._scale * (game.backScale + py / game.map.height * (game.frontScale - game.backScale));
@@ -138,6 +138,7 @@ package com.brockw.stickwar.engine.projectile
                   }
                   if(!this.isInFlight() && !isDebris)
                   {
+                        team.game.soundManager.playSound("BoulderSmashSound",px,py);
                         for(i = 0; i < 5; i++)
                         {
                               ndx = odx * 0.6 + game.random.nextNumber() * 4 - 2;

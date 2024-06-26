@@ -21,11 +21,11 @@ package com.brockw.stickwar
             
             protected static const MAX_SKIPS:int = 3;
             
-            private static const S_GOOD:int = 0;
+            private static const S_HIGH_QUALITY:int = 0;
             
-            private static const S_SLOW:int = 1;
+            private static const S_LOW_QUALITY:int = 1;
             
-            private static const S_REALLY_SLOW:int = 2;
+            private static const S_ULTRA_LOW:int = 2;
              
             
             protected var _game:StickWar;
@@ -101,10 +101,14 @@ package com.brockw.stickwar
                   this._hasScreenReduction = true;
                   this.main = main;
                   this.isDebug = false;
-                  this.slowLevel = S_GOOD;
+                  this.slowLevel = S_HIGH_QUALITY;
                   this.skipHeuristic = 0;
                   main.loadingFraction = 0;
                   this.lastSwitchInQuality = getTimer();
+            }
+            
+            public function judgementFrame() : void
+            {
             }
             
             override public function enter() : void
@@ -141,7 +145,6 @@ package com.brockw.stickwar
             
             public function updateGameLoop(evt:TimerEvent) : void
             {
-                  var result:uint = 0;
                   if(!stage)
                   {
                         return;
@@ -176,57 +179,33 @@ package com.brockw.stickwar
                   {
                         if(stage != null)
                         {
-                              if(this.slowLevel == S_REALLY_SLOW)
+                              if(this.slowLevel != S_ULTRA_LOW)
                               {
-                                    if(this.skipHeuristic < 5 && getTimer() - this.lastSwitchInQuality > 60000)
+                                    if(this.slowLevel == S_LOW_QUALITY)
                                     {
-                                          this.slowLevel = S_SLOW;
+                                          if(this.simulation.fps > 29 && getTimer() - this.lastSwitchInQuality > 60000)
+                                          {
+                                                this.slowLevel = S_HIGH_QUALITY;
+                                                this.hasChanged = true;
+                                                this.lastSwitchInQuality = getTimer();
+                                          }
+                                    }
+                                    else if(this.simulation.fps < 22 && getTimer() - this.lastSwitchInQuality > 5000)
+                                    {
+                                          this.slowLevel = S_LOW_QUALITY;
                                           this.hasChanged = true;
                                           this.lastSwitchInQuality = getTimer();
                                     }
-                              }
-                              else if(this.slowLevel == S_SLOW)
-                              {
-                                    if(this.skipHeuristic > 70)
-                                    {
-                                          this.slowLevel = S_REALLY_SLOW;
-                                          this.hasChanged = true;
-                                          this.lastSwitchInQuality = getTimer();
-                                    }
-                                    if(this.skipHeuristic < 1 && getTimer() - this.lastSwitchInQuality > 60000)
-                                    {
-                                          this.slowLevel = S_GOOD;
-                                          this.hasChanged = true;
-                                          this.lastSwitchInQuality = getTimer();
-                                    }
-                              }
-                              else if(this.skipHeuristic > 5)
-                              {
-                                    this.slowLevel = S_SLOW;
-                                    this.hasChanged = true;
-                                    this.lastSwitchInQuality = getTimer();
                               }
                         }
                         if(this.game.frame == 30 * 15)
                         {
-                              if(this.slowLevel == S_REALLY_SLOW)
-                              {
-                                    if(ExternalInterface.available)
-                                    {
-                                          result = ExternalInterface.call("changeSize",true);
-                                    }
-                                    this._hasMovingBackground = false;
-                                    this.hasScreenReduction = true;
-                              }
-                              else if(ExternalInterface.available)
-                              {
-                                    result = ExternalInterface.call("changeSize",false);
-                              }
+                              this.judgementFrame();
                         }
                         if(this.hasChanged)
                         {
                               this.hasChanged = false;
-                              if(this.slowLevel == S_GOOD)
+                              if(this.slowLevel == S_HIGH_QUALITY)
                               {
                                     this._hasEffects = true;
                                     stage.quality = "HIGH";
@@ -240,19 +219,9 @@ package com.brockw.stickwar
                         }
                         evt.updateAfterEvent();
                         this.consecutiveSkips = 0;
-                        this.skipHeuristic -= 0.2;
-                        if(this.skipHeuristic < 0)
-                        {
-                              this.skipHeuristic = 0;
-                        }
                   }
                   else
                   {
-                        ++this.skipHeuristic;
-                        if(this.skipHeuristic > 75)
-                        {
-                              this.skipHeuristic = 75;
-                        }
                         this.overTime = 0;
                         ++this.consecutiveSkips;
                         if(Boolean(this.gameTimer))
@@ -272,11 +241,13 @@ package com.brockw.stickwar
                   {
                         this.userInterface.update(evt,timeDiff);
                   }
+                  this.simulation.updateFPS();
                   this.simulation.update(this);
                   if(Boolean(this.simulation))
                   {
                         if(this.simulation.isStalled)
                         {
+                              this.game.updateVisibilityOfUnits();
                               if(this.lastPulse > 5)
                               {
                                     m = new ScreenPositionUpdateMove();

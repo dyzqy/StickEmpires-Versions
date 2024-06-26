@@ -62,7 +62,7 @@ package com.brockw.stickwar.engine
             
             public function refresh() : void
             {
-                  var c:Sprite = Sprite(this._game.getChildByName("cursorSprite"));
+                  var c:Sprite = Sprite(this._game.cursorSprite);
                   if(Boolean(this._currentMove))
                   {
                         this._currentMove.cleanUpPreClick(c);
@@ -174,7 +174,7 @@ package com.brockw.stickwar.engine
                         }
                         else
                         {
-                              s = Sprite(this._game.getChildByName("cursorSprite"));
+                              s = Sprite(gameScreen.game.cursorSprite);
                               if(s.contains(m))
                               {
                                     s.removeChild(m);
@@ -386,16 +386,16 @@ package com.brockw.stickwar.engine
                         {
                               if(Boolean(this._currentMove))
                               {
-                                    this._currentMove.cleanUpPreClick(Sprite(gameScreen.game.getChildByName("cursorSprite")));
+                                    this._currentMove.cleanUpPreClick(Sprite(gameScreen.game.cursorSprite));
                               }
-                              if(this._currentMove.drawCursorPostClick(Sprite(gameScreen.game.getChildByName("cursorSprite")),gameScreen))
+                              if(this._currentMove.drawCursorPostClick(Sprite(gameScreen.game.cursorSprite),gameScreen))
                               {
                                     this._currentMove = null;
                               }
                         }
                         else
                         {
-                              this._currentMove.drawCursorPreClick(Sprite(gameScreen.game.getChildByName("cursorSprite")),gameScreen);
+                              this._currentMove.drawCursorPreClick(Sprite(gameScreen.game.cursorSprite),gameScreen);
                         }
                   }
                   if(gameScreen.userInterface.selectedUnits.hasFinishedSelecting && this._currentMove == null && gameScreen.userInterface.selectedUnits.interactsWith != 0)

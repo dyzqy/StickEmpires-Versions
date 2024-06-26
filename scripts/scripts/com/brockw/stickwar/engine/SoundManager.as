@@ -114,31 +114,24 @@ package com.brockw.stickwar.engine
             
             public function playSoundFullVolumeRandom(baseName:String, range:int) : Number
             {
-                  var sound:Sound = null;
-                  var s:SoundChannel = null;
                   var name:String = baseName + (1 + Math.floor(Math.random() * range));
-                  if(this.main.stickWar == null || this.main.stickWar.gameScreen.userInterface.isSound)
-                  {
-                        if(this.sounds[name] != null)
-                        {
-                              sound = new this.sounds[name]();
-                              s = sound.play();
-                              return sound.length;
-                        }
-                  }
-                  return 0;
+                  return this.playSoundFullVolume(name);
             }
             
             public function playSoundFullVolume(name:String) : Number
             {
                   var sound:Sound = null;
                   var s:SoundChannel = null;
-                  if(this.main.stickWar == null || Boolean(this.main.stickWar.gameScreen.userInterface) && this.main.stickWar.gameScreen.userInterface.isSound)
+                  var transform:SoundTransform = null;
+                  if(!this.main.stickWar || this.main.stickWar.gameScreen.userInterface == null || Boolean(this.main.stickWar.gameScreen.userInterface) && this.main.stickWar.gameScreen.userInterface.isSound)
                   {
                         if(this.sounds[name] != null)
                         {
                               sound = new this.sounds[name]();
                               s = sound.play();
+                              transform = new SoundTransform();
+                              transform.volume = this.volumeMap[name];
+                              s.soundTransform = transform;
                               return sound.length;
                         }
                   }
@@ -154,7 +147,7 @@ package com.brockw.stickwar.engine
             public function playSound(name:String, posX:Number, posY:Number) : void
             {
                   var s:SoundChannel = null;
-                  if(this.main.stickWar == null || this.main.stickWar.gameScreen.userInterface.isSound)
+                  if(!this.main.stickWar || this.main.stickWar.gameScreen.userInterface == null || Boolean(this.main.stickWar.gameScreen.userInterface) && this.main.stickWar.gameScreen.userInterface.isSound)
                   {
                         if(this.sounds[name] != null)
                         {

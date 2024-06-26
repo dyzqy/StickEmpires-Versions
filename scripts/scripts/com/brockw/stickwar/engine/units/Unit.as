@@ -700,14 +700,7 @@ package com.brockw.stickwar.engine.units
             {
                   if(this.reaperCurseFrames > 0)
                   {
-                        if(Boolean(this.reaperInflictor))
-                        {
-                              this.walk(this.reaperInflictor.px - px,0,Util.sgn(this.reaperInflictor.px - px));
-                        }
-                        else
-                        {
-                              this.walk(this.team.direction,0,this.team.direction);
-                        }
+                        this.walk(this.team.direction,0,this.team.direction);
                         --this.reaperCurseFrames;
                         if(this.reaperMc.currentFrame == this.reaperMc.totalFrames)
                         {
@@ -879,12 +872,13 @@ package com.brockw.stickwar.engine.units
                         }
                         this.poisonMc = new poisonEffect();
                         this.mc.addChild(this.poisonMc);
+                        this.team.game.soundManager.playSound("PoisonedSound",px,py);
                         this.poisonMc.x = 0;
                         this.poisonMc.y = this.healthBar.y - 20;
                         this._poisonDamage = p;
                         if(this._poisonDamage > 0)
                         {
-                              this.team.poisonedUnits.push(this);
+                              this.team.poisonedUnits[this.id] = this;
                         }
                   }
             }
@@ -895,7 +889,7 @@ package com.brockw.stickwar.engine.units
                   this.reaperCurseFrames = 0;
                   if(this in this.team.poisonedUnits)
                   {
-                        this.team.poisonedUnits.splice(this.team.poisonedUnits.indexOf(this),1);
+                        delete this.team.poisonedUnits[this.id];
                   }
             }
             
@@ -1006,7 +1000,7 @@ package com.brockw.stickwar.engine.units
                   }
                   px += this._dx;
                   py += this._dy;
-                  var BUF:int = 10;
+                  var BUF:int = 7.5;
                   for each(w in this.team.enemyTeam.walls)
                   {
                         if(px < w.px + BUF && px > w.px - BUF)
@@ -1185,7 +1179,7 @@ package com.brockw.stickwar.engine.units
                   }
                   var dir:int = Util.sgn(target.px - px);
                   p = this.globalToLocal(p);
-                  if(p.x > -pwidth && p.x < pwidth && p.y > -pheight && p.y < 0)
+                  if(p.x > -pwidth && p.x < pwidth && p.y > -pheight && p.y < pheight)
                   {
                         return true;
                   }
@@ -1210,20 +1204,17 @@ package com.brockw.stickwar.engine.units
             override public function damage(type:int, amount:int, inflictor:Entity) : void
             {
                   var dmg:Number = NaN;
-                  var soundName:String = null;
                   if(this.isTargetable() && !this.isDualing)
                   {
                         if(!(Unit.D_NO_SOUND & type))
                         {
                               if(this.isArmoured)
                               {
-                                    soundName = "hitOnArmour" + (1 + this.team.game.random.nextInt() % 8);
-                                    this.team.game.soundManager.playSound(soundName,px,py);
+                                    this.team.game.soundManager.playSoundRandom("hitOnArmour",7,px,py);
                               }
                               else
                               {
-                                    soundName = "hitOnFlesh" + (1 + this.team.game.random.nextInt() % 4);
-                                    this.team.game.soundManager.playSound(soundName,px,py);
+                                    this.team.game.soundManager.playSoundRandom("hitOnFlesh",12,px,py);
                               }
                         }
                         dmg = 0;
@@ -1247,10 +1238,7 @@ package com.brockw.stickwar.engine.units
                         this._health -= dmg;
                         if(this._health <= 0)
                         {
-                              if(this.team.type == Team.T_GOOD)
-                              {
-                                    this.team.game.soundManager.playSoundRandom("orderDeath",2,px,py);
-                              }
+                              this.playDeathSound();
                               if(type == 1 && this.isFirable)
                               {
                                     this.isOnFire = true;
@@ -1275,6 +1263,11 @@ package com.brockw.stickwar.engine.units
                               this.healthBar.update();
                         }
                   }
+            }
+            
+            public function playDeathSound() : void
+            {
+                  this.team.game.soundManager.playSoundRandom("Pain",8,px,py);
             }
             
             public function startDual(target:Unit) : Boolean

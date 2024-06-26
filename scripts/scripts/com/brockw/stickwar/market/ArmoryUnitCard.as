@@ -121,6 +121,7 @@ package com.brockw.stickwar.market
                   this.main.loadout.setItem(unit,type,name);
                   this.updateUnitProfile();
                   this.main.armourScreen.saveLoadout();
+                  this.main.soundManager.playSoundFullVolume("ArmoryEquipSound");
             }
             
             public function setUnitProfile(armorScreen:MovieClip) : void

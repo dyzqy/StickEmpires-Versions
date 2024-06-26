@@ -54,6 +54,11 @@ package com.brockw.stickwar.engine.units
                   }
             }
             
+            override public function playDeathSound() : void
+            {
+                  team.game.soundManager.playSoundRandom("CrawlerDeath",3,px,py);
+            }
+            
             override public function init(game:StickWar) : void
             {
                   initBase();

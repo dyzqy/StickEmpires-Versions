@@ -102,6 +102,14 @@ package com.brockw.stickwar.engine.multiplayer
                   game.teamB.spawnMiners();
             }
             
+            override public function judgementFrame() : void
+            {
+                  trace("SEND THE JUDGEMENT OF",simulation.fps);
+                  var o:SFSObject = new SFSObject();
+                  o.putInt("fps",simulation.fps);
+                  Main(main).sfs.send(new ExtensionRequest("setFPS",o));
+            }
+            
             override public function enter() : void
             {
                   super.enter();

@@ -123,7 +123,7 @@ package com.brockw.stickwar.engine.Team
             
             private var _garrisonedUnits:Dictionary;
             
-            private var _poisonedUnits:Array;
+            private var _poisonedUnits:Dictionary;
             
             private var VISION_LENGTH:Number;
             
@@ -189,7 +189,7 @@ package com.brockw.stickwar.engine.Team
                   this.hit = false;
                   this._garrisonedUnits = new Dictionary();
                   this.loadout = new Loadout();
-                  this._poisonedUnits = [];
+                  this._poisonedUnits = new Dictionary();
                   this.numberOfCats = 0;
                   this.VISION_LENGTH = game.xml.xml.visionSize;
                   this.unitGroups = new Dictionary();
@@ -704,9 +704,23 @@ package com.brockw.stickwar.engine.Team
                               {
                                     if(gameScreen.userInterface.mouseState.clicked)
                                     {
-                                          c = new UnitCreateMove();
-                                          c.unitType = int(key);
-                                          gameScreen.doMove(c,this.id);
+                                          if(this.gold < this.unitInfo[int(key)][0])
+                                          {
+                                                this.game.gameScreen.userInterface.helpMessage.showMessage("Not enough gold to construct unit");
+                                                this.game.soundManager.playSoundFullVolume("UnitMakeFail");
+                                          }
+                                          else if(this.mana < this.unitInfo[int(key)][1])
+                                          {
+                                                this.game.gameScreen.userInterface.helpMessage.showMessage("Not enough mana to construct unit");
+                                                this.game.soundManager.playSoundFullVolume("UnitMakeFail");
+                                          }
+                                          else
+                                          {
+                                                c = new UnitCreateMove();
+                                                c.unitType = int(key);
+                                                gameScreen.doMove(c,this.id);
+                                                this.game.soundManager.playSoundFullVolume("UnitMake");
+                                          }
                                     }
                                     highlight.visible = true;
                                     overlay.visible = false;
@@ -890,6 +904,10 @@ package com.brockw.stickwar.engine.Team
                         MinerAi(unit.ai).targetOre = null;
                         MinerAi(unit.ai).isUnassigned = true;
                   }
+                  if(this == game.team)
+                  {
+                        game.soundManager.playSoundFullVolume("UnitReady");
+                  }
             }
             
             public function spawnMiners() : void
@@ -945,10 +963,22 @@ package com.brockw.stickwar.engine.Team
                               c.unitType = unitType;
                               userInterface.gameScreen.doMove(c,userInterface.gameScreen.team.enemyTeam.id);
                         }
+                        else if(this.gold < this.unitInfo[int(unitType)][0])
+                        {
+                              this.game.gameScreen.userInterface.helpMessage.showMessage("Not enough gold to construct unit");
+                              this.game.soundManager.playSoundFullVolume("UnitMakeFail");
+                        }
+                        else if(this.mana < this.unitInfo[int(unitType)][1])
+                        {
+                              this.game.gameScreen.userInterface.helpMessage.showMessage("Not enough mana to construct unit");
+                              this.game.soundManager.playSoundFullVolume("UnitMakeFail");
+                        }
                         else
                         {
-                              c.unitType = unitType;
-                              userInterface.gameScreen.doMove(c,userInterface.gameScreen.team.id);
+                              c = new UnitCreateMove();
+                              c.unitType = int(unitType);
+                              userInterface.gameScreen.doMove(c,this.id);
+                              this.game.soundManager.playSoundFullVolume("UnitMake");
                         }
                   }
             }
@@ -990,16 +1020,18 @@ package com.brockw.stickwar.engine.Team
             
             private function spawnMiddleUnit(game:StickWar) : Unit
             {
+                  var newUnit:Unit = null;
                   if(game.map.hills.length == 0)
                   {
                         return null;
                   }
                   var type:int = this.getSpawnUnitType(game);
-                  var newUnit:Unit = game.unitFactory.getUnit(type);
+                  newUnit = game.unitFactory.getUnit(type);
                   this.spawn(newUnit,game);
                   newUnit.x = newUnit.px = game.map.hills[0].px;
                   newUnit.y = newUnit.py = game.map.height / 2;
                   newUnit.isTowerSpawned = true;
+                  game.soundManager.playSoundFullVolumeRandom("GhostTower",2);
                   var attackMoveCommand:AttackMoveCommand = new AttackMoveCommand(game);
                   attackMoveCommand.type = UnitCommand.ATTACK_MOVE;
                   attackMoveCommand.goalX = this.enemyTeam.statue.px;
@@ -1459,12 +1491,12 @@ package com.brockw.stickwar.engine.Team
                   this._loadout = value;
             }
             
-            public function get poisonedUnits() : Array
+            public function get poisonedUnits() : Dictionary
             {
                   return this._poisonedUnits;
             }
             
-            public function set poisonedUnits(value:Array) : void
+            public function set poisonedUnits(value:Dictionary) : void
             {
                   this._poisonedUnits = value;
             }

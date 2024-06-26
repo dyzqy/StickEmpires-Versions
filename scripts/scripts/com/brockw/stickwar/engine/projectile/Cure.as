@@ -42,7 +42,7 @@ package com.brockw.stickwar.engine.projectile
                                     if(Math.pow(Unit(units[i]).px - this.px,2) + Math.pow(Unit(units[i]).py - this.py,2) < Math.pow(game.xml.xml.Order.Units.monk.healArea,2))
                                     {
                                           dz = dx = dy = 0;
-                                          Unit(units[i]).cure();
+                                          trace("SHOULD NOT BE HERE");
                                     }
                               }
                         }

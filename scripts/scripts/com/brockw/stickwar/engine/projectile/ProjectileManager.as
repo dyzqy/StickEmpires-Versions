@@ -107,6 +107,7 @@ package com.brockw.stickwar.engine.projectile
                   n.damageToDeal = unit.team.game.xml.xml.Chaos.Units.skelator.reaper.damage;
                   this.projectiles.push(n);
                   unit.team.game.battlefield.addChild(n);
+                  unit.team.game.soundManager.playSoundRandom("ReaperAir",3,unit.px,unit.py);
             }
             
             public function initFistAttack(x:Number, y:Number, unit:Unit, num:int) : void
@@ -150,7 +151,8 @@ package com.brockw.stickwar.engine.projectile
             
             public function initPoisonSpray(x:Number, y:Number, unit:Unit) : void
             {
-                  var n:PoisonSpray = PoisonSpray(this._projectileMap[Projectile.POISON_SPRAY].getItem());
+                  var n:PoisonSpray = null;
+                  n = PoisonSpray(this._projectileMap[Projectile.POISON_SPRAY].getItem());
                   if(n == null)
                   {
                         return;
@@ -380,6 +382,7 @@ package com.brockw.stickwar.engine.projectile
                   n.spellMc.gotoAndStop(1);
                   this.projectiles.push(n);
                   unit.team.game.battlefield.addChild(n);
+                  unit.team.game.soundManager.playSound("ElectricWallSoundEffect",x,y);
             }
             
             public function initNuke(x:Number, y:Number, unit:Unit, damage:Number) : void

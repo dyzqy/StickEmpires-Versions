@@ -15,6 +15,8 @@ package com.brockw.stickwar.engine
             
             private var teamBar:Number;
             
+            private var lastTeamBar:Number;
+            
             private var hillMc:_hillMc;
             
             private var hillControlBar:HillControlBar;
@@ -35,7 +37,7 @@ package com.brockw.stickwar.engine
                   this.addChild(this.hillMc = new _hillMc());
                   this.hillControlBar = new HillControlBar();
                   addChild(this.hillControlBar);
-                  this.teamBar = 50;
+                  this.lastTeamBar = this.teamBar = 50;
                   this.collectionRate = game.xml.xml.hill.goldCollectionRate;
                   this.collectionFrequency = game.xml.xml.hill.frequency;
                   this.hillCaptureTime = game.xml.xml.towerCaptureTime;
@@ -146,12 +148,27 @@ package com.brockw.stickwar.engine
                   if(this.teamBar == 0 || this.teamBar == 50 || this.teamBar == 100)
                   {
                         this.hillControlBar.visible = false;
+                        if(this.lastTeamBar != 0 && this.teamBar == 0)
+                        {
+                              if(game.teamA == game.team)
+                              {
+                                    game.soundManager.playSoundFullVolume("TowerCapture");
+                              }
+                        }
+                        else if(this.lastTeamBar != 100 && this.teamBar == 100)
+                        {
+                              if(game.teamB == game.team)
+                              {
+                                    game.soundManager.playSoundFullVolume("TowerCapture");
+                              }
+                        }
                   }
                   else
                   {
                         this.hillControlBar.visible = true;
                   }
                   this.hillControlBar.update((this.teamBar - 50) / 100,16711680);
+                  this.lastTeamBar = this.teamBar;
             }
       }
 }

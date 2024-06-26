@@ -178,6 +178,7 @@ package com.brockw.stickwar.engine
                   {
                         this.gameScreen.game.soundManager.playSoundInBackground("chaosInGame");
                   }
+                  this.addChild(this.gameScreen.game.cursorSprite);
             }
             
             private function exitButton(evt:Event) : void

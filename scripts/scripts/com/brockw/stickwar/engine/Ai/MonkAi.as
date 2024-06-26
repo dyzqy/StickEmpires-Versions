@@ -24,7 +24,7 @@ package com.brockw.stickwar.engine.Ai
             override public function update(game:StickWar) : void
             {
                   var u:Unit = null;
-                  var i:int = 0;
+                  var poisoned:Unit = null;
                   var range:Number = NaN;
                   unit.isBusyForSpell = false;
                   if(currentCommand.type == UnitCommand.HEAL || currentCommand.type == UnitCommand.CURE || currentCommand.type == UnitCommand.SLOW_DART)
@@ -77,13 +77,13 @@ package com.brockw.stickwar.engine.Ai
                               {
                                     cureCommand = new CureCommand(unit.team.game);
                               }
-                              for(i = 0; i < unit.team.poisonedUnits.length; i++)
+                              for each(poisoned in unit.team.poisonedUnits)
                               {
-                                    cureCommand.realX = unit.team.poisonedUnits[i].px;
-                                    cureCommand.realY = unit.team.poisonedUnits[i].py;
+                                    cureCommand.realX = poisoned.px;
+                                    cureCommand.realY = poisoned.py;
                                     if(cureCommand.inRange(unit))
                                     {
-                                          this.inRange = unit.team.poisonedUnits[i];
+                                          this.inRange = poisoned;
                                           break;
                                     }
                               }

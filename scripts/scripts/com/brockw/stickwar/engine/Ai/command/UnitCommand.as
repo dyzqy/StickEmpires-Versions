@@ -170,6 +170,10 @@ package com.brockw.stickwar.engine.Ai.command
                   this.gold = int(xmlList.gold);
             }
             
+            public function playSound(game:StickWar) : void
+            {
+            }
+            
             public function getGoldRequired() : int
             {
                   return this.gold;
@@ -356,6 +360,7 @@ package com.brockw.stickwar.engine.Ai.command
                   var dposY:Number = NaN;
                   var c:UnitCommand = null;
                   var distanceNew:Number = NaN;
+                  this.playSound(gameScreen.game);
                   var u:UnitMove = new UnitMove();
                   u.moveType = this.type;
                   var bestUnit:Unit = null;

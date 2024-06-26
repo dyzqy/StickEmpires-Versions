@@ -89,6 +89,7 @@ package com.brockw.stickwar.engine.multiplayer
                                     this.main.raceSelected = Team.T_GOOD;
                                     this.didSelect = true;
                                     this.raceChange();
+                                    this.main.soundManager.playSoundFullVolume("SelectRaceSound");
                               }
                               d = Math.sqrt(Math.pow(this.raceSelectMc.chaosButton.mouseX,2) + Math.pow(this.raceSelectMc.chaosButton.mouseY + 100,2));
                               if(this.main.isMember && d < 150)
@@ -96,6 +97,7 @@ package com.brockw.stickwar.engine.multiplayer
                                     this.main.raceSelected = Team.T_CHAOS;
                                     this.didSelect = true;
                                     this.raceChange();
+                                    this.main.soundManager.playSoundFullVolume("SelectRaceSound");
                               }
                               d = Math.sqrt(Math.pow(this.raceSelectMc.randomButton.mouseX,2) + Math.pow(this.raceSelectMc.randomButton.mouseY,2));
                               if(this.main.isMember && d < 75)
@@ -103,6 +105,7 @@ package com.brockw.stickwar.engine.multiplayer
                                     this.main.raceSelected = Team.T_RANDOM;
                                     this.didSelect = true;
                                     this.raceChange();
+                                    this.main.soundManager.playSoundFullVolume("SelectRaceSound");
                               }
                         }
                   }
@@ -138,7 +141,7 @@ package com.brockw.stickwar.engine.multiplayer
                   }
                   else
                   {
-                        trace("Error connecting");
+                        trace("Error connecting",evt.params.errorMessage);
                   }
             }
             
@@ -151,6 +154,7 @@ package com.brockw.stickwar.engine.multiplayer
             {
                   this.isShowingMembershipRequired = false;
                   this.raceSelectMc.membershipRequired.y = 740;
+                  this.main.soundManager.playSoundFullVolume("MatchFoundSound");
                   trace("Select your races!");
                   stage.frameRate = 30;
                   this.timerStartTime = getTimer();

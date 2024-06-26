@@ -5,9 +5,9 @@
 <skipToLevel>6</skipToLevel>
 <campaignDifficulty>1</campaignDifficulty>
 <isFogOfWar>1</isFogOfWar>
-<debugTeamA>Chaos</debugTeamA>
-<debugTeamB>Order</debugTeamB>
-<version>1.19</version>
+<debugTeamA>Order</debugTeamA>
+<debugTeamB>Chaos</debugTeamB>
+<version>1.20</version>
 <gravity>0.45</gravity>
 <worldScale>1</worldScale>
 <frontScale>.8</frontScale>
@@ -1152,7 +1152,7 @@
 <dragForce>0.89</dragForce>
 <scale>0.9</scale>
 <maxVelocity>5.8</maxVelocity>
-<population>2</population>
+<population>3</population>
 
 
 
@@ -1383,7 +1383,7 @@
 <effect>0</effect>
 <cooldown>450</cooldown>
 
-<damage>10</damage>
+<damage>9</damage>
 <toArmour>0</toArmour>
 <toNotArmour>4</toNotArmour>
 <castleDamage>14</castleDamage>

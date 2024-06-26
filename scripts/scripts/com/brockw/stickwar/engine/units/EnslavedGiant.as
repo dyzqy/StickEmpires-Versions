@@ -20,6 +20,8 @@ package com.brockw.stickwar.engine.units
             
             private var scaleII:Number;
             
+            private var hasGrowled:Boolean;
+            
             public function EnslavedGiant(game:StickWar)
             {
                   super(game);
@@ -50,6 +52,7 @@ package com.brockw.stickwar.engine.units
             override public function init(game:StickWar) : void
             {
                   initBase();
+                  this.hasGrowled = false;
                   _maximumRange = game.xml.xml.Order.Units.giant.maximumRange;
                   population = game.xml.xml.Chaos.Units.giant.population;
                   maxHealth = health = game.xml.xml.Order.Units.giant.health;
@@ -84,6 +87,11 @@ package com.brockw.stickwar.engine.units
             override public function update(game:StickWar) : void
             {
                   var p:Point = null;
+                  if(!this.hasGrowled)
+                  {
+                        this.hasGrowled = true;
+                        team.game.soundManager.playSoundRandom("GiantGrowl",6,px,py);
+                  }
                   stunTimeLeft = 0;
                   _dz = 0;
                   if(team.tech.isResearched(Tech.GIANT_GROWTH_II))
@@ -143,6 +151,10 @@ package com.brockw.stickwar.engine.units
                         }
                         else if(_state == S_ATTACK)
                         {
+                              if(MovieClip(_mc.mc).currentFrame == 1)
+                              {
+                                    team.game.soundManager.playSound("BoulderThrowSound",px,py);
+                              }
                               if(MovieClip(_mc.mc).currentFrame == 33)
                               {
                                     p = _mc.localToGlobal(new Point(50,-90));
@@ -168,6 +180,7 @@ package com.brockw.stickwar.engine.units
                   else if(isDead == false)
                   {
                         isDead = true;
+                        team.game.soundManager.playSoundRandom("GiantDeath",3,px,py);
                         if(_isDualing)
                         {
                               _mc.gotoAndStop(_currentDual.defendLabel);

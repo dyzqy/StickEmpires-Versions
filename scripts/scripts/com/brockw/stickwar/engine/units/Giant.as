@@ -25,6 +25,8 @@ package com.brockw.stickwar.engine.units
             
             private var stunTime:int;
             
+            private var hasGrowled:Boolean;
+            
             public function Giant(game:StickWar)
             {
                   super(game);
@@ -52,6 +54,7 @@ package com.brockw.stickwar.engine.units
             {
                   initBase();
                   WEAPON_REACH = game.xml.xml.Chaos.Units.giant.weaponReach;
+                  this.hasGrowled = false;
                   population = game.xml.xml.Chaos.Units.giant.population;
                   _mass = game.xml.xml.Chaos.Units.giant.mass;
                   _maxForce = game.xml.xml.Chaos.Units.giant.maxForce;
@@ -117,6 +120,11 @@ package com.brockw.stickwar.engine.units
             
             override public function update(game:StickWar) : void
             {
+                  if(!this.hasGrowled)
+                  {
+                        this.hasGrowled = true;
+                        team.game.soundManager.playSoundRandom("GiantGrowl",6,px,py);
+                  }
                   stunTimeLeft = 0;
                   _dz = 0;
                   if(team.tech.isResearched(Tech.CHAOS_GIANT_GROWTH_II))
@@ -186,6 +194,7 @@ package com.brockw.stickwar.engine.units
                   }
                   else if(isDead == false)
                   {
+                        team.game.soundManager.playSoundRandom("GiantDeath",3,px,py);
                         if(_isDualing)
                         {
                               _mc.gotoAndStop(_currentDual.defendLabel);

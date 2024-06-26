@@ -104,6 +104,10 @@ package com.brockw.stickwar.engine
                   {
                         this.clear();
                   }
+                  if(Boolean(unit.interactsWith & Unit.I_IS_BUILDING))
+                  {
+                        this.gameScreen.game.soundManager.playSoundFullVolume("MouseoverStructure");
+                  }
                   this.selected.push(unit);
                   if(!(unit.type in this.unitTypes))
                   {

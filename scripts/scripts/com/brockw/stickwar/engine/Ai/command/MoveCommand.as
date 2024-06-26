@@ -64,6 +64,29 @@ package com.brockw.stickwar.engine.Ai.command
                   this.attackClip.scaleY *= 0.25;
             }
             
+            override public function playSound(game:StickWar) : void
+            {
+                  if(targetId in game.units)
+                  {
+                        if(game.units[targetId] is Gold && Boolean(game.gameScreen.userInterface.selectedUnits.interactsWith & Unit.I_MINE))
+                        {
+                              game.soundManager.playSoundFullVolume("ClickGold");
+                        }
+                        else if(game.units[targetId] is Statue && Boolean(game.gameScreen.userInterface.selectedUnits.interactsWith & Unit.I_STATUE))
+                        {
+                              game.soundManager.playSoundFullVolume("ClickMana");
+                        }
+                        else
+                        {
+                              game.soundManager.playSoundFullVolumeRandom("CommandMove",6);
+                        }
+                  }
+                  else
+                  {
+                        game.soundManager.playSoundFullVolumeRandom("CommandMove",6);
+                  }
+            }
+            
             public function init() : void
             {
                   this._distanceToGoal = 0;

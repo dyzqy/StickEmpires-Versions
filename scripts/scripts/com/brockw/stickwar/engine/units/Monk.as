@@ -73,7 +73,7 @@ package com.brockw.stickwar.engine.units
             {
                   initBase();
                   WEAPON_REACH = game.xml.xml.Order.Units.magikill.weaponReach;
-                  population = game.xml.xml.Order.Units.magikill.population;
+                  population = game.xml.xml.Order.Units.monk.population;
                   _mass = game.xml.xml.Order.Units.monk.mass;
                   _maxForce = game.xml.xml.Order.Units.monk.maxForce;
                   _dragForce = game.xml.xml.Order.Units.monk.dragForce;
@@ -147,6 +147,7 @@ package com.brockw.stickwar.engine.units
                                     if(this.healTarget != null)
                                     {
                                           this.healTarget.heal(this.healAmount,this.healDuration);
+                                          team.game.soundManager.playSound("HealSpellFinish",this.healTarget.px,this.healTarget.py);
                                     }
                                     hasHit = true;
                               }
@@ -162,6 +163,8 @@ package com.brockw.stickwar.engine.units
                               if(MovieClip(_mc.mc).currentFrame == 25 && !hasHit)
                               {
                                     this.cureTarget.cure();
+                                    trace("DO THE CURE");
+                                    team.game.soundManager.playSound("PoisonCureSpellFinish",this.cureTarget.px,this.cureTarget.py);
                                     hasHit = true;
                               }
                               if(MovieClip(_mc.mc).currentFrame == MovieClip(_mc.mc).totalFrames)
@@ -290,6 +293,7 @@ package com.brockw.stickwar.engine.units
                         _state = S_ATTACK;
                         hasHit = false;
                         this.healTarget = personToHeal;
+                        team.game.soundManager.playSound("HealSpellFinish",px,py);
                         return true;
                   }
                   return false;
@@ -303,6 +307,7 @@ package com.brockw.stickwar.engine.units
                         this.isCuring = true;
                         _state = S_ATTACK;
                         hasHit = false;
+                        team.game.soundManager.playSound("PoisonCureSpellStart",px,py);
                   }
             }
             

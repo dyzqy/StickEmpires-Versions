@@ -52,7 +52,7 @@ package com.brockw.stickwar.engine
             
             private function howToPlayButton(evt:Event) : void
             {
-                  var url:URLRequest = new URLRequest("http://www.stickpage.com");
+                  var url:URLRequest = new URLRequest("http://www.stickpage.com/stickempiresguide.shtml");
                   navigateToURL(url,"_blank");
             }
             

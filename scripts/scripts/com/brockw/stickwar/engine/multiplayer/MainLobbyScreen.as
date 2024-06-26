@@ -115,6 +115,7 @@ package com.brockw.stickwar.engine.multiplayer
             private function playButton(evt:MouseEvent) : void
             {
                   this.main.sfs.send(new ExtensionRequest("match"));
+                  this.main.soundManager.playSoundFullVolume("StartMatchmaking");
             }
             
             private function tutorialButton(evt:MouseEvent) : void

@@ -205,6 +205,7 @@ package com.brockw.stickwar.engine.units
                                     {
                                           attackState = 1;
                                           _mc.gotoAndStop("building");
+                                          game.soundManager.playSound("BuildChaosTower",px,py);
                                     }
                               }
                               else if(attackState != 1)

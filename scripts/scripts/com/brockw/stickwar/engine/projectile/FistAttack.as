@@ -48,6 +48,14 @@ package com.brockw.stickwar.engine.projectile
             
             override public function update(game:StickWar) : void
             {
+                  if(this.spellMc.currentFrame == 1)
+                  {
+                        game.soundManager.playSound("Hellfistin",px,py);
+                  }
+                  else if(this.spellMc.currentFrame == 24)
+                  {
+                        game.soundManager.playSoundRandom("Hellfistout",3,px,py);
+                  }
                   this.visible = true;
                   this.spellMc.nextFrame();
                   this.scaleX = 1 * (game.backScale + py / game.map.height * (game.frontScale - game.backScale));

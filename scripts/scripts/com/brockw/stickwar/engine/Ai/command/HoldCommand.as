@@ -22,6 +22,11 @@ package com.brockw.stickwar.engine.Ai.command
                   }
             }
             
+            override public function playSound(game:StickWar) : void
+            {
+                  game.soundManager.playSoundFullVolume("CommandHoldSound");
+            }
+            
             override public function isFinished(unit:Unit) : Boolean
             {
                   return false;

@@ -179,6 +179,7 @@ package com.brockw.stickwar.engine.multiplayer
                   {
                         this.loginMc.loginBox.usernameInput.text.text = "Joining Main Lobby...";
                         this.main.sfs.send(new JoinRoomRequest("Lobby"));
+                        this.main.soundManager.playSoundFullVolume("LoginSound");
                   }
             }
             

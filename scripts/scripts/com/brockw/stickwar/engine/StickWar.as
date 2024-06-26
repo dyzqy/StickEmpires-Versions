@@ -213,7 +213,6 @@ package com.brockw.stickwar.engine
                   addChild(this._rain);
                   ++main.loadingFraction;
                   this._rain.mouseEnabled = false;
-                  addChild(this._cursorSprite);
                   this._cursorSprite.mouseChildren = false;
                   this._cursorSprite.mouseEnabled = false;
                   addChild(this.tipBox);
@@ -250,7 +249,10 @@ package com.brockw.stickwar.engine
             
             public function cleanUp() : void
             {
-                  removeChild(this._cursorSprite);
+                  if(Boolean(this._cursorSprite.parent) && this._cursorSprite.parent.contains(this._cursorSprite))
+                  {
+                        this._cursorSprite.parent.removeChild(this._cursorSprite);
+                  }
                   this._cursorSprite = null;
                   this._map = null;
                   this._team = null;
@@ -346,6 +348,33 @@ package com.brockw.stickwar.engine
                   return false;
             }
             
+            public function updateVisibilityOfUnits() : void
+            {
+                  var unit:String = null;
+                  for(unit in this.teamA.units)
+                  {
+                        if(Entity(this.teamA.units[unit]).onScreen(this))
+                        {
+                              this.teamA.units[unit].visible = true;
+                        }
+                        else
+                        {
+                              this.teamA.units[unit].visible = false;
+                        }
+                  }
+                  for(unit in this.teamB.units)
+                  {
+                        if(Entity(this.teamB.units[unit]).onScreen(this))
+                        {
+                              this.teamB.units[unit].visible = true;
+                        }
+                        else
+                        {
+                              this.teamB.units[unit].visible = false;
+                        }
+                  }
+            }
+            
             override public function update(screen:Screen) : void
             {
                   var hill:Hill = null;
@@ -371,11 +400,13 @@ package com.brockw.stickwar.engine
                   if(this.teamA.statue.health <= 0)
                   {
                         this.showGameOverAnimation = true;
+                        this.soundManager.playSoundFullVolume("StatueDestroyed");
                         winner = this.teamB;
                   }
                   if(this.teamB.statue.health <= 0)
                   {
                         this.showGameOverAnimation = true;
+                        this.soundManager.playSoundFullVolume("StatueDestroyed");
                         winner = this.teamA;
                   }
                   this.projectileManager.update(this);

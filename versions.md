@@ -1,3 +1,47 @@
+## version 1.20
+- Added sounds to all these actions:
+  - Right clicking to attack a unit.
+  - Garrisoning a unit.
+  - Ungarrisoning a unit.
+  - Holding a unit.
+  - Right clicking to move a unit.
+  - Making a unit stand.
+  - Capturing centre tower.
+  - Clicking on lobby, armory, leaderboard or profile buttons.
+  - Selecting an empire before playing a match.
+  - When a match is found.
+  - When entering the lobby.
+  - When starting matchmaking.
+  - When unlocking a unit(in campaign).
+  - When an E. giant's boulder hits a unit.
+  - When hell fist hits the ground and when the fist comes out.
+  - When using reaper spell of Marrowkai.
+  - When usin electric wall of Magikill.
+  - When hovering over structure.
+  - When statues get destroyed.
+  - When making units.
+  - When failing to make a unit.
+  - When made unit is ready.
+  - When Towerspawn unit spawns.
+  - When an Archidon's arrow is ready, and when they launch an arrow.
+  - When a crawler dies.
+  - When a giant first enters the battlefield.
+  - When a magikill casts Acid Spray.
+  - When a magikill dies.
+  - When medusa dies.
+  - When building a wall.
+  - When building a chaos tower.
+  - When healing and curing by a meric.
+  - When using Rage.
+  - When hitting an armored or non armored unit.
+- When equipping a skin.
+- Added logic to UnitAi when attacking walls.
+- Fixed bug where units double cure.
+- Better logic for when playing sounds.
+- Reason is now given when not able to build units.
+- Added new cursors.
+- Using a directory instead of array to track poisoned units.
+
 ## version 1.19
 - Added "Miner Hustle" upgrade.(Both values are the same for Eminers and normal miners)
   - Miner damage 2.5 to 4
@@ -10,7 +54,7 @@
   - And can now also compliment the player.
 - You can now see newly unlock units after levels.
 - Added a best time tracker for levels.
-- The center tower now has a bigger range to begin control.
+- The center tower now takes longer time to control.
 - Statues now have an animation when losing, and you do not instantly see the post game screen.
 
 ## version 1.18

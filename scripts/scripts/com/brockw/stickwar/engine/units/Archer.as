@@ -223,6 +223,10 @@ package com.brockw.stickwar.engine.units
                         bow.gotoAndStop(this.bowFrame);
                         if(this.bowFrame != 1)
                         {
+                              if(this.bowFrame == 46)
+                              {
+                                    game.soundManager.playSound("BowReady",px,py);
+                              }
                               bow.nextFrame();
                               this.bowFrame += 1;
                               if(bow.currentFrame == bow.totalFrames)
@@ -268,7 +272,7 @@ package com.brockw.stickwar.engine.units
                         {
                               fireDamage = Number(game.xml.xml.Order.Units.archer.fire.damage);
                         }
-                        game.soundManager.playSoundRandom("launchArrow",4,px,py);
+                        game.soundManager.playSoundRandom("launchArrow",5,px,py);
                         if(mc.scaleX < 0)
                         {
                               game.projectileManager.initArrow(p.x,p.y,180 - bowAngle,v,target.y,angleToTargetW(target,v,angleToTarget(target)),this,damage,poison,this.isFire,this.area,this.areaDamage);

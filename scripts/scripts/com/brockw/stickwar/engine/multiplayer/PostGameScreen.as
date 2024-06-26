@@ -104,6 +104,7 @@ package com.brockw.stickwar.engine.multiplayer
                         this.mc.unlockCard.description.text = nextUnit[1];
                         this.mc.unlockCard.unitName.text = nextUnit[0];
                         this.mc.unlockCard.profilePictureBacking.addChild(nextUnit[2]);
+                        this.main.soundManager.playSoundFullVolume("UnitUnlock");
                   }
             }
             

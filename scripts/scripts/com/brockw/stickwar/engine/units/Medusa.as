@@ -61,6 +61,11 @@ package com.brockw.stickwar.engine.units
                   }
             }
             
+            override public function playDeathSound() : void
+            {
+                  team.game.soundManager.playSoundRandom("Medusa",3,px,py);
+            }
+            
             override public function init(game:StickWar) : void
             {
                   var d:DisplayObject = null;
@@ -224,10 +229,6 @@ package com.brockw.stickwar.engine.units
                               if(MovieClip(_mc.mc).currentFrame > MovieClip(_mc.mc).totalFrames / 2 && !hasHit)
                               {
                                     hasHit = this.checkForHit();
-                                    if(hasHit)
-                                    {
-                                          game.soundManager.playSound("sword1",px,py);
-                                    }
                               }
                               if(MovieClip(_mc.mc).totalFrames == MovieClip(_mc.mc).currentFrame)
                               {

@@ -58,6 +58,7 @@ package com.brockw.stickwar.engine.units
                   hitBoxWidth = 150;
                   this.type = Unit.U_WALL;
                   _interactsWith = Unit.I_IS_BUILDING;
+                  flyingHeight = 0;
             }
             
             override public function poison(p:Number) : void

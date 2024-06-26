@@ -71,6 +71,11 @@ package com.brockw.stickwar.engine.units
                   }
             }
             
+            override public function playDeathSound() : void
+            {
+                  team.game.soundManager.playSound("MagikillDeath",px,py);
+            }
+            
             override public function init(game:StickWar) : void
             {
                   initBase();
@@ -168,6 +173,7 @@ package com.brockw.stickwar.engine.units
                               _mc.gotoAndStop("poisonAttack");
                               if(MovieClip(_mc.mc).currentFrame == 49 && !hasHit)
                               {
+                                    game.soundManager.playSound("AcidSpraySound",px,py);
                                     game.projectileManager.initPoisonSpray(this.spellX,this.spellY,this);
                                     hasHit = true;
                               }

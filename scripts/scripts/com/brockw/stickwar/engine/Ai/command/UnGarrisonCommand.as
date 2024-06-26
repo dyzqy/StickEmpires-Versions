@@ -22,6 +22,11 @@ package com.brockw.stickwar.engine.Ai.command
                   }
             }
             
+            override public function playSound(game:StickWar) : void
+            {
+                  game.soundManager.playSoundFullVolume("GarrisonExit");
+            }
+            
             override public function isFinished(unit:Unit) : Boolean
             {
                   return true;

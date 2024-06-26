@@ -242,6 +242,7 @@ package com.brockw.stickwar.engine.units
                         if(this.rageSpell.spellActivate(team))
                         {
                               health -= this.healthLoss;
+                              team.game.soundManager.playSoundRandom("Rage",3,px,py);
                         }
                   }
             }

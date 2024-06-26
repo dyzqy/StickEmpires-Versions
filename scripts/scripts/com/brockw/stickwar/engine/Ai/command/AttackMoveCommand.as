@@ -44,6 +44,11 @@ package com.brockw.stickwar.engine.Ai.command
                   }
             }
             
+            override public function playSound(game:StickWar) : void
+            {
+                  game.soundManager.playSoundFullVolumeRandom("CommandMove",3);
+            }
+            
             override public function drawCursorPreClick(canvas:Sprite, gameScreen:GameScreen) : Boolean
             {
                   if(canvas.contains(cursor))

@@ -231,6 +231,7 @@ package com.brockw.stickwar.engine.multiplayer
             {
                   var s:SFSObject = new SFSObject();
                   this.main.sfs.send(new ExtensionRequest("cancelMatch",s));
+                  this.main.soundManager.playSoundFullVolume("CancelMatchmakingSound");
             }
             
             private function clearFieldOnClick(evt:Event) : void
@@ -290,6 +291,7 @@ package com.brockw.stickwar.engine.multiplayer
                   if(this.chatOverlay.lobbyButton.hitTestPoint(stage.mouseX,stage.mouseY))
                   {
                         this.main.showScreen("lobby");
+                        this.main.soundManager.playSoundFullVolume("MenuTab");
                   }
                   if(this.chatOverlay.armourButton.hitTestPoint(stage.mouseX,stage.mouseY))
                   {
@@ -305,20 +307,24 @@ package com.brockw.stickwar.engine.multiplayer
                         if(this.main.xml.xml.hasArmory == 1)
                         {
                               this.main.showScreen("armoury");
+                              this.main.soundManager.playSoundFullVolume("MenuTab");
                         }
                   }
                   if(this.chatOverlay.leaderboardButton.hitTestPoint(stage.mouseX,stage.mouseY))
                   {
                         this.main.showScreen("leaderboard");
+                        this.main.soundManager.playSoundFullVolume("MenuTab");
                   }
                   if(this.chatOverlay.profileButton.hitTestPoint(stage.mouseX,stage.mouseY))
                   {
                         this.main.showScreen("profile");
+                        this.main.soundManager.playSoundFullVolume("MenuTab");
                         this.main.profileScreen.loadProfile(this.main.sfs.mySelf.name);
                   }
                   if(this.chatOverlay.faqButton.hitTestPoint(stage.mouseX,stage.mouseY))
                   {
                         this.main.showScreen("faq");
+                        this.main.soundManager.playSoundFullVolume("MenuTab");
                   }
             }
             
