@@ -75,8 +75,8 @@ package com.brockw.stickwar.engine.units
                   MovieClip(_mc.gotoAndStop(1));
                   drawShadow();
                   this.healthBar.y = -mc.mc.height * 1.1;
-                  aimXOffset = 50;
-                  aimYOffset = -90;
+                  aimXOffset = 50 * 2 - 35;
+                  aimYOffset = -90 * 2 + 102;
             }
             
             override public function setBuilding() : void
@@ -102,9 +102,7 @@ package com.brockw.stickwar.engine.units
                               maxHealth = game.xml.xml.Order.Units.giant.healthII;
                               healthBar.totalHealth = maxHealth;
                         }
-                        this.pheight *= this.scaleII / _scale;
-                        this.aimXOffset *= this.scaleII / _scale;
-                        this.aimYOffset *= this.scaleII / _scale;
+                        this.pheight *= this.scaleII / this.scaleI;
                         _scale = this.scaleII;
                   }
                   else if(team.tech.isResearched(Tech.GIANT_GROWTH_I))
@@ -115,11 +113,13 @@ package com.brockw.stickwar.engine.units
                               maxHealth = game.xml.xml.Order.Units.giant.healthI;
                               healthBar.totalHealth = maxHealth;
                         }
-                        _scale = this.scaleI;
                         this.pheight *= this.scaleI / _scale;
-                        this.aimXOffset *= this.scaleI / _scale;
-                        this.aimYOffset *= this.scaleI / _scale;
+                        _scale = this.scaleI;
                   }
+                  p = _mc.localToGlobal(new Point(50,-90));
+                  p = this.globalToLocal(p);
+                  aimXOffset = p.x;
+                  aimYOffset = p.y + 25;
                   super.update(game);
                   updateCommon(game);
                   if(!isDieing)

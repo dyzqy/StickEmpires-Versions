@@ -261,11 +261,17 @@ package com.brockw.stickwar.engine.units
                         _state = S_ATTACK;
                         hasHit = false;
                         this.targetsHit = 0;
+                        framesInAttack = MovieClip(_mc.mc).totalFrames;
+                        attackStartFrame = team.game.frame;
                   }
             }
             
             override public function mayAttack(target:Unit) : Boolean
             {
+                  if(framesInAttack > team.game.frame - attackStartFrame)
+                  {
+                        return false;
+                  }
                   if(isIncapacitated())
                   {
                         return false;

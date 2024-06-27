@@ -5,9 +5,9 @@
 <skipToLevel>6</skipToLevel>
 <campaignDifficulty>1</campaignDifficulty>
 <isFogOfWar>1</isFogOfWar>
-<debugTeamA>Chaos</debugTeamA>
-<debugTeamB>Order</debugTeamB>
-<version>1.21</version>
+<debugTeamA>Order</debugTeamA>
+<debugTeamB>Chaos</debugTeamB>
+<version>1.22</version>
 <gravity>0.45</gravity>
 <worldScale>1</worldScale>
 <frontScale>.8</frontScale>
@@ -1428,7 +1428,7 @@
 <info>A flying ranged unit.</info>
 <hotkey>53</hotkey>
 <gold>450</gold>
-<mana>250</mana>
+<mana>200</mana>
 <effect>0</effect>
 <cooldown>500</cooldown>
 

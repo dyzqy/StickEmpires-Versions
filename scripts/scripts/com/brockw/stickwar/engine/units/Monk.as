@@ -277,6 +277,9 @@ package com.brockw.stickwar.engine.units
                         MovieClip(_mc.mc).gotoAndStop(1);
                         _state = S_ATTACK;
                         hasHit = false;
+                        attackStartFrame = team.game.frame;
+                        framesInAttack = MovieClip(_mc.mc).totalFrames;
+                        trace(framesInAttack);
                   }
             }
             

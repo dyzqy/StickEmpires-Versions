@@ -273,6 +273,7 @@ package com.brockw.stickwar.engine.units
                               fireDamage = Number(game.xml.xml.Order.Units.archer.fire.damage);
                         }
                         game.soundManager.playSoundRandom("launchArrow",5,px,py);
+                        trace("Angle of bow:",bowAngle);
                         if(mc.scaleX < 0)
                         {
                               game.projectileManager.initArrow(p.x,p.y,180 - bowAngle,v,target.y,angleToTargetW(target,v,angleToTarget(target)),this,damage,poison,this.isFire,this.area,this.areaDamage);

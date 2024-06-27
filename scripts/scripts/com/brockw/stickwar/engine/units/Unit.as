@@ -225,6 +225,10 @@ package com.brockw.stickwar.engine.units
             
             protected var _shadowSprite:MovieClip;
             
+            protected var framesInAttack:int;
+            
+            protected var attackStartFrame:int;
+            
             protected var _interactsWith:int;
             
             private var dzOffset:Number;
@@ -294,6 +298,8 @@ package com.brockw.stickwar.engine.units
                   var glowInner:Boolean = false;
                   var glowKnockout:Boolean = false;
                   this.towerSpawnGlow = new GlowFilter(glowColor,glowAlpha,glowBlurX,glowBlurY,glowStrength,glowQuality,glowInner,glowKnockout);
+                  this.attackStartFrame = 0;
+                  this.framesInAttack = 0;
                   super();
             }
             
@@ -1194,7 +1200,7 @@ package com.brockw.stickwar.engine.units
                   }
                   var dir:int = Util.sgn(target.px - px);
                   p = this.globalToLocal(p);
-                  if(p.x > -pwidth && p.x < pwidth && p.y > -pheight && p.y < 0 && Math.abs(py - this.py) < 50)
+                  if(p.x > -pwidth && p.x < pwidth && p.y > -pheight && p.y < 0 && Math.abs(py - this.py) < 150)
                   {
                         return true;
                   }

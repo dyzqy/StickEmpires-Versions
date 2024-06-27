@@ -1,3 +1,10 @@
+## version 1.22
+- Albowtross mana cost  decrease from 250 mana to 200 mana.
+- Added measures to prevent animation skipping to get more damage from certain units:
+  - Crawlers, Giants, Juggerknights, Medusas, Shadowrath, Speartons and Swordwrath.
+- Added dust effect when jugg uses Charge.
+- Fixed bug where ranged units(archidons and E. Giants) would not hit their targets.
+
 ## version 1.21
 - Fix bug that occurs when meric tries to heal.
 - Removed "WINGIDON_SPEED" upgrade from Eclipsor(completely this time).

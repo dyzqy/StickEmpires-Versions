@@ -1020,13 +1020,12 @@ package com.brockw.stickwar.engine.Team
             
             private function spawnMiddleUnit(game:StickWar) : Unit
             {
-                  var newUnit:Unit = null;
                   if(game.map.hills.length == 0)
                   {
                         return null;
                   }
                   var type:int = this.getSpawnUnitType(game);
-                  newUnit = game.unitFactory.getUnit(type);
+                  var newUnit:Unit = game.unitFactory.getUnit(type);
                   this.spawn(newUnit,game);
                   newUnit.x = newUnit.px = game.map.hills[0].px;
                   newUnit.y = newUnit.py = game.map.height / 2;

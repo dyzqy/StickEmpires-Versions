@@ -102,10 +102,11 @@ package com.brockw.stickwar.engine.units
                   }
                   var v:Number = this._projectileVelocity;
                   var g:Number = StickWar.GRAVITY;
-                  var d:Number = Math.sqrt(target.sqrDistanceTo(this));
+                  var d:Number = Math.sqrt((target.px - this.px) * (target.px - this.px));
+                  d += this.aimXOffset * Util.sgn(mc.scaleX);
                   var x:Number = d;
                   var hDiff:Number = 0;
-                  var zDiff:Number = -(target.pz - pz) + hDiff;
+                  var zDiff:Number = -(target.pz - pz) + hDiff + this.aimYOffset;
                   if(this._maximumRange < Math.abs(target.px - px))
                   {
                         return false;
@@ -166,8 +167,8 @@ package com.brockw.stickwar.engine.units
                   }
                   var v:Number = this._projectileVelocity;
                   var g:Number = StickWar.GRAVITY;
-                  var d:Number = Math.sqrt(target.sqrDistanceTo(this));
-                  var x:Number = d + this.aimXOffset * Util.sgn(mc.scaleX);
+                  var d:Number = Math.sqrt((target.px - this.px) * (target.px - this.px));
+                  var x:Number = d - this.aimXOffset * Util.sgn(mc.scaleX);
                   var hDiff:Number = 0;
                   if(target.mc != null)
                   {
@@ -196,7 +197,8 @@ package com.brockw.stickwar.engine.units
                   }
                   v = this._projectileVelocity;
                   var g:Number = StickWar.GRAVITY;
-                  var d:Number = Math.sqrt(target.sqrDistanceTo(this)) + this.aimXOffset * Util.sgn(mc.scaleX);
+                  var d:Number = Math.sqrt((target.px - this.px) * (target.px - this.px));
+                  d += this.aimXOffset * Util.sgn(mc.scaleX);
                   var hDiff:Number = target.pheight - this.pheight;
                   hDiff = 0;
                   var zDiff:Number = -(target.pz - pz) + hDiff + this.aimYOffset;

@@ -254,6 +254,10 @@ package com.brockw.stickwar.engine.units
                         MovieClip(_mc.mc).gotoAndStop(1);
                   }
                   Util.animateMovieClipBasic(_mc.mc);
+                  if(Boolean(_mc.mc.dust))
+                  {
+                        Util.animateMovieClipBasic(_mc.mc.dust);
+                  }
                   Knight.setItem(_knight(mc),team.loadout.getItem(this.type,MarketItem.T_WEAPON),team.loadout.getItem(this.type,MarketItem.T_ARMOR),team.loadout.getItem(this.type,MarketItem.T_MISC));
             }
             
@@ -286,11 +290,17 @@ package com.brockw.stickwar.engine.units
                         MovieClip(_mc.mc).gotoAndStop(1);
                         _state = S_ATTACK;
                         hasHit = false;
+                        framesInAttack = MovieClip(_mc.mc).totalFrames;
+                        attackStartFrame = team.game.frame;
                   }
             }
             
             override public function mayAttack(target:Unit) : Boolean
             {
+                  if(framesInAttack > team.game.frame - attackStartFrame)
+                  {
+                        return false;
+                  }
                   if(isIncapacitated())
                   {
                         return false;

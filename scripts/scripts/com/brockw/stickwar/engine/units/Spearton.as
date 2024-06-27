@@ -307,6 +307,8 @@ package com.brockw.stickwar.engine.units
                         MovieClip(_mc.mc).gotoAndStop(1);
                         _state = S_ATTACK;
                         hasHit = false;
+                        attackStartFrame = team.game.frame;
+                        framesInAttack = MovieClip(_mc.mc).totalFrames;
                   }
             }
             
@@ -324,6 +326,10 @@ package com.brockw.stickwar.engine.units
             
             override public function mayAttack(target:Unit) : Boolean
             {
+                  if(framesInAttack > team.game.frame - attackStartFrame)
+                  {
+                        return false;
+                  }
                   if(isIncapacitated())
                   {
                         return false;
