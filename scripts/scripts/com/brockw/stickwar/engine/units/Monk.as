@@ -163,7 +163,7 @@ package com.brockw.stickwar.engine.units
                               if(MovieClip(_mc.mc).currentFrame == 25 && !hasHit)
                               {
                                     this.cureTarget.cure();
-                                    trace("DO THE CURE");
+                                    trace("DO THE CURE",this.cureTarget,this.cureTarget.id);
                                     team.game.soundManager.playSound("PoisonCureSpellFinish",this.cureTarget.px,this.cureTarget.py);
                                     hasHit = true;
                               }

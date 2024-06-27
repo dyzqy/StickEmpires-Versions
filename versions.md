@@ -1,3 +1,9 @@
+## version 1.21
+- Fix bug that occurs when meric tries to heal.
+- Removed "WINGIDON_SPEED" upgrade from Eclipsor(completely this time).
+- Changed width of wall from 50 to 15.
+- Updated attacking logic of Unit Ai.
+
 ## version 1.20
 - Added sounds to all these actions:
   - Right clicking to attack a unit.

@@ -163,7 +163,7 @@ package com.brockw.stickwar.engine.Ai
                   var yMovement:Number = NaN;
                   this.checkNextMove(game);
                   var target:Unit = this.getClosestTarget();
-                  if(this.mayAttack && (this.unit.mayAttack(target) || target is Wall && Math.abs(target.px - this.unit.px) < 10))
+                  if(this.mayAttack && (this.unit.mayAttack(target) || target is Wall && Math.abs(target.px - this.unit.px) < target.pwidth + this.unit.pwidth / 2))
                   {
                         if(target.damageWillKill(0,this.unit.getDamageToUnit(target)) && this.unit.getDirection() != target.getDirection() && this.unit.getDirection() == Util.sgn(target.px - this.unit.px))
                         {

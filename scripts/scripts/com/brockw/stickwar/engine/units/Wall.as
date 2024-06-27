@@ -48,7 +48,7 @@ package com.brockw.stickwar.engine.units
                   healthBar.y = -100;
                   healthBar.scaleX *= 1.3;
                   healthBar.scaleY *= 1.2;
-                  pwidth = 50;
+                  pwidth = 15;
                   pheight = 250;
                   addChild(healthBar);
                   pz = 0;

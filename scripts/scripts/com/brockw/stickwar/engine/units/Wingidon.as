@@ -5,7 +5,6 @@ package com.brockw.stickwar.engine.units
       import com.brockw.stickwar.engine.Ai.*;
       import com.brockw.stickwar.engine.Ai.command.*;
       import com.brockw.stickwar.engine.Team.Chaos.*;
-      import com.brockw.stickwar.engine.Team.Tech;
       import com.brockw.stickwar.market.MarketItem;
       import flash.display.MovieClip;
       import flash.geom.Point;
@@ -100,10 +99,6 @@ package com.brockw.stickwar.engine.units
             override public function setActionInterface(a:ActionInterface) : void
             {
                   super.setActionInterface(a);
-                  if(team.tech.isResearched(Tech.WINGIDON_SPEED))
-                  {
-                        a.setAction(0,0,UnitCommand.WINGIDON_SPEED);
-                  }
             }
             
             public function speedSpell() : void

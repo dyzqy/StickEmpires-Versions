@@ -887,7 +887,7 @@ package com.brockw.stickwar.engine.units
             {
                   this._poisonDamage = 0;
                   this.reaperCurseFrames = 0;
-                  if(this in this.team.poisonedUnits)
+                  if(this.id in this.team.poisonedUnits)
                   {
                         delete this.team.poisonedUnits[this.id];
                   }
