@@ -2,7 +2,6 @@ package com.brockw.stickwar.engine.multiplayer
 {
       import com.brockw.game.Screen;
       import flash.events.Event;
-      import flash.external.ExternalInterface;
       
       public class VersionMismatchScreen extends Screen
       {
@@ -33,13 +32,9 @@ package com.brockw.stickwar.engine.multiplayer
                   {
                         time = 0;
                   }
-                  this.mc.refreshText.text = "Refresh your browser to fix this. Auto refresh in (" + time + ")";
+                  this.mc.refreshText.text = "Refresh this page to load the new version.";
                   if(time <= 0)
                   {
-                        if(ExternalInterface.available)
-                        {
-                              ExternalInterface.call("history.go",0);
-                        }
                   }
             }
       }

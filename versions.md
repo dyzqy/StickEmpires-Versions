@@ -1,3 +1,8 @@
+## version 1.23
+- When mismatching versions, the game does not automatically refresh page anymore(web only)
+- Made crawler hitbox have bigger hieght so Castle Units have easier time hitting them.
+- Bombers now can catch up to units. 
+
 ## version 1.22
 - Albowtross mana cost  decrease from 250 mana to 200 mana.
 - Added measures to prevent animation skipping to get more damage from certain units:

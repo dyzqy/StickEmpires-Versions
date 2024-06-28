@@ -129,9 +129,12 @@ package com.brockw.stickwar.engine
                         {
                               sound = new this.sounds[name]();
                               s = sound.play();
-                              transform = new SoundTransform();
-                              transform.volume = this.volumeMap[name];
-                              s.soundTransform = transform;
+                              if(s != null)
+                              {
+                                    transform = new SoundTransform();
+                                    transform.volume = this.volumeMap[name];
+                                    s.soundTransform = transform;
+                              }
                               return sound.length;
                         }
                   }

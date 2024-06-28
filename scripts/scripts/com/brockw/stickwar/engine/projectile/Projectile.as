@@ -155,22 +155,6 @@ package com.brockw.stickwar.engine.projectile
                               }
                         }
                   }
-                  if(pz > 0 && this.dz > 0)
-                  {
-                        this.dz = this.dx = this.dy = 0;
-                        if(!this.hasHit)
-                        {
-                              this.hasHit = true;
-                              if(this.area != 0)
-                              {
-                                    game.spatialHash.mapInArea(px - this.area,py - this.area,px + this.area,py + this.area,this.projectileArea);
-                              }
-                        }
-                  }
-                  else
-                  {
-                        rotation = 90 - Math.atan2(this.dx,this.dz + this.dy) * 180 / Math.PI;
-                  }
                   if(this.isDebris)
                   {
                         return;
@@ -211,6 +195,22 @@ package com.brockw.stickwar.engine.projectile
                               }
                         }
                         this.lastDistanceToCentre = cDistance;
+                  }
+                  if(pz > 0 && this.dz > 0)
+                  {
+                        this.dz = this.dx = this.dy = 0;
+                        if(!this.hasHit)
+                        {
+                              this.hasHit = true;
+                              if(this.area != 0)
+                              {
+                                    game.spatialHash.mapInArea(px - this.area,py - this.area,px + this.area,py + this.area,this.projectileArea);
+                              }
+                        }
+                  }
+                  else
+                  {
+                        rotation = 90 - Math.atan2(this.dx,this.dz + this.dy) * 180 / Math.PI;
                   }
             }
             

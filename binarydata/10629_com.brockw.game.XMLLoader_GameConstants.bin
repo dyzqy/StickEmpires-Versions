@@ -7,7 +7,7 @@
 <isFogOfWar>1</isFogOfWar>
 <debugTeamA>Order</debugTeamA>
 <debugTeamB>Chaos</debugTeamB>
-<version>1.22</version>
+<version>1.23</version>
 <gravity>0.45</gravity>
 <worldScale>1</worldScale>
 <frontScale>.8</frontScale>

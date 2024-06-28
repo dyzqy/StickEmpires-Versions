@@ -84,6 +84,7 @@ package com.brockw.stickwar.engine.units
                   MovieClip(_mc.mc.gotoAndPlay(1));
                   MovieClip(_mc.gotoAndStop(1));
                   drawShadow();
+                  pheight = 150;
             }
             
             override protected function checkForHit() : Boolean

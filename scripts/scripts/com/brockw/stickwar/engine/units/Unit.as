@@ -1200,6 +1200,7 @@ package com.brockw.stickwar.engine.units
                   }
                   var dir:int = Util.sgn(target.px - px);
                   p = this.globalToLocal(p);
+                  trace(p,pwidth,pheight,Math.abs(py - this.py));
                   if(p.x > -pwidth && p.x < pwidth && p.y > -pheight && p.y < 0 && Math.abs(py - this.py) < 150)
                   {
                         return true;
