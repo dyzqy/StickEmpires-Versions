@@ -104,6 +104,11 @@ package com.brockw.stickwar.engine.units
                   drawShadow();
             }
             
+            override public function weaponReach() : Number
+            {
+                  return WEAPON_REACH;
+            }
+            
             override public function setBuilding() : void
             {
                   building = team.buildings["BarracksBuilding"];

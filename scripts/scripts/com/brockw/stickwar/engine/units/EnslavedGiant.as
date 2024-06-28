@@ -87,6 +87,7 @@ package com.brockw.stickwar.engine.units
             override public function update(game:StickWar) : void
             {
                   var p:Point = null;
+                  var yVel:Number = NaN;
                   if(!this.hasGrowled)
                   {
                         this.hasGrowled = true;
@@ -159,16 +160,18 @@ package com.brockw.stickwar.engine.units
                               {
                                     p = _mc.localToGlobal(new Point(50,-90));
                                     p = game.battlefield.globalToLocal(p);
-                                    if(this.inRange(this.target))
+                                    yVel = 0;
+                                    if(inRange(this.target))
                                     {
-                                          if(mc.scaleX < 0)
-                                          {
-                                                game.projectileManager.initBoulder(p.x,p.y,180 - bowAngle,projectileVelocity,this.target.y,angleToTargetW(this.target,projectileVelocity,angleToTarget(this.target)),this,damageToDeal,false);
-                                          }
-                                          else
-                                          {
-                                                game.projectileManager.initBoulder(p.x,p.y,bowAngle,projectileVelocity,this.target.y,angleToTargetW(this.target,projectileVelocity,angleToTarget(this.target)),this,damageToDeal,false);
-                                          }
+                                          yVel = angleToTargetW(this.target,projectileVelocity,angleToTarget(this.target));
+                                    }
+                                    if(mc.scaleX < 0)
+                                    {
+                                          game.projectileManager.initBoulder(p.x,p.y,180 - bowAngle,projectileVelocity,0,yVel,this,damageToDeal,false);
+                                    }
+                                    else
+                                    {
+                                          game.projectileManager.initBoulder(p.x,p.y,bowAngle,projectileVelocity,0,yVel,this,damageToDeal,false);
                                     }
                               }
                               if(MovieClip(_mc.mc).totalFrames == MovieClip(_mc.mc).currentFrame)
@@ -203,6 +206,10 @@ package com.brockw.stickwar.engine.units
             override public function aim(target:Unit) : void
             {
                   var a:Number = angleToTarget(target);
+                  if(target != null && this._state == Unit.S_ATTACK && !inRange(target))
+                  {
+                        return;
+                  }
                   if(Math.abs(normalise(angleToBowSpace(a) - bowAngle)) < 10)
                   {
                         bowAngle += normalise(angleToBowSpace(a) - bowAngle) * 1;

@@ -199,6 +199,18 @@ package com.brockw.stickwar.engine.units
                                           }
                                           hasHit = true;
                                     }
+                                    else
+                                    {
+                                          if(mc.scaleX < 0)
+                                          {
+                                                game.projectileManager.initGuts(p.x,p.y,180 - bowAngle,v,this.target.y,0,poisonDamage,this);
+                                          }
+                                          else
+                                          {
+                                                game.projectileManager.initGuts(p.x,p.y,bowAngle,v,this.target.y,0,poisonDamage,this);
+                                          }
+                                          hasHit = true;
+                                    }
                               }
                               if(MovieClip(_mc.mc).totalFrames == MovieClip(_mc.mc).currentFrame)
                               {

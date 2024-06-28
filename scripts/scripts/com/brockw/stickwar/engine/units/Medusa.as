@@ -61,6 +61,11 @@ package com.brockw.stickwar.engine.units
                   }
             }
             
+            override public function weaponReach() : Number
+            {
+                  return this.WEAPON_REACH;
+            }
+            
             override public function playDeathSound() : void
             {
                   team.game.soundManager.playSoundRandom("Medusa",3,px,py);

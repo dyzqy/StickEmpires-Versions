@@ -71,6 +71,11 @@ package com.brockw.stickwar.engine.units
                   }
             }
             
+            override public function weaponReach() : Number
+            {
+                  return WEAPON_REACH;
+            }
+            
             override public function playDeathSound() : void
             {
                   team.game.soundManager.playSound("MagikillDeath",px,py);

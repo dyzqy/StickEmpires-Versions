@@ -70,6 +70,10 @@ package com.brockw.stickwar.engine.units
             public function aim(target:Unit) : void
             {
                   var a:Number = this.angleToTarget(target);
+                  if(target != null && this._state == Unit.S_ATTACK && !this.inRange(target))
+                  {
+                        return;
+                  }
                   if(Math.abs(this.normalise(this.angleToBowSpace(a) - this.bowAngle)) < 10)
                   {
                         this.bowAngle += this.normalise(this.angleToBowSpace(a) - this.bowAngle) * 0.8;

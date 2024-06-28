@@ -229,7 +229,7 @@ package com.brockw.stickwar.engine.Ai
                               }
                               else
                               {
-                                    offset = Util.sgn(target.px - this.unit.px) * (target.pwidth + this.unit.pwidth) * 0.25;
+                                    offset = Util.sgn(target.px - this.unit.px) * this.unit.weaponReach() * 0.8;
                                     this.unit.walk((target.px - offset - this.unit.px) / 100,yMovement,Util.sgn(target.px - this.unit.px));
                               }
                               if(Math.abs(target.px - this.unit.px - (this.unit.pwidth + target.pwidth) * 0.125 * this.unit.team.direction) < 10)

@@ -76,6 +76,11 @@ package com.brockw.stickwar.engine.units
                   }
             }
             
+            override public function weaponReach() : Number
+            {
+                  return 0;
+            }
+            
             override public function init(game:StickWar) : void
             {
                   initBase();

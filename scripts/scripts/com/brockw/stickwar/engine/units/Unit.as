@@ -303,6 +303,11 @@ package com.brockw.stickwar.engine.units
                   super();
             }
             
+            public function weaponReach() : Number
+            {
+                  return 0;
+            }
+            
             public function reaperCurse(inflictor:Unit) : void
             {
                   this.stateFixForCutToWalk();

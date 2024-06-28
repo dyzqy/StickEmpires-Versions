@@ -1,3 +1,16 @@
+## version 1.26
+- Updated campaign to have Albowtross in last level.
+- Titles are now shown in level "scroll".
+- Deads will now attempt to shoot target even if far away.
+- Added weapon reach.
+- Ranged units will not try to aim anymoe if no unit is in range.
+- Added descriptions to these techs:
+  - Statue Health(resilience)
+  - Miner Tower
+  - Giant Growth II
+- Fixed many descripts of other techs.
+- The "Dark Knight" is officially named "Jugger Knight".
+
 ## version 1.25
 - Replaced Battlefield and Economy buttons with Garrison and Ungarrison buttons.
 - Dead units can't be poisoned anymore.
