@@ -47,10 +47,11 @@ package com.brockw.stickwar.campaign
                   }
                   addEventListener(Event.ENTER_FRAME,this.update);
                   addEventListener(MouseEvent.CLICK,this.click);
-                  this.mc.story.gotoAndStop(1);
                   this.mc.bottomPanel.campaignButtons.saveGame.addEventListener(MouseEvent.CLICK,this.saveButtonClick);
                   this.mc.saveGamePrompt.visible = false;
                   this.mc.saveGamePrompt.okButton.addEventListener(MouseEvent.CLICK,this.okButton);
+                  this.mc.text.mouseEnabled = false;
+                  this.mc.title.mouseEnabled = false;
             }
             
             private function okButton(even:Event) : void
@@ -84,10 +85,8 @@ package com.brockw.stickwar.campaign
                   else
                   {
                         this.mc.map.playbuttonflag.turning.visible = true;
-                        this.mc.story.y += (609 - this.mc.story.y) * 1;
-                        this.mc.story.nextFrame();
-                        this.mc.story.text.text = this.main.campaign.getCurrentLevel().storyName;
-                        this.mc.story.title.text = this.main.campaign.getCurrentLevel().title;
+                        this.mc.text.text = this.main.campaign.getCurrentLevel().storyName;
+                        this.mc.title.text = this.main.campaign.getCurrentLevel().title;
                         this.mc.bottomPanel.y += (1192.15 - this.mc.bottomPanel.y) * 1;
                   }
                   MovieClip(this.mc.map.playbuttonflag.turning).mouseEnabled = false;

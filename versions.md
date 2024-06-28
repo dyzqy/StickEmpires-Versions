@@ -1,3 +1,8 @@
+## version 1.27
+- Replaced campaign "Scroll" with new desctrip tion and text holder.
+- Fixed bug where Swordwrath don't have double attack speed while using rage.
+  - 
+
 ## version 1.26
 - Updated campaign to have Albowtross in last level.
 - Titles are now shown in level "scroll".

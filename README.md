@@ -1,2 +1,2 @@
 # Current version
-1.26
+1.27

@@ -57,7 +57,6 @@ package com.brockw.stickwar.campaign
             
             public function isGameFinished() : Boolean
             {
-                  trace(this.currentLevel,this.levels.length);
                   return this.currentLevel >= this.levels.length;
             }
             

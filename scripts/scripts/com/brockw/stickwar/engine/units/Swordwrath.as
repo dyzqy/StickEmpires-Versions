@@ -263,7 +263,14 @@ package com.brockw.stickwar.engine.units
                         _state = S_ATTACK;
                         hasHit = false;
                         attackStartFrame = team.game.frame;
-                        framesInAttack = MovieClip(_mc.mc).totalFrames;
+                        if(this.rageSpell.inEffect())
+                        {
+                              framesInAttack = MovieClip(_mc.mc).totalFrames / 2;
+                        }
+                        else
+                        {
+                              framesInAttack = MovieClip(_mc.mc).totalFrames;
+                        }
                   }
             }
             
