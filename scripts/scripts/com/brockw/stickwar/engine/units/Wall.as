@@ -19,6 +19,8 @@ package com.brockw.stickwar.engine.units
             
             private var isConstructed:Boolean = false;
             
+            private var healthLost:Number;
+            
             public function Wall(game:StickWar, team:Team)
             {
                   var n:wallSpike = null;
@@ -59,6 +61,7 @@ package com.brockw.stickwar.engine.units
                   this.type = Unit.U_WALL;
                   _interactsWith = Unit.I_IS_BUILDING;
                   flyingHeight = 0;
+                  this.healthLost = 0;
             }
             
             override public function poison(p:Number) : void
@@ -76,7 +79,7 @@ package com.brockw.stickwar.engine.units
                   var mc:wallSpike = null;
                   if(fraction >= 0 && fraction <= 1)
                   {
-                        _health = fraction * _maxHealth;
+                        _health = fraction * _maxHealth - this.healthLost;
                         healthBar.reset();
                         if(fraction >= 1)
                         {
@@ -105,6 +108,14 @@ package com.brockw.stickwar.engine.units
                   ai.update(game);
             }
             
+            override public function damage(type:int, amount:int, inflictor:Entity) : void
+            {
+                  var healthBefore:* = _health;
+                  super.damage(type,amount,inflictor);
+                  var healthAfter:* = _health;
+                  this.healthLost += healthBefore - healthAfter;
+            }
+            
             override public function checkForHitPoint(p:Point, target:Unit) : Boolean
             {
                   return this.checkForHitPoint2(p);
@@ -128,8 +139,9 @@ package com.brockw.stickwar.engine.units
             
             public function setLocation(x:Number) : void
             {
-                  var e:Entity = null;
                   var i:int = 0;
+                  var e:Entity = null;
+                  i = 0;
                   for each(e in this.wallParts)
                   {
                         e.x = e.px = x - i * 5 * team.direction;

@@ -143,7 +143,8 @@ package com.brockw.stickwar.engine.Team.Chaos
             
             override public function spawnMiners() : void
             {
-                  var u1:Unit = game.unitFactory.getUnit(Unit.U_CHAOS_MINER);
+                  var u1:Unit = null;
+                  u1 = game.unitFactory.getUnit(Unit.U_CHAOS_MINER);
                   var u2:Unit = game.unitFactory.getUnit(Unit.U_CHAOS_MINER);
                   spawn(u1,game);
                   spawn(u2,game);

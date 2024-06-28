@@ -1,3 +1,8 @@
+## version 1.24
+- Added 20s cooldown to building walls(per miner)
+- Now units can catch up to other units.
+- Walls are now able to take damage and be destroyed while being built.
+
 ## version 1.23
 - When mismatching versions, the game does not automatically refresh page anymore(web only)
 - Made crawler hitbox have bigger hieght so Castle Units have easier time hitting them.

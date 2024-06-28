@@ -6,8 +6,8 @@
 <campaignDifficulty>1</campaignDifficulty>
 <isFogOfWar>1</isFogOfWar>
 <debugTeamA>Order</debugTeamA>
-<debugTeamB>Chaos</debugTeamB>
-<version>1.23</version>
+<debugTeamB>Order</debugTeamB>
+<version>1.24</version>
 <gravity>0.45</gravity>
 <worldScale>1</worldScale>
 <frontScale>.8</frontScale>
@@ -1494,7 +1494,7 @@
 <gold>200</gold>
 <mana>0</mana>
 <effect>0</effect>
-<cooldown>0</cooldown>
+<cooldown>600</cooldown>
 
 <constructionTime>200</constructionTime>
 <constructRange>50</constructRange>

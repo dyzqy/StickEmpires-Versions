@@ -222,7 +222,8 @@ package com.brockw.stickwar.engine.Ai
                               {
                                     yMovement = target.py - this.unit.py;
                               }
-                              this.unit.walk((target.px - this.unit.px - (this.unit.pwidth + target.pwidth) * 0.125 * this.unit.team.direction) / 100,yMovement,Util.sgn(target.px - this.unit.px));
+                              trace("CATCH UP",(target.px - this.unit.px) / 20);
+                              this.unit.walk((target.px - this.unit.px) / 20,yMovement,Util.sgn(target.px - this.unit.px));
                               if(Math.abs(target.px - this.unit.px - (this.unit.pwidth + target.pwidth) * 0.125 * this.unit.team.direction) < 10)
                               {
                                     this.unit.faceDirection(target.px - this.unit.px);
