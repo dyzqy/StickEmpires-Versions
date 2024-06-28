@@ -5,9 +5,9 @@
 <skipToLevel>6</skipToLevel>
 <campaignDifficulty>1</campaignDifficulty>
 <isFogOfWar>1</isFogOfWar>
-<debugTeamA>Order</debugTeamA>
-<debugTeamB>Order</debugTeamB>
-<version>1.24</version>
+<debugTeamA>Chaos</debugTeamA>
+<debugTeamB>Chaos</debugTeamB>
+<version>1.25</version>
 <gravity>0.45</gravity>
 <worldScale>1</worldScale>
 <frontScale>.8</frontScale>

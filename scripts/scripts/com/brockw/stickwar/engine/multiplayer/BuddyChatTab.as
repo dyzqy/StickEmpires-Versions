@@ -1,9 +1,9 @@
 package com.brockw.stickwar.engine.multiplayer
 {
       import com.brockw.stickwar.Main;
-      import com.smartfoxserver.v2.entities.data.*;
-      import com.smartfoxserver.v2.requests.*;
-      import com.smartfoxserver.v2.requests.buddylist.*;
+      import com.smartfoxserver.v2.entities.data.SFSObject;
+      import com.smartfoxserver.v2.requests.ExtensionRequest;
+      import fl.controls.ScrollPolicy;
       import flash.events.Event;
       
       public class BuddyChatTab extends buddyChatMc
@@ -30,6 +30,11 @@ package com.brockw.stickwar.engine.multiplayer
                   this.chatWindow.chatOutput.text = "";
                   this.buddyText.mouseEnabled = false;
                   this.buddy = null;
+                  this.chatWindow.scroll.source = this.chatWindow.chatOutput;
+                  this.chatWindow.scroll.setSize(this.chatWindow.scroll.width,this.chatWindow.scroll.height);
+                  this.chatWindow.scroll.verticalScrollPolicy = ScrollPolicy.AUTO;
+                  this.chatWindow.scroll.horizontalScrollPolicy = ScrollPolicy.OFF;
+                  this.chatWindow.scroll.update();
             }
             
             public function minimize() : void
@@ -54,7 +59,7 @@ package com.brockw.stickwar.engine.multiplayer
             private function sendChatMessage(evt:Event) : void
             {
                   var params:SFSObject = null;
-                  var txt:String = String(this.chatWindow.chatInput.text);
+                  var txt:String = this.chatWindow.chatInput.text;
                   if(txt.charCodeAt(txt.length - 1) == 13)
                   {
                         txt = txt.slice(0,txt.length - 1);

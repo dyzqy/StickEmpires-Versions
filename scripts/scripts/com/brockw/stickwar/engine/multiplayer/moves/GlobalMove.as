@@ -64,6 +64,14 @@ package com.brockw.stickwar.engine.multiplayer.moves
                   {
                         team.defend(true);
                   }
+                  else if(this.globalMoveType == Team.G_GARRISON_MINER)
+                  {
+                        team.garrisonMiner(true);
+                  }
+                  else if(this.globalMoveType == Team.G_UNGARRISON_MINER)
+                  {
+                        team.unGarrisonMiner(true);
+                  }
                   else
                   {
                         team.attack(true);

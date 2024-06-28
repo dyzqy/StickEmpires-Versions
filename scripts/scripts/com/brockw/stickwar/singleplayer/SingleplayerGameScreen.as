@@ -47,7 +47,7 @@ package com.brockw.stickwar.singleplayer
                   a = 0;
                   b = 1;
                   game.initTeams(Team.getIdFromRaceName(game.xml.xml.debugTeamA),Team.getIdFromRaceName(game.xml.xml.debugTeamB),game.xml.xml.Order.Units.statue.health,game.xml.xml.Order.Units.statue.health);
-                  team = game.teamB;
+                  team = game.teamA;
                   game.team = team;
                   game.teamA.id = a;
                   game.teamB.id = b;

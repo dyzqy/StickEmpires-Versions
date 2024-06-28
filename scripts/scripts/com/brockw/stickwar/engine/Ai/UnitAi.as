@@ -161,6 +161,7 @@ package com.brockw.stickwar.engine.Ai
             public function baseUpdate(game:StickWar) : void
             {
                   var yMovement:Number = NaN;
+                  var offset:Number = NaN;
                   this.checkNextMove(game);
                   var target:Unit = this.getClosestTarget();
                   if(this.mayAttack && (this.unit.mayAttack(target) || target is Wall && Math.abs(target.px - this.unit.px) < target.pwidth + this.unit.pwidth / 2))
@@ -222,8 +223,15 @@ package com.brockw.stickwar.engine.Ai
                               {
                                     yMovement = target.py - this.unit.py;
                               }
-                              trace("CATCH UP",(target.px - this.unit.px) / 20);
-                              this.unit.walk((target.px - this.unit.px) / 20,yMovement,Util.sgn(target.px - this.unit.px));
+                              if(Util.sgn(target.dx) == Util.sgn(this.unit.dx) && Math.abs(target.dx) > 1)
+                              {
+                                    this.unit.walk((target.px - this.unit.px) / 20,yMovement,Util.sgn(target.px - this.unit.px));
+                              }
+                              else
+                              {
+                                    offset = Util.sgn(target.px - this.unit.px) * (target.pwidth + this.unit.pwidth) * 0.25;
+                                    this.unit.walk((target.px - offset - this.unit.px) / 100,yMovement,Util.sgn(target.px - this.unit.px));
+                              }
                               if(Math.abs(target.px - this.unit.px - (this.unit.pwidth + target.pwidth) * 0.125 * this.unit.team.direction) < 10)
                               {
                                     this.unit.faceDirection(target.px - this.unit.px);

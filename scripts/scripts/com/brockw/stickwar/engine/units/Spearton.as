@@ -143,7 +143,8 @@ package com.brockw.stickwar.engine.units
                               {
                                     _isDualing = false;
                                     _state = S_RUN;
-                                    px += Util.sgn(mc.scaleX) * _currentDual.finalXOffset * this.scaleX * this._scale * _worldScaleX * this.perspectiveScale;
+                                    px += Util.sgn(mc.scaleX) * team.game.getPerspectiveScale(py) * _currentDual.finalXOffset;
+                                    x = px;
                                     dx = 0;
                                     dy = 0;
                               }

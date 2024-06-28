@@ -1,3 +1,11 @@
+## version 1.25
+- Replaced Battlefield and Economy buttons with Garrison and Ungarrison buttons.
+- Dead units can't be poisoned anymore.
+- Fixed spearton finisher animation movements.
+- Archidons now take 10 frames(0.33s) less to load a bow.
+- Fixed bug introduced in last update where units push each other instead of attacking.
+- Walls & Towers can't be built past middle of the map.
+
 ## version 1.24
 - Added 20s cooldown to building walls(per miner)
 - Now units can catch up to other units.

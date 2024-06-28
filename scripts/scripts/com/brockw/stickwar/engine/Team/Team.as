@@ -39,6 +39,10 @@ package com.brockw.stickwar.engine.Team
             public static const G_DEFEND:int = 1;
             
             public static const G_ATTACK:int = 2;
+            
+            public static const G_GARRISON_MINER:int = 3;
+            
+            public static const G_UNGARRISON_MINER:int = 4;
              
             
             public var averagePosition:Number;
@@ -287,6 +291,77 @@ package com.brockw.stickwar.engine.Team
                   this.game.projectileManager.initWallExplosion(w.px,3 * this.game.map.height / 5,this);
                   this.game.projectileManager.initWallExplosion(w.px,4 * this.game.map.height / 5,this);
                   this.game.projectileManager.initWallExplosion(w.px,5 * this.game.map.height / 5,this);
+            }
+            
+            public function garrisonMiner(isLocal:Boolean = false) : void
+            {
+                  var unit:String = null;
+                  var u:UnitMove = new UnitMove();
+                  u.moveType = UnitCommand.GARRISON;
+                  for(unit in this.units)
+                  {
+                        if(this.units[unit].type == this.getMinerType())
+                        {
+                              u.units.push(this.units[unit].id);
+                        }
+                  }
+                  u.arg0 = this.homeX;
+                  u.arg1 = this.game.gameScreen.game.map.height / 2;
+                  if(!isLocal)
+                  {
+                        this.game.gameScreen.doMove(u,this.id);
+                  }
+                  else
+                  {
+                        u.execute(this.game);
+                  }
+            }
+            
+            public function unGarrisonMiner(isLocal:Boolean = false) : void
+            {
+                  var u:Unit = null;
+                  var m:UnitMove = null;
+                  for each(u in this.units)
+                  {
+                        if(u.type == this.getMinerType())
+                        {
+                              if(MinerAi(u.ai).targetOre != null)
+                              {
+                                    m = new UnitMove();
+                                    m.moveType = UnitCommand.MOVE;
+                                    m.units.push(u.id);
+                                    m.owner = this.id;
+                                    m.arg0 = MinerAi(u.ai).targetOre.x;
+                                    m.arg1 = MinerAi(u.ai).targetOre.y;
+                                    m.arg4 = MinerAi(u.ai).targetOre.id;
+                                    if(!isLocal)
+                                    {
+                                          this.game.gameScreen.doMove(m,this.id);
+                                    }
+                                    else
+                                    {
+                                          m.execute(this.game);
+                                    }
+                              }
+                              else
+                              {
+                                    m = new UnitMove();
+                                    m.moveType = UnitCommand.ATTACK_MOVE;
+                                    m.units.push(u.id);
+                                    m.owner = this.id;
+                                    m.arg0 = this.homeX + this.direction * 900;
+                                    m.arg1 = this.game.gameScreen.game.map.height / 2;
+                                    if(!isLocal)
+                                    {
+                                          this.game.gameScreen.doMove(m,this.id);
+                                    }
+                                    else
+                                    {
+                                          m.execute(this.game);
+                                    }
+                              }
+                        }
+                  }
             }
             
             public function garrison(isLocal:Boolean = false, specificUnit:Unit = null) : void

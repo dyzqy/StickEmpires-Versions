@@ -337,6 +337,7 @@ package com.brockw.stickwar.engine.units
                   else if(isDead == false)
                   {
                         isDead = true;
+                        MinerAi(ai).targetOre = null;
                         if(_isDualing)
                         {
                               _mc.gotoAndStop(_currentDual.defendLabel);

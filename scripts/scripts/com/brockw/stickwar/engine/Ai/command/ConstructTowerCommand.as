@@ -52,12 +52,16 @@ package com.brockw.stickwar.engine.Ai.command
                   {
                         return false;
                   }
+                  if(team.direction * mouseX > team.direction * (team.game.map.width / 2 - 400 * team.direction))
+                  {
+                        return false;
+                  }
                   return true;
             }
             
             override public function unableToCastMessage() : String
             {
-                  return "Too close to statue for construction";
+                  return "Unable to construct in this region.";
             }
             
             override public function cleanUpPreClick(canvas:Sprite) : void

@@ -181,7 +181,7 @@ package com.brockw.stickwar.engine.Ai
                   }
                   else if(MinerAi(miner.ai).targetOre == null || MinerAi(miner.ai).targetOre && !MinerAi(miner.ai).targetOre.hasMiningSpot(miner))
                   {
-                        miner.team.statue.getMiningSpot(miner);
+                        miner.team.statue.reserveMiningSpot(miner);
                         MinerAi(miner.ai).targetOre = miner.team.statue;
                   }
             }

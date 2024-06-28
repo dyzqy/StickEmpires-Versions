@@ -242,7 +242,7 @@ package com.brockw.stickwar.engine.units
             override public function isLoaded() : Boolean
             {
                   var bow:MovieClip = _mc.mc.bow;
-                  return this.bowFrame < 45;
+                  return this.bowFrame < 35;
             }
             
             override public function shoot(game:StickWar, target:Unit) : void

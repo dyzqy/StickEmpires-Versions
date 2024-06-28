@@ -133,7 +133,8 @@ package com.brockw.stickwar.engine
             
             public function drawToggle(box:MovieClip, enabled:Boolean) : void
             {
-                  var s:Sprite = Sprite(box.getChildByName("overlay"));
+                  var s:Sprite = null;
+                  s = Sprite(box.getChildByName("overlay"));
                   var mc:DisplayObject = box.getChildByName("mc");
                   box.removeChild(s);
                   box.addChild(s);

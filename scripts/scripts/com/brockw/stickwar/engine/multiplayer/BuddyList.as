@@ -287,7 +287,9 @@ package com.brockw.stickwar.engine.multiplayer
                         if(BuddyChatTab(this._chatTabs[i]).id == buddy.id)
                         {
                               BuddyChatTab(this._chatTabs[i]).chatWindow.chatOutput.text = BuddyChatTab(this._chatTabs[i]).chatWindow.chatOutput.text + (userName + ": " + message + "\n");
-                              BuddyChatTab(this._chatTabs[i]).chatWindow.chatOutput.scrollV = BuddyChatTab(this._chatTabs[i]).chatWindow.chatOutput.numLines;
+                              BuddyChatTab(this._chatTabs[i]).chatWindow.chatOutput.height = BuddyChatTab(this._chatTabs[i]).chatWindow.chatOutput.textHeight + 50;
+                              BuddyChatTab(this._chatTabs[i]).chatWindow.scroll.verticalScrollPosition = BuddyChatTab(this._chatTabs[i]).chatWindow.chatOutput.height;
+                              BuddyChatTab(this._chatTabs[i]).chatWindow.scroll.update();
                               buddy.chatHistory = BuddyChatTab(this._chatTabs[i]).chatWindow.chatOutput.text;
                         }
                   }

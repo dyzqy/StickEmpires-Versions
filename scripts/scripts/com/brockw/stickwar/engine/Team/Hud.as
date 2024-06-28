@@ -20,8 +20,6 @@ package com.brockw.stickwar.engine.Team
                   this.hud.garrisonButton.tabEnabled = false;
                   this.hud.defendButton.tabEnabled = false;
                   this.hud.attackButton.tabEnabled = false;
-                  this.hud.battlefieldButton.tabEnabled = false;
-                  this.hud.economyButton.tabEnabled = false;
             }
             
             public function mapClear() : void

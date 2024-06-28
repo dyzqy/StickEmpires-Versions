@@ -159,14 +159,16 @@ package com.brockw.stickwar.engine
                   {
                         this.hud.hud.garrisonButton.addEventListener(MouseEvent.CLICK,this.garrisonButton);
                         this.hud.hud.attackButton.addEventListener(MouseEvent.CLICK,this.attackButton);
+                        this.hud.hud.leftMinerButton.addEventListener(MouseEvent.CLICK,this.garrisonMinerButton);
+                        this.hud.hud.rightMinerButton.addEventListener(MouseEvent.CLICK,this.unGarrisonMinerButton);
                   }
                   else
                   {
                         this.hud.hud.attackButton.addEventListener(MouseEvent.CLICK,this.garrisonButton);
                         this.hud.hud.garrisonButton.addEventListener(MouseEvent.CLICK,this.attackButton);
+                        this.hud.hud.leftMinerButton.addEventListener(MouseEvent.CLICK,this.unGarrisonMinerButton);
+                        this.hud.hud.rightMinerButton.addEventListener(MouseEvent.CLICK,this.garrisonMinerButton);
                   }
-                  this.hud.hud.economyButton.addEventListener(MouseEvent.CLICK,this.economyButton);
-                  this.hud.hud.battlefieldButton.addEventListener(MouseEvent.CLICK,this.battlefieldButton);
                   ++this.main.loadingFraction;
                   this.gameScreen.team.initTeamButtons(this.gameScreen);
                   ++this.main.loadingFraction;
@@ -214,8 +216,6 @@ package com.brockw.stickwar.engine
                         this.hud.hud.garrisonButton.removeEventListener(MouseEvent.CLICK,this.attackButton);
                   }
                   this.hud.hud.defendButton.removeEventListener(MouseEvent.CLICK,this.defendButton);
-                  this.hud.hud.economyButton.removeEventListener(MouseEvent.CLICK,this.economyButton);
-                  this.hud.hud.battlefieldButton.removeEventListener(MouseEvent.CLICK,this.battlefieldButton);
                   this._hud = null;
                   Util.recursiveRemoval(Sprite(this));
             }
@@ -226,6 +226,44 @@ package com.brockw.stickwar.engine
             
             private function battlefieldButton(evt:MouseEvent) : void
             {
+            }
+            
+            public function garrisonMinerButton(evt:MouseEvent) : void
+            {
+                  if(!this.isGlobalsEnabled)
+                  {
+                        return;
+                  }
+                  var m:GlobalMove = new GlobalMove();
+                  m.globalMoveType = Team.G_GARRISON_MINER;
+                  this.gameScreen.doMove(m,this.team.id);
+                  if(this.team.type == Team.T_GOOD)
+                  {
+                        this.gameScreen.game.soundManager.playSoundFullVolume("manthefortSoundOrder");
+                  }
+                  else
+                  {
+                        this.gameScreen.game.soundManager.playSoundFullVolume("manthefortSoundChaos");
+                  }
+            }
+            
+            public function unGarrisonMinerButton(evt:MouseEvent) : void
+            {
+                  if(!this.isGlobalsEnabled)
+                  {
+                        return;
+                  }
+                  var m:GlobalMove = new GlobalMove();
+                  m.globalMoveType = Team.G_UNGARRISON_MINER;
+                  this.gameScreen.doMove(m,this.team.id);
+                  if(this.team.type == Team.T_GOOD)
+                  {
+                        this.gameScreen.game.soundManager.playSoundFullVolume("defendSoundOrder");
+                  }
+                  else
+                  {
+                        this.gameScreen.game.soundManager.playSoundFullVolume("defendSoundChaos");
+                  }
             }
             
             public function garrisonButton(evt:MouseEvent) : void

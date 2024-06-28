@@ -40,7 +40,6 @@ package com.brockw.stickwar.engine.projectile
             
             override public function update(game:StickWar) : void
             {
-                  var ody:Number = NaN;
                   var effects:Array = null;
                   var effect:Array = null;
                   var dir:int = 0;
@@ -52,7 +51,7 @@ package com.brockw.stickwar.engine.projectile
                   var ndy:* = undefined;
                   var ndz:* = undefined;
                   var odx:Number = dx;
-                  ody = dy;
+                  var ody:Number = dy;
                   var odz:Number = dz;
                   this.stunTime = this.stunTimeBoulder;
                   this.visible = true;

@@ -164,7 +164,7 @@ package com.brockw.stickwar.engine.projectile
                   this.p3 = this.localToGlobal(new Point(30,0));
                   if(!this.hasHit)
                   {
-                        game.spatialHash.mapInArea(px,py,px,py,this.arrowHit);
+                        game.spatialHash.mapInArea(px - 50,py - 50,px + 50,py + 50,this.arrowHit);
                         for each(w in this.team.enemyTeam.walls)
                         {
                               this.arrowHit(w);
