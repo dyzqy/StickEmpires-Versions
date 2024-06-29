@@ -2,6 +2,7 @@ package com.brockw.stickwar.engine.Ai
 {
       import com.brockw.stickwar.engine.Ai.command.*;
       import com.brockw.stickwar.engine.StickWar;
+      import com.brockw.stickwar.engine.Team.Tech;
       import com.brockw.stickwar.engine.units.*;
       
       public class MonkAi extends UnitAi
@@ -70,7 +71,7 @@ package com.brockw.stickwar.engine.Ai
                   }
                   else
                   {
-                        if(Monk(unit).isCureToggled && !Monk(unit).isBusy() && Monk(unit).cureCooldown() == 0 && (currentCommand is AttackMoveCommand || currentCommand is StandCommand || currentCommand is HoldCommand))
+                        if(unit.team.tech.isResearched(Tech.MONK_CURE) && Monk(unit).isCureToggled && !Monk(unit).isBusy() && Monk(unit).cureCooldown() == 0 && (currentCommand is AttackMoveCommand || currentCommand is StandCommand || currentCommand is HoldCommand))
                         {
                               this.inRange = null;
                               if(cureCommand == null)

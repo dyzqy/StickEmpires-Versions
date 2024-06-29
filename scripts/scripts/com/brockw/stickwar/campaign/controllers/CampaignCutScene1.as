@@ -1,16 +1,13 @@
 package com.brockw.stickwar.campaign.controllers
 {
       import com.brockw.stickwar.GameScreen;
-      import com.brockw.stickwar.campaign.CampaignGameScreen;
-      import com.brockw.stickwar.campaign.InGameMessage;
-      import com.brockw.stickwar.engine.Ai.command.HoldCommand;
-      import com.brockw.stickwar.engine.Ai.command.MoveCommand;
+      import com.brockw.stickwar.campaign.*;
+      import com.brockw.stickwar.engine.Ai.*;
+      import com.brockw.stickwar.engine.Ai.command.*;
       import com.brockw.stickwar.engine.StickWar;
-      import com.brockw.stickwar.engine.units.EnslavedGiant;
-      import com.brockw.stickwar.engine.units.Medusa;
-      import com.brockw.stickwar.engine.units.Spearton;
-      import com.brockw.stickwar.engine.units.Swordwrath;
-      import com.brockw.stickwar.engine.units.Unit;
+      import com.brockw.stickwar.engine.Team.*;
+      import com.brockw.stickwar.engine.multiplayer.moves.*;
+      import com.brockw.stickwar.engine.units.*;
       import flash.display.MovieClip;
       
       public class CampaignCutScene1 extends CampaignController
@@ -68,6 +65,8 @@ package com.brockw.stickwar.campaign.controllers
             override public function update(gameScreen:GameScreen) : void
             {
                   var unit:Unit = null;
+                  var numGiants:int = 0;
+                  var giant:Giant = null;
                   var game:StickWar = null;
                   var u1:Unit = null;
                   var frontPosition:Number = NaN;
@@ -76,6 +75,7 @@ package com.brockw.stickwar.campaign.controllers
                   {
                         this.message.update();
                   }
+                  gameScreen.team.enemyTeam.gold = 0;
                   if(this.state != S_BEFORE_CUTSCENE)
                   {
                         for each(unit in gameScreen.game.team.units)
@@ -92,7 +92,17 @@ package com.brockw.stickwar.campaign.controllers
                   }
                   if(this.state == S_BEFORE_CUTSCENE)
                   {
-                        if(gameScreen.team.enemyTeam.statue.health < 200)
+                        numGiants = 0;
+                        if(Boolean(gameScreen.team.enemyTeam.unitGroups[Unit.U_GIANT]))
+                        {
+                              numGiants = 1;
+                              giant = gameScreen.team.enemyTeam.unitGroups[Unit.U_GIANT][0];
+                              if(giant == null || giant.health == 0)
+                              {
+                                    numGiants = 0;
+                              }
+                        }
+                        if(numGiants == 0)
                         {
                               this.state = S_FADE_OUT;
                               this.counter = 0;
@@ -151,6 +161,7 @@ package com.brockw.stickwar.campaign.controllers
                               u1.y = 0;
                               u1.px = gameScreen.team.enemyTeam.homeX + gameScreen.team.enemyTeam.direction * 100;
                               u1.x = u1.px;
+                              u1.faceDirection(-1);
                         }
                   }
                   else if(this.state == S_FADE_IN)

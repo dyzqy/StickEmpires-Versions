@@ -16,6 +16,18 @@ package com.brockw.stickwar.engine.projectile
             
             private var stunTimeBoulder:Number;
             
+            protected var p4:Point;
+            
+            protected var p5:Point;
+            
+            protected var p6:Point;
+            
+            protected var p7:Point;
+            
+            protected var p8:Point;
+            
+            protected var p9:Point;
+            
             public function Boulder(game:StickWar)
             {
                   super();
@@ -36,6 +48,27 @@ package com.brockw.stickwar.engine.projectile
                   super.cleanUp();
                   removeChild(this.spellMc);
                   this.spellMc = null;
+            }
+            
+            override protected function arrowHit(u:Unit) : void
+            {
+                  if(hasHit)
+                  {
+                        return;
+                  }
+                  if(isDebris && u == unitNotToHit)
+                  {
+                        return;
+                  }
+                  if(Unit(u).team != this.team)
+                  {
+                        if(Unit(u).checkForHitPointArrow(p1,py,Unit(u)) || Unit(u).checkForHitPointArrow(p2,py,Unit(u)) || Unit(u).checkForHitPointArrow(p3,py,Unit(u)))
+                        {
+                              unitNotToHit = u;
+                              hasHit = true;
+                              lastDistanceToCentre = Math.abs(x - u.px);
+                        }
+                  }
             }
             
             override public function update(game:StickWar) : void
@@ -79,7 +112,7 @@ package com.brockw.stickwar.engine.projectile
                               }
                         }
                   }
-                  if(pz > 0 && dz > 0)
+                  if(pz > 0 && dz > 0 && !hasHit)
                   {
                         dz = dx = dy = 0;
                         if(!hasHit)
@@ -95,15 +128,21 @@ package com.brockw.stickwar.engine.projectile
                   {
                         return;
                   }
-                  p1 = this.localToGlobal(new Point(0,40));
+                  p1 = this.localToGlobal(new Point(-10,40));
                   p2 = this.localToGlobal(new Point(40,40));
-                  p3 = this.localToGlobal(new Point(80,40));
+                  p3 = this.localToGlobal(new Point(90,40));
+                  this.p4 = this.localToGlobal(new Point(-10,-10));
+                  this.p5 = this.localToGlobal(new Point(40,-10));
+                  this.p6 = this.localToGlobal(new Point(90,-10));
+                  this.p7 = this.localToGlobal(new Point(-10,90));
+                  this.p8 = this.localToGlobal(new Point(40,90));
+                  this.p9 = this.localToGlobal(new Point(90,90));
                   if(!hasHit)
                   {
-                        game.spatialHash.mapInArea(px,py,px,py,arrowHit);
+                        game.spatialHash.mapInArea(px - 100,py - 100,px + 100,py + 100,this.arrowHit);
                         for each(w in team.enemyTeam.walls)
                         {
-                              arrowHit(w);
+                              this.arrowHit(w);
                         }
                   }
                   else if(unitNotToHit != null)

@@ -9,6 +9,7 @@ package com.brockw.stickwar
       import com.brockw.stickwar.engine.StickWar;
       import com.brockw.stickwar.engine.multiplayer.PostGameScreen;
       import com.brockw.stickwar.engine.multiplayer.SignUpScreen;
+      import com.google.analytics.AnalyticsTracker;
       import com.smartfoxserver.v2.SmartFox;
       import com.smartfoxserver.v2.entities.Room;
       import flash.display.MovieClip;
@@ -20,6 +21,8 @@ package com.brockw.stickwar
              
             
             protected var _sfs:SmartFox;
+            
+            public var tracker:AnalyticsTracker;
             
             private var _gameServer:SmartFox;
             
@@ -51,10 +54,13 @@ package com.brockw.stickwar
             
             private var _loadingBar:MovieClip;
             
+            public var isCampaignDebug:Boolean;
+            
             public function BaseMain()
             {
                   super();
                   this._loadingBar = null;
+                  this.isCampaignDebug = false;
                   trace("BASE MAIN STUFF");
                   this.soundManager = new SoundManager(this);
                   this.soundLoader = new SoundLoader(this.soundManager);

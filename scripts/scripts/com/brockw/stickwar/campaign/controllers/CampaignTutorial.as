@@ -8,6 +8,8 @@ package com.brockw.stickwar.campaign.controllers
       import com.brockw.stickwar.engine.Team.*;
       import com.brockw.stickwar.engine.multiplayer.moves.*;
       import com.brockw.stickwar.engine.units.*;
+      import flash.events.Event;
+      import flash.events.MouseEvent;
       
       public class CampaignTutorial extends CampaignController
       {
@@ -87,10 +89,60 @@ package com.brockw.stickwar.campaign.controllers
             
             private var arrow:tutorialArrow;
             
+            private var spawnSpeartonCounter:int;
+            
+            private var skipTutorialButton:skipTutorial;
+            
+            private var _gameScreen:GameScreen;
+            
+            private var hasShownhillTip:Boolean;
+            
+            private var frameShownHillTip:int;
+            
             public function CampaignTutorial(gameScreen:GameScreen)
             {
                   super(gameScreen);
+                  this._gameScreen = gameScreen;
                   this.state = S_SET_UP;
+                  this.spawnSpeartonCounter = -1;
+                  this.skipTutorialButton = new skipTutorial();
+                  this.frameShownHillTip = 0;
+                  this.hasShownhillTip = false;
+                  this.skipTutorialButton.addEventListener(MouseEvent.CLICK,this.skipTutorialClick,false,0,true);
+            }
+            
+            private function skipTutorialClick(e:Event) : void
+            {
+                  this.state = S_ALL_DONE;
+                  var game:StickWar = this._gameScreen.game;
+                  game.team.unitsAvailable[Unit.U_SWORDWRATH] = 1;
+                  game.team.unitsAvailable[Unit.U_MINER] = 1;
+                  game.team.spawnUnitGroup([Unit.U_MINER,Unit.U_MINER,Unit.U_SWORDWRATH]);
+                  if(this._gameScreen.game.main.campaign.difficultyLevel == Campaign.D_NORMAL)
+                  {
+                        game.team.enemyTeam.spawnUnitGroup([Unit.U_MINER,Unit.U_MINER,Unit.U_MINER]);
+                  }
+                  else
+                  {
+                        game.team.enemyTeam.spawnUnitGroup([Unit.U_MINER,Unit.U_MINER,Unit.U_MINER,Unit.U_MINER,Unit.U_SPEARTON]);
+                  }
+                  game.team.defend(true);
+                  this.skipTutorialButton.removeEventListener(MouseEvent.CLICK,this.skipTutorialClick);
+                  this.message.visible = false;
+                  if(this._gameScreen.contains(this.skipTutorialButton))
+                  {
+                        this._gameScreen.removeChild(this.skipTutorialButton);
+                  }
+                  if(this._gameScreen.contains(this.arrow))
+                  {
+                        this._gameScreen.removeChild(this.arrow);
+                  }
+                  this._gameScreen.team.gold = 500;
+                  this._gameScreen.team.enemyTeam.gold = 150;
+                  this._gameScreen.userInterface.isSlowCamera = false;
+                  CampaignGameScreen(this._gameScreen).doAiUpdates = true;
+                  this._gameScreen.userInterface.isGlobalsEnabled = true;
+                  this._gameScreen.team.tech.isResearchedMap[Tech.CASTLE_ARCHER_1] = 1;
             }
             
             override public function update(gameScreen:GameScreen) : void
@@ -102,12 +154,17 @@ package com.brockw.stickwar.campaign.controllers
                   var u:UnitMove = null;
                   var notGarrisoned:Boolean = false;
                   var notDefending:Boolean = false;
-                  var v1:Miner = null;
-                  var v2:Miner = null;
                   super.update(gameScreen);
                   if(Boolean(this.message))
                   {
                         this.message.update();
+                  }
+                  if(this.state == S_ALL_DONE)
+                  {
+                        if(gameScreen.team.enemyTeam.attackingForcePopulation * 2 > gameScreen.team.attackingForcePopulation)
+                        {
+                              gameScreen.team.enemyTeam.mana = 0;
+                        }
                   }
                   if(this.arrow != null)
                   {
@@ -165,9 +222,19 @@ package com.brockw.stickwar.campaign.controllers
                         this.arrow.x = this.s1.x + gameScreen.game.battlefield.x;
                         this.arrow.y = this.s1.y - this.s1.pheight * 0.8 + gameScreen.game.battlefield.y;
                         this.message.setMessage("Left click and drag a box over units to select them.","Step #1",0,"voiceTutorial1",true);
+                        if(!gameScreen.contains(this.skipTutorialButton) && gameScreen.main.campaign.difficultyLevel != 0)
+                        {
+                              gameScreen.addChild(this.skipTutorialButton);
+                              this.skipTutorialButton.x = gameScreen.game.map.screenWidth / 2 + 17;
+                              this.skipTutorialButton.y = this.message.y + this.message.height - 140;
+                        }
                   }
                   else if(this.state == S_MOVE_UNITS)
                   {
+                        if(gameScreen.contains(this.skipTutorialButton))
+                        {
+                              gameScreen.removeChild(this.skipTutorialButton);
+                        }
                         if(this.s1.selected == false)
                         {
                               gameScreen.userInterface.selectedUnits.add(this.s1);
@@ -389,13 +456,40 @@ package com.brockw.stickwar.campaign.controllers
                         this.arrow.visible = false;
                         CampaignGameScreen(gameScreen).doAiUpdates = true;
                         gameScreen.userInterface.isGlobalsEnabled = true;
+                        this.spawnSpeartonCounter = 30 * 60 * 2;
                   }
                   if(this.state < S_CLICK_ON_ARCHERY_RANGE)
                   {
                         gameScreen.team.enemyTeam.gold = 0;
                   }
-                  if(this.state != S_ALL_DONE)
+                  if(this.state == S_ALL_DONE)
                   {
+                        if(!this.hasShownhillTip)
+                        {
+                              if(Boolean(gameScreen.team.forwardUnit) && gameScreen.team.forwardUnit.x > gameScreen.game.map.width / 2)
+                              {
+                                    gameScreen.removeChild(this.message);
+                                    game = gameScreen.game;
+                                    this.message = new InGameMessage("",gameScreen.game);
+                                    this.message.x = game.stage.stageWidth / 2;
+                                    this.message.y = game.stage.stageHeight / 4 - 75;
+                                    this.message.scaleX *= 1.3;
+                                    this.message.scaleY *= 1.3;
+                                    gameScreen.addChild(this.message);
+                                    this.message.setMessage("Capturing the center tower will award you a continuous stream of gold for as long as you hold the tower","");
+                                    this.message.visible = true;
+                                    this.hasShownhillTip = true;
+                                    this.frameShownHillTip = gameScreen.game.frame;
+                              }
+                        }
+                        else if(gameScreen.game.frame - this.frameShownHillTip > 30 * 5)
+                        {
+                              this.message.visible = false;
+                        }
+                        else
+                        {
+                              gameScreen.game.targetScreenX = 4070;
+                        }
                   }
                   if(this.o1 != null)
                   {
@@ -596,28 +690,8 @@ package com.brockw.stickwar.campaign.controllers
                               gameScreen.team.gold = 150;
                               gameScreen.team.game.team.unitsAvailable[Unit.U_MINER] = 1;
                               game = gameScreen.game;
-                              v1 = Miner(game.unitFactory.getUnit(Unit.U_MINER));
-                              v2 = Miner(game.unitFactory.getUnit(Unit.U_MINER));
-                              gameScreen.team.spawn(v1,game);
-                              gameScreen.team.spawn(v2,game);
-                              v1.px = gameScreen.team.homeX;
-                              v2.px = gameScreen.team.homeX;
-                              v1.py = game.map.height / 3;
-                              v2.py = game.map.height / 3 * 2;
-                              v1.ai.setCommand(game,new StandCommand(game));
-                              v2.ai.setCommand(game,new StandCommand(game));
-                              game.team.population += 4;
-                              v1 = Miner(game.unitFactory.getUnit(Unit.U_MINER));
-                              v2 = Miner(game.unitFactory.getUnit(Unit.U_MINER));
-                              gameScreen.team.enemyTeam.spawn(v1,game);
-                              gameScreen.team.enemyTeam.spawn(v2,game);
-                              v1.px = gameScreen.team.enemyTeam.homeX;
-                              v2.px = gameScreen.team.enemyTeam.homeX;
-                              v1.py = game.map.height / 3;
-                              v2.py = game.map.height / 3 * 2;
-                              v1.ai.setCommand(game,new StandCommand(game));
-                              v2.ai.setCommand(game,new StandCommand(game));
-                              game.team.enemyTeam.population += 4;
+                              game.team.spawnUnitGroup([Unit.U_MINER,Unit.U_MINER]);
+                              game.team.enemyTeam.spawnUnitGroup([Unit.U_MINER,Unit.U_MINER,Unit.U_SPEARTON]);
                               game.team.defend(true);
                         }
                   }

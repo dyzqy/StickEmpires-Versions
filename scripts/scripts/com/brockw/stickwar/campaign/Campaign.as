@@ -49,10 +49,31 @@ package com.brockw.stickwar.campaign
                   }
                   this.currentLevel = skipToLevel;
                   this.campaignPoints = skipToLevel;
-                  this.campaignPoints = skipToLevel;
                   this.initUpgradeTree();
                   this.difficultyLevel = difficulty;
                   this.justTutorial = false;
+            }
+            
+            private function getDifficultyDescription() : String
+            {
+                  if(this.difficultyLevel == Campaign.D_NORMAL)
+                  {
+                        return "normal";
+                  }
+                  if(this.difficultyLevel == Campaign.D_HARD)
+                  {
+                        return "hard";
+                  }
+                  if(this.difficultyLevel == Campaign.D_INSANE)
+                  {
+                        return "insane";
+                  }
+                  return "";
+            }
+            
+            public function getLevelDescription() : String
+            {
+                  return "level" + this.currentLevel + "_" + this.getDifficultyDescription();
             }
             
             public function isGameFinished() : Boolean
@@ -80,7 +101,10 @@ package com.brockw.stickwar.campaign
                   this.upgradeMap[u.name] = u;
                   u = new CampaignUpgrade("Giant Growth II",["Giant Growth I"],[],Tech.GIANT_GROWTH_II);
                   this.upgradeMap[u.name] = u;
-                  u = new CampaignUpgrade("Cloak",["Shield Bash"],[],Tech.CLOAK);
+                  u = new CampaignUpgrade("Cloak_BASIC",["Shield Bash"],[],Tech.CLOAK);
+                  this.upgradeMap[u.name] = u;
+                  u.upgraded = true;
+                  u = new CampaignUpgrade("Cloak",["Shield Bash"],[],Tech.CLOAK_II);
                   this.upgradeMap[u.name] = u;
                   u = new CampaignUpgrade("Passive Income I",["Rage"],["Miner Speed","Castle Archer II"],Tech.BANK_PASSIVE_1);
                   this.upgradeMap[u.name] = u;

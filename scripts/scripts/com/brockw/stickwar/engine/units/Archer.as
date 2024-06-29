@@ -236,7 +236,14 @@ package com.brockw.stickwar.engine.units
                               }
                         }
                   }
-                  Archer.setItem(mc,team.loadout.getItem(this.type,MarketItem.T_WEAPON),team.loadout.getItem(this.type,MarketItem.T_ARMOR),team.loadout.getItem(this.type,MarketItem.T_MISC));
+                  if(this.isCastleArcher)
+                  {
+                        Archer.setItem(mc,"Default","Basic Helmet","Default");
+                  }
+                  else
+                  {
+                        Archer.setItem(mc,team.loadout.getItem(this.type,MarketItem.T_WEAPON),team.loadout.getItem(this.type,MarketItem.T_ARMOR),team.loadout.getItem(this.type,MarketItem.T_MISC));
+                  }
             }
             
             override public function isLoaded() : Boolean
@@ -285,6 +292,19 @@ package com.brockw.stickwar.engine.units
                         this.isFire = false;
                         _maximumRange = this.normalRange;
                         takeBottomTrajectory = true;
+                  }
+            }
+            
+            override public function aim(target:Unit) : void
+            {
+                  var a:Number = angleToTarget(target);
+                  if(Math.abs(normalise(angleToBowSpace(a) - bowAngle)) < 10)
+                  {
+                        bowAngle += normalise(angleToBowSpace(a) - bowAngle) * 0.8;
+                  }
+                  else
+                  {
+                        bowAngle += normalise(angleToBowSpace(a) - bowAngle) * 0.1;
                   }
             }
             

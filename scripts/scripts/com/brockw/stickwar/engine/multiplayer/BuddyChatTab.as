@@ -30,6 +30,7 @@ package com.brockw.stickwar.engine.multiplayer
                   this.chatWindow.chatOutput.text = "";
                   this.buddyText.mouseEnabled = false;
                   this.buddy = null;
+                  this.chatWindow.chatOutput.mouseWheelEnabled = false;
                   this.chatWindow.scroll.source = this.chatWindow.chatOutput;
                   this.chatWindow.scroll.setSize(this.chatWindow.scroll.width,this.chatWindow.scroll.height);
                   this.chatWindow.scroll.verticalScrollPolicy = ScrollPolicy.AUTO;

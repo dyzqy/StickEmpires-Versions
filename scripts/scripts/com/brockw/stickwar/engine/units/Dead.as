@@ -236,7 +236,14 @@ package com.brockw.stickwar.engine.units
                         MovieClip(_mc.mc).gotoAndStop(1);
                   }
                   Util.animateMovieClip(_mc,0);
-                  Dead.setItem(mc,team.loadout.getItem(this.type,MarketItem.T_WEAPON),team.loadout.getItem(this.type,MarketItem.T_ARMOR),team.loadout.getItem(this.type,MarketItem.T_MISC));
+                  if(this.isCastleArcher)
+                  {
+                        Dead.setItem(mc,"Default","Wrapped Helmet","Default");
+                  }
+                  else
+                  {
+                        Dead.setItem(mc,team.loadout.getItem(this.type,MarketItem.T_WEAPON),team.loadout.getItem(this.type,MarketItem.T_ARMOR),team.loadout.getItem(this.type,MarketItem.T_MISC));
+                  }
             }
             
             override public function shoot(game:StickWar, target:Unit) : void

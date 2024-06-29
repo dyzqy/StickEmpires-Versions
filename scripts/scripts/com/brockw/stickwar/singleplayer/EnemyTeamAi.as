@@ -268,14 +268,11 @@ package com.brockw.stickwar.singleplayer
             protected function updateGlobalStrategy(game:StickWar) : void
             {
                   var movePos:Number = NaN;
-                  var m:UnitMove = null;
-                  var moveOn:UnitMove = null;
-                  var unit:Unit = null;
                   if(this.enemyIsWeak())
                   {
                         this.attackMoveGroupTo(this.team.medianPosition + this.team.direction * 250);
                   }
-                  else if(this.enemyIsEvenStrength())
+                  else if(this.enemyIsEvenStrength() || Unit.U_GIANT in this.team.unitGroups)
                   {
                         movePos = this.team.medianPosition + this.team.direction * 250;
                         if(this.team.direction * movePos > this.team.direction * this.team.game.map.width / 2)
@@ -295,32 +292,6 @@ package com.brockw.stickwar.singleplayer
                   else
                   {
                         this.attackMoveGroupTo(this.team.game.map.width / 2);
-                  }
-                  if(Unit.U_GIANT in this.team.unitGroups)
-                  {
-                        m = new UnitMove();
-                        m.moveType = UnitCommand.ATTACK_MOVE;
-                        moveOn = new UnitMove();
-                        moveOn.moveType = UnitCommand.MOVE;
-                        for each(unit in this.team.unitGroups[Unit.U_GIANT])
-                        {
-                              if(unit.ai.currentTarget != null && Math.abs(unit.x - unit.ai.currentTarget.x) < 100)
-                              {
-                                    m.units.push(unit.id);
-                              }
-                              else
-                              {
-                                    moveOn.units.push(unit.id);
-                              }
-                        }
-                        m.arg0 = this.team.enemyTeam.statue.x;
-                        m.arg1 = this.team.game.gameScreen.game.map.height / 2;
-                        m.owner = this.team.id;
-                        m.execute(this.team.game);
-                        moveOn.arg0 = this.team.enemyTeam.statue.x;
-                        moveOn.arg1 = this.team.game.gameScreen.game.map.height / 2;
-                        moveOn.owner = this.team.id;
-                        moveOn.execute(this.team.game);
                   }
             }
             

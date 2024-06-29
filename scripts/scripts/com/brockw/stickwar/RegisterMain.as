@@ -57,7 +57,7 @@ package com.brockw.stickwar
             
             private function playButton(evt:Event) : void
             {
-                  var url:URLRequest = new URLRequest("http://www.stickempires.com/main.php");
+                  var url:URLRequest = new URLRequest("http://www.stickempires.com");
                   navigateToURL(url,"_self");
             }
             

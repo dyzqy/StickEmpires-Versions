@@ -173,9 +173,14 @@ package com.brockw.stickwar.engine.Team
             
             private var _pauseCount:int;
             
+            private var _rating:int;
+            
+            private var _statueType:String;
+            
             public function Team(game:StickWar)
             {
                   super();
+                  this.rating = 0;
                   this._pauseCount = 0;
                   this.spawnedUnit = null;
                   this.timeSinceSpawnedUnit = 0;
@@ -213,6 +218,7 @@ package com.brockw.stickwar.engine.Team
                   this.healthModifier = 1;
                   this._isMember = true;
                   this.towerSpawnDelay = game.xml.xml.towerSpawnDelay;
+                  this._statueType = "default";
             }
             
             public static function getTeamFromId(id:int, game:StickWar, health:int, techAllowed:Dictionary, handicap:* = 1, healthModifier:Number = 1) : Team
@@ -536,12 +542,13 @@ package com.brockw.stickwar.engine.Team
             
             public function cleanUpUnits() : void
             {
-                  var unit:Unit = null;
                   var building:String = null;
-                  for each(unit in this._units)
+                  var unit:Unit = null;
+                  while(this._deadUnits.length != 0)
                   {
-                        this.removeUnitCompletely(unit,this.game);
+                        this.removeUnitCompletely(this._deadUnits.shift(),this.game);
                   }
+                  this._deadUnits = [];
                   for(building in this._unitProductionQueue)
                   {
                         this._unitProductionQueue[building] = [];
@@ -549,6 +556,10 @@ package com.brockw.stickwar.engine.Team
                   this.population = 0;
                   this.castleDefence.cleanUpUnits();
                   delete this.tech.isResearchedMap[Tech.CASTLE_ARCHER_1];
+                  for each(unit in this._units)
+                  {
+                        this.removeUnitCompletely(unit,this.game);
+                  }
             }
             
             public function cleanUp() : void
@@ -1020,6 +1031,7 @@ package com.brockw.stickwar.engine.Team
                   {
                         game.battlefield.removeChild(unit);
                   }
+                  this.unitGroups[unit.type].splice(this.unitGroups[unit.type].indexOf(unit),1);
                   game.unitFactory.returnUnit(unit.type,unit);
                   if(unit.id in this.garrisonedUnits)
                   {
@@ -1120,6 +1132,18 @@ package com.brockw.stickwar.engine.Team
                   }
                   game.projectileManager.initTowerSpawn(game.map.hills[0].px,game.map.height / 2,this,scale);
                   return newUnit;
+            }
+            
+            public function updateStatue() : void
+            {
+                  if(this._statueType != "default")
+                  {
+                        this.statue.mc.statue.gotoAndStop(this._statueType);
+                  }
+                  else
+                  {
+                        this.statue.mc.statue.gotoAndStop("default");
+                  }
             }
             
             public function update(game:StickWar) : void
@@ -1733,6 +1757,26 @@ package com.brockw.stickwar.engine.Team
             public function set pauseCount(value:int) : void
             {
                   this._pauseCount = value;
+            }
+            
+            public function get rating() : int
+            {
+                  return this._rating;
+            }
+            
+            public function set rating(value:int) : void
+            {
+                  this._rating = value;
+            }
+            
+            public function get statueType() : String
+            {
+                  return this._statueType;
+            }
+            
+            public function set statueType(value:String) : void
+            {
+                  this._statueType = value;
             }
       }
 }

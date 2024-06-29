@@ -309,7 +309,7 @@ package com.brockw.stickwar.engine.units
             
             public function cureSpell(personToCure:Unit) : void
             {
-                  if(!this.isBusy() && this.cureSpellCooldown.spellActivate(team) && team.tech.isResearched(Tech.MONK_CURE))
+                  if(!this.isBusy() && team.tech.isResearched(Tech.MONK_CURE) && this.cureSpellCooldown.spellActivate(team))
                   {
                         this.cureTarget = personToCure;
                         this.isCuring = true;
@@ -373,6 +373,14 @@ package com.brockw.stickwar.engine.units
                         }
                   }
                   return false;
+            }
+            
+            override public function stateFixForCutToWalk() : void
+            {
+                  if(!this.isCuring && !this.isHealing)
+                  {
+                        super.stateFixForCutToWalk();
+                  }
             }
             
             public function get isCureToggled() : Boolean

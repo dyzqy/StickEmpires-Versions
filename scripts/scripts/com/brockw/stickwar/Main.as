@@ -313,7 +313,14 @@ package com.brockw.stickwar
                               break;
                         case "profile":
                               trace("receiving profile");
-                              this._profileScreen.receiveProfile(extParams);
+                              if(this.currentScreen() == "profile")
+                              {
+                                    this._profileScreen.receiveProfile(extParams);
+                              }
+                              else
+                              {
+                                    this.postGameScreen.receiveProfile(extParams);
+                              }
                               break;
                         case "changePassword":
                               this._profileScreen.receiveChangeMessage(extParams.getUtfString("reply"));

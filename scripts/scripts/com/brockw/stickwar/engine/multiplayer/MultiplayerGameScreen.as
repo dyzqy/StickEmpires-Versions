@@ -55,6 +55,8 @@ package com.brockw.stickwar.engine.multiplayer
                   var teamBName:int = raceParams.getInt(User(Main(main).gameRoom.playerList[1]).name);
                   var teamARealName:String = String(User(Main(main).gameRoom.playerList[0]).name);
                   var teamBRealName:String = String(User(Main(main).gameRoom.playerList[1]).name);
+                  var teamARating:Number = Number(User(Main(main).gameRoom.playerList[0]).getVariable("rating").getDoubleValue());
+                  var teamBRating:Number = Number(User(Main(main).gameRoom.playerList[1]).getVariable("rating").getDoubleValue());
                   trace(teamAName,teamBName,raceParams,Main(main).gameRoom.getVariable(aMemberLabel).getBoolValue(),Main(main).gameRoom.getVariable(bMemberLabel).getBoolValue());
                   if(a > b)
                   {
@@ -67,6 +69,8 @@ package com.brockw.stickwar.engine.multiplayer
                         game.teamB.realName = teamARealName;
                         game.teamA.isMember = Main(main).gameRoom.getVariable(bMemberLabel).getBoolValue();
                         game.teamB.isMember = Main(main).gameRoom.getVariable(aMemberLabel).getBoolValue();
+                        game.teamA.rating = teamBRating;
+                        game.teamB.rating = teamARating;
                   }
                   else
                   {
@@ -77,6 +81,8 @@ package com.brockw.stickwar.engine.multiplayer
                         game.teamB.realName = teamBRealName;
                         game.teamB.isMember = Main(main).gameRoom.getVariable(bMemberLabel).getBoolValue();
                         game.teamA.isMember = Main(main).gameRoom.getVariable(aMemberLabel).getBoolValue();
+                        game.teamA.rating = teamARating;
+                        game.teamB.rating = teamBRating;
                   }
                   if(a == Main(main).gameServer.mySelf.id)
                   {
@@ -191,6 +197,7 @@ package com.brockw.stickwar.engine.multiplayer
                               Main(main).postGameScreen.setMode(PostGameScreen.M_MULTIPLAYER);
                               Main(main).postGameScreen.setReplayFile(simulation.gameReplay.toString(game));
                               Main(main).postGameScreen.setWinner(extParams.getInt("winner"),team.type,team.realName,team.enemyTeam.realName,team.id);
+                              Main(main).postGameScreen.setRatings(team.rating,team.enemyTeam.rating);
                               Main(main).postGameScreen.setRecords(game.economyRecords,game.militaryRecords);
                               break;
                         case "c":

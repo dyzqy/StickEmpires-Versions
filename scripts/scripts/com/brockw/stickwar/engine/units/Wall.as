@@ -139,9 +139,8 @@ package com.brockw.stickwar.engine.units
             
             public function setLocation(x:Number) : void
             {
-                  var i:int = 0;
                   var e:Entity = null;
-                  i = 0;
+                  var i:int = 0;
                   for each(e in this.wallParts)
                   {
                         e.x = e.px = x - i * 5 * team.direction;

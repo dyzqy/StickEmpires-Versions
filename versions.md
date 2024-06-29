@@ -1,7 +1,26 @@
-## version 1.27
-- Replaced campaign "Scroll" with new desctrip tion and text holder.
-- Fixed bug where Swordwrath don't have double attack speed while using rage.
+## version 1.28
+- Many updates to the campaign, such as more starting miners, new messages, startign walls & tips
+- Added Main Menu screen and difficulties.
+- New heal & stun effects.
+- Castle Archers & Deads now wear diffrent armor from normal units.
+- New post Game screen.
+- Added statue skins.
+- Updates to Team AI regarding Giants.
+- Many balanced changes:
+  - Cleric's now official name is Meric.
+  - Meric's damage increase from 5 to 8.
+  - Meric's health decrese from 200 to 180.
+  - Heal now costs 0 mana.
+  - Heal amount decreased from 22 to 20.
+  - Reap now costs 0 mana.
+  - Reap lasts for 100 frames(3.3s) instead of 150 frames(5s).
+  - Shadowrath's weapon reach decrease from 120 to 100.
+  - Electric wall area increase from 50 to 75(a 50% increase!).
   - 
+
+## version 1.27
+- Replaced campaign "Scroll" with new desctription and text holder.
+- Fixed bug where Swordwrath don't have double attack speed while using rage.
 
 ## version 1.26
 - Updated campaign to have Albowtross in last level.

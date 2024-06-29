@@ -29,7 +29,7 @@ package com.brockw.stickwar.engine.Team.Chaos
                   e = new Entity();
                   e.addChild(new chaosCastleBack());
                   castleBack = e;
-                  var u:Statue = new Statue(new chaosStatue(),game,health);
+                  var u:Statue = new Statue(new _statueMc(),game,health);
                   game.units[u.id] = u;
                   statue = u;
                   super(game);
@@ -96,6 +96,18 @@ package com.brockw.stickwar.engine.Team.Chaos
             override public function getMinerType() : int
             {
                   return Unit.U_CHAOS_MINER;
+            }
+            
+            override public function updateStatue() : void
+            {
+                  if(statueType != "default")
+                  {
+                        statue.mc.statue.gotoAndStop(statueType);
+                  }
+                  else
+                  {
+                        statue.mc.statue.gotoAndStop("chaos");
+                  }
             }
             
             override public function init() : void

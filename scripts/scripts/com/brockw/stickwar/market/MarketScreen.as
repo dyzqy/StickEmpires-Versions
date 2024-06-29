@@ -30,8 +30,8 @@ package com.brockw.stickwar.market
             
             public function MarketScreen(main:Main)
             {
-                  var mainMenuButton:GenericButton;
                   var txtWelcome:GenericText = null;
+                  var mainMenuButton:GenericButton = null;
                   super();
                   this.main = main;
                   txtWelcome = new GenericText();

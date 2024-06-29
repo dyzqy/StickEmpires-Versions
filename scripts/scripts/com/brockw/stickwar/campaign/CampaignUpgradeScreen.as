@@ -27,6 +27,8 @@ package com.brockw.stickwar.campaign
             
             private var timeOfLastUpdate:int;
             
+            internal var good:Team;
+            
             public function CampaignUpgradeScreen(main:BaseMain)
             {
                   super();
@@ -77,9 +79,6 @@ package com.brockw.stickwar.campaign
                   var t:TechItem = null;
                   var canUpgrade:Boolean = false;
                   var p:String = null;
-                  var parent:String = null;
-                  var widthOffset:Number = NaN;
-                  var heightOffset:Number = NaN;
                   if(this.mc.confirmTech.visible)
                   {
                         return;
@@ -89,19 +88,10 @@ package com.brockw.stickwar.campaign
                   {
                         this.mc.campaignPoints.text = "0";
                   }
-                  var good:Team = new TeamGood(this.main.stickWar,10);
                   for(key in this.buttonMap)
                   {
                         c = CampaignUpgrade(this.main.campaign.upgradeMap[key]);
-                        if(c != null)
-                        {
-                              for each(parent in c.children)
-                              {
-                                    widthOffset = 142.1 / 2;
-                                    heightOffset = 58.25 / 2;
-                              }
-                        }
-                        t = good.tech.upgrades[this.main.campaign.upgradeMap[key].tech];
+                        t = this.good.tech.upgrades[this.main.campaign.upgradeMap[key].tech];
                         if(Boolean(t) && Boolean(this.buttonMap[key].hitTestPoint(stage.mouseX,stage.mouseY,false)))
                         {
                               this.mc.infoBox.text.text = t.tip;
@@ -178,6 +168,8 @@ package com.brockw.stickwar.campaign
             
             override public function enter() : void
             {
+                  this.good = new TeamGood(this.main.stickWar,10);
+                  this.main.soundManager.playSoundInBackground("loginMusic");
                   stage.frameRate = 30;
                   addEventListener(Event.ENTER_FRAME,this.update);
                   addEventListener(MouseEvent.CLICK,this.click);

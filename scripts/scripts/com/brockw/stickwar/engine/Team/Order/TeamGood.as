@@ -117,8 +117,9 @@ package com.brockw.stickwar.engine.Team.Order
             override public function spawnMiners() : void
             {
                   var u1:Unit = null;
+                  var u2:Unit = null;
                   u1 = game.unitFactory.getUnit(Unit.U_MINER);
-                  var u2:Unit = game.unitFactory.getUnit(Unit.U_MINER);
+                  u2 = game.unitFactory.getUnit(Unit.U_MINER);
                   spawn(u1,game);
                   spawn(u2,game);
                   u1.px = homeX + 650 * direction;

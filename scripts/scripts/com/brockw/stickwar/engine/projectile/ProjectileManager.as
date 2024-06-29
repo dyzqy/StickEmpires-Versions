@@ -64,6 +64,7 @@ package com.brockw.stickwar.engine.projectile
                   this._projectileMap[Projectile.REAPER] = new Pool(10,Reaper,game);
                   this._projectileMap[Projectile.POISON_POOL] = new Pool(10,PoisonPool,game);
                   this._projectileMap[Projectile.TOWER_DART] = new Pool(10,ChaosTowerDart,game);
+                  this._projectileMap[Projectile.HEAL_EFFECT] = new Pool(10,HealEffect,game);
                   this.projectiles = [];
                   this._waitingToBeCleaned = [];
                   this._airEffects = [];
@@ -465,6 +466,28 @@ package com.brockw.stickwar.engine.projectile
                   n.py = y;
                   n.x = n.px;
                   n.y = n.py;
+                  Util.animateToNeutral(n.spellMc);
+                  n.spellMc.gotoAndStop(1);
+                  n.stunTime = 0;
+                  this.projectiles.push(n);
+                  team.game.battlefield.addChild(n);
+                  n.team = team;
+            }
+            
+            public function initHealEffect(x:Number, y:Number, py:Number, team:Team, unit:Unit, isCure:Boolean = false) : void
+            {
+                  var n:HealEffect = HealEffect(this._projectileMap[Projectile.HEAL_EFFECT].getItem());
+                  if(n == null)
+                  {
+                        return;
+                  }
+                  n.visible = true;
+                  n.isCure = isCure;
+                  n.unit = unit;
+                  n.px = x;
+                  n.py = py;
+                  n.x = n.px;
+                  n.y = y;
                   Util.animateToNeutral(n.spellMc);
                   n.spellMc.gotoAndStop(1);
                   n.stunTime = 0;

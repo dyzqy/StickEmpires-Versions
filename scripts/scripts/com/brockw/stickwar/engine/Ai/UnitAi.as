@@ -140,7 +140,7 @@ package com.brockw.stickwar.engine.Ai
                   {
                         this.currentCommand = this.defaultStandCommand;
                   }
-                  this.setParamatersFromCommand(game);
+                  this.setParamatersFromCommand(game,true);
             }
             
             protected function nextMove(game:StickWar) : void
@@ -187,11 +187,54 @@ package com.brockw.stickwar.engine.Ai
                                     if(this.unit.sqrDistanceTo(target) > 50000)
                                     {
                                           yMovement = 0;
-                                          if(Math.abs(this.unit.px - target.px) < 200)
+                                          if(target.type != Unit.U_WALL && Math.abs(this.unit.px - target.px) < 200)
                                           {
                                                 yMovement = target.py - this.unit.py;
                                           }
-                                          this.unit.walk((target.px - this.unit.px - (this.unit.pwidth + target.pwidth) * 0.125 * this.unit.team.direction) / 100,yMovement,Util.sgn(target.px - this.unit.px));
+                                          if(Util.sgn(target.dx) == Util.sgn(this.unit.dx) && Math.abs(target.dx) > 1)
+                                          {
+                                                this.unit.walk((target.px - this.unit.px) / 20,yMovement,Util.sgn(target.px - this.unit.px));
+                                          }
+                                          else
+                                          {
+                                                offset = Util.sgn(target.px - this.unit.px) * this.unit.weaponReach() * 0.5;
+                                                if(Math.abs(target.px - this.unit.px) < this.unit.weaponReach() * 0.9)
+                                                {
+                                                      this.unit.walk(0,yMovement,Util.sgn(target.px - this.unit.px));
+                                                }
+                                                else
+                                                {
+                                                      this.unit.walk((target.px - offset - this.unit.px) / 100,yMovement,Util.sgn(target.px - this.unit.px));
+                                                }
+                                          }
+                                          if(Math.abs(target.px - this.unit.px - (this.unit.pwidth + target.pwidth) * 0.125 * this.unit.team.direction) < 10)
+                                          {
+                                                this.unit.faceDirection(target.px - this.unit.px);
+                                          }
+                                    }
+                                    else if(this.unit.team.isAi)
+                                    {
+                                          yMovement = 0;
+                                          if(target.type != Unit.U_WALL && Math.abs(this.unit.px - target.px) < 200)
+                                          {
+                                                yMovement = target.py - this.unit.py;
+                                          }
+                                          if(Util.sgn(target.dx) == Util.sgn(this.unit.dx) && Math.abs(target.dx) > 1)
+                                          {
+                                                this.unit.walk((target.px - this.unit.px) / 20,yMovement,Util.sgn(target.px - this.unit.px));
+                                          }
+                                          else
+                                          {
+                                                offset = Util.sgn(target.px - this.unit.px) * this.unit.weaponReach() * 0.5;
+                                                if(Math.abs(target.px - this.unit.px) < this.unit.weaponReach() * 0.9)
+                                                {
+                                                      this.unit.walk(0,yMovement,Util.sgn(target.px - this.unit.px));
+                                                }
+                                                else
+                                                {
+                                                      this.unit.walk((target.px - offset - this.unit.px) / 100,yMovement,Util.sgn(target.px - this.unit.px));
+                                                }
+                                          }
                                           if(Math.abs(target.px - this.unit.px - (this.unit.pwidth + target.pwidth) * 0.125 * this.unit.team.direction) < 10)
                                           {
                                                 this.unit.faceDirection(target.px - this.unit.px);
@@ -201,11 +244,26 @@ package com.brockw.stickwar.engine.Ai
                               else if(this.currentCommand.type != UnitCommand.STAND)
                               {
                                     yMovement = 0;
-                                    if(Math.abs(this.unit.px - target.px) < 200)
+                                    if(target.type != Unit.U_WALL && Math.abs(this.unit.px - target.px) < 200)
                                     {
                                           yMovement = target.py - this.unit.py;
                                     }
-                                    this.unit.walk((target.px - this.unit.px - (this.unit.pwidth + target.pwidth) * 0.125 * this.unit.team.direction) / 100,yMovement,Util.sgn(target.px - this.unit.px));
+                                    if(Util.sgn(target.dx) == Util.sgn(this.unit.dx) && Math.abs(target.dx) > 1)
+                                    {
+                                          this.unit.walk((target.px - this.unit.px) / 20,yMovement,Util.sgn(target.px - this.unit.px));
+                                    }
+                                    else
+                                    {
+                                          offset = Util.sgn(target.px - this.unit.px) * this.unit.weaponReach() * 0.5;
+                                          if(Math.abs(target.px - this.unit.px) < this.unit.weaponReach() * 0.9)
+                                          {
+                                                this.unit.walk(0,yMovement,Util.sgn(target.px - this.unit.px));
+                                          }
+                                          else
+                                          {
+                                                this.unit.walk((target.px - offset - this.unit.px) / 100,yMovement,Util.sgn(target.px - this.unit.px));
+                                          }
+                                    }
                                     if(Math.abs(target.px - this.unit.px - (this.unit.pwidth + target.pwidth) * 0.125 * this.unit.team.direction) < 10)
                                     {
                                           this.unit.faceDirection(target.px - this.unit.px);
@@ -229,8 +287,15 @@ package com.brockw.stickwar.engine.Ai
                               }
                               else
                               {
-                                    offset = Util.sgn(target.px - this.unit.px) * this.unit.weaponReach() * 0.8;
-                                    this.unit.walk((target.px - offset - this.unit.px) / 100,yMovement,Util.sgn(target.px - this.unit.px));
+                                    offset = Util.sgn(target.px - this.unit.px) * this.unit.weaponReach() * 0.5;
+                                    if(Math.abs(target.px - this.unit.px) < this.unit.weaponReach() * 0.9)
+                                    {
+                                          this.unit.walk(0,yMovement,Util.sgn(target.px - this.unit.px));
+                                    }
+                                    else
+                                    {
+                                          this.unit.walk((target.px - offset - this.unit.px) / 100,yMovement,Util.sgn(target.px - this.unit.px));
+                                    }
                               }
                               if(Math.abs(target.px - this.unit.px - (this.unit.pwidth + target.pwidth) * 0.125 * this.unit.team.direction) < 10)
                               {
@@ -242,7 +307,7 @@ package com.brockw.stickwar.engine.Ai
                   else if(this.mayMove)
                   {
                         this.unit.mayWalkThrough = false;
-                        this.unit.walk((this.goalX - this.unit.px) / 50,(this.goalY - this.unit.py) / 50,this.intendedX);
+                        this.unit.walk((this.goalX - this.unit.px) / 100,(this.goalY - this.unit.py) / 100,this.intendedX);
                   }
             }
             
@@ -296,7 +361,7 @@ package com.brockw.stickwar.engine.Ai
                   return null;
             }
             
-            private function setParamatersFromCommand(game:StickWar) : void
+            private function setParamatersFromCommand(game:StickWar, isRestore:Boolean = false) : void
             {
                   if(this.currentCommand.type == UnitCommand.STAND)
                   {
@@ -382,7 +447,7 @@ package com.brockw.stickwar.engine.Ai
                         }
                         else
                         {
-                              if(MinerAi(this).targetOre != null)
+                              if(this.unit.team.isAi == false && MinerAi(this).targetOre != null)
                               {
                                     MinerAi(this).targetOre = null;
                               }

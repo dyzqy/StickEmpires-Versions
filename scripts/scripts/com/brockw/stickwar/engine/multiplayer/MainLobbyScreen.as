@@ -110,6 +110,10 @@ package com.brockw.stickwar.engine.multiplayer
             {
                   var url:URLRequest = new URLRequest("http://www.stickpage.com/stickempiresguide.shtml");
                   navigateToURL(url,"_blank");
+                  if(Boolean(this.main.tracker))
+                  {
+                        this.main.tracker.trackEvent("link","http://www.stickpage.com/stickempiresguide.shtml");
+                  }
             }
             
             private function playButton(evt:MouseEvent) : void

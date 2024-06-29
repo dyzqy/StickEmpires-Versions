@@ -33,6 +33,8 @@ package com.brockw.stickwar.engine
             
             private var backgroundVolume:Number;
             
+            private var currentBackgroundName:String;
+            
             private var timer:Timer;
             
             public function SoundManager(main:BaseMain)
@@ -54,6 +56,7 @@ package com.brockw.stickwar.engine
                   this.timer.addEventListener(TimerEvent.TIMER,this.update);
                   this.timer.start();
                   this.isMusic = true;
+                  this.currentBackgroundName = "";
             }
             
             public function cleanUp() : void
@@ -97,6 +100,10 @@ package com.brockw.stickwar.engine
             
             public function playSoundInBackground(name:String) : void
             {
+                  if(name == this.currentBackgroundName)
+                  {
+                        return;
+                  }
                   if(this.backgroundLoop != null)
                   {
                         this.backgroundLoop.stop();
@@ -108,8 +115,9 @@ package com.brockw.stickwar.engine
                   var s:Sound = new this.sounds[name]();
                   this.backgroundLoop = s.play(0,int.MAX_VALUE);
                   var transform:SoundTransform = new SoundTransform();
-                  transform.volume = 0;
+                  transform.volume = this.backgroundVolume;
                   this.backgroundLoop.soundTransform = transform;
+                  this.currentBackgroundName = name;
             }
             
             public function playSoundFullVolumeRandom(baseName:String, range:int) : Number

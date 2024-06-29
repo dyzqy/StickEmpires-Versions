@@ -278,7 +278,6 @@ package com.brockw.stickwar.engine
                   this._mouseOverUnit = null;
                   this._tipBox = null;
                   Util.recursiveRemoval(Sprite(this));
-                  this.soundManager.cleanUp();
             }
             
             public function getNextUnitId() : int
@@ -381,6 +380,8 @@ package com.brockw.stickwar.engine
                   var unit:String = null;
                   var gold:String = null;
                   var wall:Wall = null;
+                  this.teamA.updateStatue();
+                  this.teamB.updateStatue();
                   if(this.showGameOverAnimation)
                   {
                         return;

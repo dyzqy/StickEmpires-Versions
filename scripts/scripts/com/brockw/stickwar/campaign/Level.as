@@ -35,9 +35,13 @@ package com.brockw.stickwar.campaign
             
             private var _levelXml:XML;
             
+            private var _hasInsaneWall:Boolean;
+            
             public var totalTime:int;
             
             public var bestTime:int;
+            
+            public var retries:int;
             
             public function Level(xml:XML)
             {
@@ -61,6 +65,14 @@ package com.brockw.stickwar.campaign
                   {
                         this.controller = CampaignCutScene2;
                   }
+                  else if(controllerName == "CampaignBomber")
+                  {
+                        this.controller = CampaignBomber;
+                  }
+                  else if(controllerName == "CampaignShadow")
+                  {
+                        this.controller = CampaignShadow;
+                  }
                   this.unlocks = [];
                   for each(x in xml.unlock)
                   {
@@ -75,6 +87,18 @@ package com.brockw.stickwar.campaign
                   this.tip = xml.tip;
                   this.totalTime = 0;
                   this.bestTime = -1;
+                  this.retries = 0;
+                  this.hasInsaneWall = xml.hasInsaneWall == true;
+            }
+            
+            public function get hasInsaneWall() : Boolean
+            {
+                  return this._hasInsaneWall;
+            }
+            
+            public function set hasInsaneWall(value:Boolean) : void
+            {
+                  this._hasInsaneWall = value;
             }
             
             public function updateTime(time:Number) : void
@@ -88,6 +112,7 @@ package com.brockw.stickwar.campaign
                         this.bestTime = time;
                   }
                   this.totalTime += time;
+                  ++this.retries;
             }
             
             public function toString() : String

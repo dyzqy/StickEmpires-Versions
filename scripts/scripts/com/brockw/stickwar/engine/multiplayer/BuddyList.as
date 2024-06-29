@@ -190,8 +190,9 @@ package com.brockw.stickwar.engine.multiplayer
             
             public function startGameInvite(friend:int, userName:String) : void
             {
+                  var timeRemaining:int = 0;
                   this.currentInviteTime = getTimer();
-                  var timeRemaining:int = GAME_INVITE_TIME_LIMIT - 1;
+                  timeRemaining = GAME_INVITE_TIME_LIMIT - 1;
                   this.chatOverlay.gameInviteWindow.visible = true;
                   this.chatOverlay.gameInviteWindow.invitationText.text = userName + " has invited you to play a game. (" + timeRemaining + ")";
                   this.chatOverlay.gameInviteWindow.acceptButton.addEventListener(MouseEvent.CLICK,this.acceptGameInvite);
@@ -287,9 +288,9 @@ package com.brockw.stickwar.engine.multiplayer
                         if(BuddyChatTab(this._chatTabs[i]).id == buddy.id)
                         {
                               BuddyChatTab(this._chatTabs[i]).chatWindow.chatOutput.text = BuddyChatTab(this._chatTabs[i]).chatWindow.chatOutput.text + (userName + ": " + message + "\n");
-                              BuddyChatTab(this._chatTabs[i]).chatWindow.chatOutput.height = BuddyChatTab(this._chatTabs[i]).chatWindow.chatOutput.textHeight + 50;
-                              BuddyChatTab(this._chatTabs[i]).chatWindow.scroll.verticalScrollPosition = BuddyChatTab(this._chatTabs[i]).chatWindow.chatOutput.height;
+                              BuddyChatTab(this._chatTabs[i]).chatWindow.chatOutput.height = BuddyChatTab(this._chatTabs[i]).chatWindow.chatOutput.textHeight + 20;
                               BuddyChatTab(this._chatTabs[i]).chatWindow.scroll.update();
+                              BuddyChatTab(this._chatTabs[i]).chatWindow.scroll.verticalScrollPosition = BuddyChatTab(this._chatTabs[i]).chatWindow.chatOutput.height;
                               buddy.chatHistory = BuddyChatTab(this._chatTabs[i]).chatWindow.chatOutput.text;
                         }
                   }
@@ -339,6 +340,15 @@ package com.brockw.stickwar.engine.multiplayer
                         {
                               b.minimize();
                         }
+                  }
+            }
+            
+            public function updateScrollOnTabs() : void
+            {
+                  for(var i:int = 0; i < this._chatTabs.length; i++)
+                  {
+                        BuddyChatTab(this._chatTabs[i]).chatWindow.chatOutput.height = BuddyChatTab(this._chatTabs[i]).chatWindow.chatOutput.textHeight;
+                        BuddyChatTab(this._chatTabs[i]).chatWindow.scroll.update();
                   }
             }
             

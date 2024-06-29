@@ -259,6 +259,8 @@ package com.brockw.stickwar.engine.units
             
             private var poisonMc:poisonEffect;
             
+            private var stunMc:dizzyMc;
+            
             private var _isRejoiningFormation:Boolean;
             
             private var garrisonHealRate:Number;
@@ -266,6 +268,8 @@ package com.brockw.stickwar.engine.units
             private var _isTowerSpawned:Boolean;
             
             private var towerSpawnGlow:GlowFilter;
+            
+            private var lastHealthAnimation:int;
             
             public function Unit(game:StickWar)
             {
@@ -277,6 +281,7 @@ package com.brockw.stickwar.engine.units
                   this._lastTurnCount = 0;
                   this.healthBar = new HealthBar();
                   this._building = null;
+                  this.lastHealthAnimation = 0;
                   this.dzOffset = 0;
                   this._createTime = 30;
                   this._randomInterval = 90;
@@ -675,8 +680,16 @@ package com.brockw.stickwar.engine.units
             
             public function heal(amount:Number, duration:int) : void
             {
+                  var p:Point = null;
                   this._healTimeRemaining = duration;
                   this._healAmount = amount;
+                  if(this.health != this.maxHealth && this.team.game.frame - this.lastHealthAnimation > 30)
+                  {
+                        p = this.healthBar.localToGlobal(new Point(0,40));
+                        p = this.team.game.battlefield.globalToLocal(p);
+                        this.team.game.projectileManager.initHealEffect(x,p.y,py,this.team,this);
+                        this.lastHealthAnimation = this.team.game.frame;
+                  }
             }
             
             public function faceDirection(dir:int) : void
@@ -709,6 +722,17 @@ package com.brockw.stickwar.engine.units
             
             protected function updateCommon(game:StickWar) : void
             {
+                  if(Boolean(this.stunMc))
+                  {
+                        Util.animateMovieClipBasic(this.stunMc);
+                        if(this.stunTimeLeft <= 0)
+                        {
+                              if(Boolean(this.stunMc) && this.mc.contains(this.stunMc))
+                              {
+                                    this.mc.removeChild(this.stunMc);
+                              }
+                        }
+                  }
                   if(this.reaperCurseFrames > 0)
                   {
                         this.walk(this.team.direction,0,this.team.direction);
@@ -900,6 +924,14 @@ package com.brockw.stickwar.engine.units
             
             public function cure() : void
             {
+                  var p:Point = null;
+                  if(this.poisonDamage != 0)
+                  {
+                        p = this.healthBar.localToGlobal(new Point(0,-40));
+                        p = this.team.game.battlefield.globalToLocal(p);
+                        this.team.game.projectileManager.initHealEffect(x,p.y,py,this.team,this,true);
+                        this.lastHealthAnimation = this.team.game.frame;
+                  }
                   this._poisonDamage = 0;
                   this.reaperCurseFrames = 0;
                   if(this.id in this.team.poisonedUnits)
@@ -1047,11 +1079,11 @@ package com.brockw.stickwar.engine.units
                   var f:Number = NaN;
                   var hitWidth:Number = NaN;
                   var hitAmount:Number = NaN;
-                  var pdx1:Number = NaN;
-                  var pdx2:Number = NaN;
-                  var pdy1:Number = NaN;
-                  var pdy2:Number = NaN;
                   if(u == this || u.pz != 0)
+                  {
+                        return;
+                  }
+                  if(u._isGarrisoned || this._isGarrisoned)
                   {
                         return;
                   }
@@ -1073,12 +1105,7 @@ package com.brockw.stickwar.engine.units
                                     {
                                           if(Util.sgn(this._dx) == Util.sgn(u.dx) || this.team != u.team)
                                           {
-                                                pdx1 = Math.abs(this._dx);
-                                                pdx2 = Math.abs(u._dx);
-                                                if(this.team != u.team)
-                                                {
-                                                }
-                                                if(this.team != u.team || Math.abs(this.dx) < 1 && Math.abs(u.dx) < 1)
+                                                if(Math.abs(this.dx) < 1 && Math.abs(u.dx) < 1 || u.isMiner() && this.isMiner())
                                                 {
                                                       this.nudgeFrame = this.team.game.frame;
                                                       if(this.mass < u.mass)
@@ -1103,15 +1130,10 @@ package com.brockw.stickwar.engine.units
                                     }
                                     if(py != u.py)
                                     {
-                                          if(Util.sgn(this._dy) == Util.sgn(u.dy) || this.team != u.team)
+                                          if(Util.sgn(this._dy) != -Util.sgn(u.dy) && this.team == u.team)
                                           {
-                                                pdy1 = Math.abs(this._dy);
-                                                pdy2 = Math.abs(u._dy);
-                                                if(this.team != u.team)
-                                                {
-                                                }
                                                 this.nudgeFrame = this.team.game.frame;
-                                                if(this.team != u.team || Math.abs(this.dy) < 1 && Math.abs(u.dy) < 1)
+                                                if(Math.abs(this.dy) < 1 && Math.abs(u.dy) < 1 || u.isMiner() && this.isMiner())
                                                 {
                                                       if(this.mass < u.mass)
                                                       {
@@ -1129,6 +1151,11 @@ package com.brockw.stickwar.engine.units
                   }
             }
             
+            public function isMiner() : Boolean
+            {
+                  return type == this.team.getMinerType();
+            }
+            
             public function isFeetMoving() : Boolean
             {
                   return Math.abs(this._dx) + Math.abs(this._dy) > 0.25;
@@ -1136,10 +1163,23 @@ package com.brockw.stickwar.engine.units
             
             public function stun(s:int) : void
             {
+                  if(!this.isAlive())
+                  {
+                        return;
+                  }
                   if(s > 0)
                   {
                         this._dz = -Unit.stunUpForce;
                         this.stunTimeLeft = s;
+                        if(Boolean(this.stunMc) && this.mc.contains(this.stunMc))
+                        {
+                              this.mc.removeChild(this.stunMc);
+                        }
+                        this.mc.addChild(this.stunMc = new dizzyMc());
+                        this.stunMc.y = this.healthBar.y - 20;
+                        this.stunMc.x = 0;
+                        this.stunMc.scaleX = 0.4;
+                        this.stunMc.scaleY = 0.4;
                   }
             }
             
@@ -1266,6 +1306,10 @@ package com.brockw.stickwar.engine.units
                               if(Boolean(this.poisonMc) && this.mc.contains(this.poisonMc))
                               {
                                     this.mc.removeChild(this.poisonMc);
+                              }
+                              if(Boolean(this.stunMc) && this.mc.contains(this.stunMc))
+                              {
+                                    this.mc.removeChild(this.stunMc);
                               }
                               this._timeOfDeath = 0;
                               this._health = 0;

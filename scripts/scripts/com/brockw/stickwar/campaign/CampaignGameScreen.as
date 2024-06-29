@@ -6,6 +6,7 @@ package com.brockw.stickwar.campaign
       import com.brockw.simulationSync.Move;
       import com.brockw.simulationSync.SimulationSyncronizer;
       import com.brockw.stickwar.BaseMain;
+      import com.brockw.stickwar.CampaignMain;
       import com.brockw.stickwar.GameScreen;
       import com.brockw.stickwar.campaign.controllers.CampaignController;
       import com.brockw.stickwar.engine.Ai.command.*;
@@ -40,7 +41,14 @@ package com.brockw.stickwar.campaign
             {
                   var a:int = 0;
                   var b:int = 0;
+                  var upgrade:CampaignUpgrade = null;
                   var w:Wall = null;
+                  var towerConstructing:ChaosTower = null;
+                  if(main is CampaignMain)
+                  {
+                        trace(main.campaign.getLevelDescription());
+                        main.tracker.trackEvent(main.campaign.getLevelDescription(),"start");
+                  }
                   var level:Level = main.campaign.getCurrentLevel();
                   var c:Class = level.controller;
                   if(c != null)
@@ -78,6 +86,12 @@ package com.brockw.stickwar.campaign
                   {
                         healthModifier = level.normalHealthScale;
                   }
+                  if(Boolean(level.player.unitsAvailable[Unit.U_NINJA]))
+                  {
+                        upgrade = CampaignUpgrade(main.campaign.upgradeMap["Cloak_BASIC"]);
+                        upgrade.upgraded = true;
+                        main.campaign.techAllowed[Tech.CLOAK] = 1;
+                  }
                   game.initTeams(Team.getIdFromRaceName(level.player.race),Team.getIdFromRaceName(level.oponent.race),level.player.statueHealth,level.oponent.statueHealth,main.campaign.techAllowed,null,1,level.insaneModifier,1,healthModifier);
                   team = game.teamA;
                   game.team = team;
@@ -91,7 +105,35 @@ package com.brockw.stickwar.campaign
                   this.team.enemyTeam.isAi = true;
                   team.realName = "Player";
                   team.enemyTeam.realName = "Computer";
-                  var playerStartingUnits:Array = level.player.startingUnits;
+                  game.teamA.statueType = level.player.statue;
+                  game.teamB.statueType = level.oponent.statue;
+                  game.teamA.gold = level.player.gold;
+                  game.teamA.mana = level.player.mana;
+                  game.teamB.gold = level.oponent.gold;
+                  game.teamB.mana = level.oponent.mana;
+                  if(main.campaign.difficultyLevel == Campaign.D_NORMAL)
+                  {
+                        game.teamA.gold += 200;
+                        game.teamA.mana += 200;
+                  }
+                  var playerStartingUnits:Array = level.player.startingUnits.slice(0,level.player.startingUnits.length);
+                  if(main.campaign.getCurrentLevel().hasInsaneWall && main.campaign.difficultyLevel == Campaign.D_INSANE)
+                  {
+                        if(game.teamB.type == Team.T_GOOD)
+                        {
+                              w = team.enemyTeam.addWall(team.enemyTeam.homeX - 900);
+                              w.setConstructionAmount(1);
+                        }
+                        else
+                        {
+                              towerConstructing = ChaosTower(game.unitFactory.getUnit(int(Unit.U_CHAOS_TOWER)));
+                              team.enemyTeam.spawn(towerConstructing,game);
+                              towerConstructing.scaleX *= team.enemyTeam.direction * -1;
+                              towerConstructing.px = team.enemyTeam.homeX - 900;
+                              towerConstructing.py = game.map.height / 2;
+                              towerConstructing.setConstructionAmount(1);
+                        }
+                  }
                   if(main.campaign.currentLevel != 0)
                   {
                         if(main.campaign.difficultyLevel == Campaign.D_HARD)
@@ -157,11 +199,15 @@ package com.brockw.stickwar.campaign
                   simulation.hasStarted = true;
                   super.enter();
                   this.doAiUpdates = true;
+                  if(game.teamB.type == Team.T_CHAOS)
+                  {
+                        game.soundManager.playSoundInBackground("chaosInGame");
+                  }
             }
             
             override public function update(evt:Event, timeDiff:Number) : void
             {
-                  if(userInterface.keyBoardState.isDown(78))
+                  if(main.isCampaignDebug && userInterface.keyBoardState.isDown(78))
                   {
                         game.teamB.statue.damage(0,100000000,null);
                   }
@@ -201,23 +247,27 @@ package com.brockw.stickwar.campaign
                   e.winner = game.winner.id;
                   e.turn = simulation.turn;
                   simulation.processMove(e);
+                  trace("UPDATE TIME");
                   main.campaign.getCurrentLevel().updateTime(game.frame / 30);
+                  if(main is CampaignMain)
+                  {
+                        if(e.winner == team.id)
+                        {
+                              main.tracker.trackEvent(main.campaign.getLevelDescription(),"finish","win",game.economyRecords.length);
+                        }
+                        else
+                        {
+                              main.tracker.trackEvent(main.campaign.getLevelDescription(),"finish","lose",game.economyRecords.length);
+                        }
+                  }
                   if(e.winner == team.id)
                   {
                         main.campaign.campaignPoints += main.campaign.getCurrentLevel().points;
                         ++main.campaign.currentLevel;
                   }
-                  if(e.winner == team.id)
-                  {
-                        main.postGameScreen.setTipText("");
-                  }
-                  else
-                  {
-                        main.postGameScreen.setTipText(main.campaign.getCurrentLevel().tip);
-                  }
                   main.postGameScreen.setWinner(e.winner,team.type,team.realName,team.enemyTeam.realName,team.id);
                   main.postGameScreen.setRecords(game.economyRecords,game.militaryRecords);
-                  if(!main.campaign.isGameFinished())
+                  if(!main.campaign.isGameFinished() && e.winner == team.id)
                   {
                         for each(u in main.campaign.getCurrentLevel().unlocks)
                         {
@@ -229,6 +279,14 @@ package com.brockw.stickwar.campaign
                         main.postGameScreen.showNextUnitUnlocked();
                   }
                   main.postGameScreen.setMode(PostGameScreen.M_CAMPAIGN);
+                  if(e.winner == team.id)
+                  {
+                        main.postGameScreen.setTipText("");
+                  }
+                  else
+                  {
+                        main.postGameScreen.setTipText(main.campaign.getCurrentLevel().tip);
+                  }
                   if(main.campaign.justTutorial)
                   {
                         if(e.winner == team.id)

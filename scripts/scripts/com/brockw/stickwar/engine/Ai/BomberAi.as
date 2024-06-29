@@ -37,7 +37,7 @@ package com.brockw.stickwar.engine.Ai
                   }
                   else if(mayMoveToAttack && unit.sqrDistanceTo(target) < 150000)
                   {
-                        unit.walk(target.px - unit.px,target.py - unit.py,Util.sgn(target.px - unit.px));
+                        unit.walk((target.px - unit.px) / 30,target.py - unit.py,Util.sgn(target.px - unit.px));
                         if(Math.abs(target.px - unit.px) < 10)
                         {
                               unit.faceDirection(target.px - unit.px);

@@ -46,6 +46,8 @@ package com.brockw.stickwar.engine.projectile
             public static const TOWER_SPAWN:int = 17;
             
             public static const SPAWN_DRIP:int = 18;
+            
+            public static const HEAL_EFFECT:int = 19;
              
             
             protected var _scale:Number;
@@ -196,7 +198,7 @@ package com.brockw.stickwar.engine.projectile
                         }
                         this.lastDistanceToCentre = cDistance;
                   }
-                  if(pz > 0 && this.dz > 0)
+                  if(pz > 0 && this.dz > 0 && !this.hasHit)
                   {
                         this.dz = this.dx = this.dy = 0;
                         if(!this.hasHit)

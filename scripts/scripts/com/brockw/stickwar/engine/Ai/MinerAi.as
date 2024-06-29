@@ -232,6 +232,10 @@ package com.brockw.stickwar.engine.Ai
             
             public function set targetOre(value:Ore) : void
             {
+                  if(this._targetOre == value)
+                  {
+                        return;
+                  }
                   if(Boolean(this._targetOre))
                   {
                         this._targetOre.stopMining(Miner(unit));

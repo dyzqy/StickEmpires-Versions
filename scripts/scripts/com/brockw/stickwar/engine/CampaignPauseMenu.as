@@ -54,6 +54,10 @@ package com.brockw.stickwar.engine
             {
                   var url:URLRequest = new URLRequest("http://www.stickpage.com/stickempiresguide.shtml");
                   navigateToURL(url,"_blank");
+                  if(Boolean(gameScreen.main.tracker))
+                  {
+                        gameScreen.main.tracker.trackEvent("link","http://www.stickpage.com/stickempiresguide.shtml");
+                  }
             }
             
             override public function cleanUp() : void

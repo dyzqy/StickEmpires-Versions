@@ -5,15 +5,14 @@
 </player>
 
 <oponent race="Order" statueHealth="400">
-<unit>Swordwrath</unit>
+<statue>spearton</statue>
 <unit>Spearton</unit>
 </oponent>
-
-<normal>2.</normal>  
-<hard>1.4</hard>
-<insane>.8</insane>
+<normal>1.8</normal>  
+<hard>1.2</hard>
+<insane>.7</insane>
 <normalHealthScale>0.7</normalHealthScale>
-<tip>You must outnumber the more powerful enemy. Take advantage of your rage ability</tip>
+<tip>You must out number the more powerful enemy. Take advantage of your rage ability</tip>
 
 </level>
 
@@ -21,7 +20,7 @@
 
 <unlock>Spearton</unlock>
 <normal>1.8</normal>
-<hard>.95</hard>
+<hard>1.3</hard>
 <insane>.8</insane>
 <normalHealthScale>.5</normalHealthScale>
 <tip>The Speartons heavy armor is good at blocking arrows.</tip>
@@ -37,6 +36,7 @@
 </player>
 
 <oponent race="Order" statueHealth="800">
+<statue>archidon</statue>
 <unit>Swordwrath</unit>
 <unit>Archidon</unit>
 <startingUnit>Miner</startingUnit>
@@ -47,19 +47,20 @@
 
 </level>
 
-<level title="Silent Assassins: Ninjas Declare War" number="3" map="5" story="When the nations fled your control , some of the more cunning swordwrath managed to escape and rebuild, they managed to train themselves into a new breed of swordwrath more intelligent and skilled. This new race is called Shadowrath. " controller="" points="1">
+<level title="Silent Assassins: Ninjas Declare War" number="3" map="5" story="When the nations fled your control , some of the more cunning swordwrath managed to escape and rebuild, they managed to train themselves into a new breed of swordwrath more intelligent and skilled. This new race is called Shadowrath. " controller="CampaignShadow" points="1">
 
 <unlock>Archidon</unlock>
-<normal>1.5</normal>
-<hard>1.1</hard>
-<insane>.8</insane>
+<normal>1.6</normal>
+<hard>1.2</hard>
+<insane>.85</insane>
 <normalHealthScale>.6</normalHealthScale>
-<tip>When the Shadowrath cloaks try to pull away from combat to avoid his assination ability.</tip>
+<tip>Cure poison and heal your units by garrisoning inside your castle walls.</tip>
 
 <player race="Order" statueHealth="1200">
 <unit>Swordwrath</unit>
 <unit>Spearton</unit>
 <unit>Archidon</unit>
+<startingUnit>Miner</startingUnit>
 <startingUnit>Miner</startingUnit>
 <startingUnit>Miner</startingUnit>
 <startingUnit>Archidon</startingUnit>
@@ -80,14 +81,15 @@
 </level>
 
 <level title="Magic in the Air: Wizards and monks Declare War " number="4" map="2" story="The Rebel Magikill have trained the women in the art of magic, creating powerful clerics with the ability to heal, cure, and protect." controller="" points="1">
+<hasInsaneWall>true</hasInsaneWall>
 <unlock>Ninja</unlock>
-<normal>1.4</normal>
-<hard>1.1</hard>
+<normal>1.7</normal>
+<hard>1.3</hard>
 <insane>.9</insane>
 <normalHealthScale>.65</normalHealthScale>
-<tip>Take advantage of the Ninjas abilities to cloak past the enemy's front lines to assassinate the more powerful Magikill and Monks at the back of the enemy lines.</tip>
+<tip>Take advantage of the Shadowrath cloak ability "Shinobi" to assassinate the powerful Magikill and Merics</tip>
 
-<player race="Order" statueHealth="700">
+<player race="Order" statueHealth="700">   
 <unit>Swordwrath</unit>
 <unit>Spearton</unit>
 <unit>Archidon</unit>
@@ -98,6 +100,9 @@
 </player>
 
 <oponent race="Order" statueHealth="1200">     
+<mana>400</mana>
+<gold>700</gold>
+<statue>magikill</statue>
 <unit>Magikill</unit>
 <unit>Monk</unit>
 <startingUnit>Miner</startingUnit>
@@ -110,14 +115,15 @@
 </oponent>
 </level>
 
-<level title="All remaining Rebels team together for a massive battle." number="4" map="1" story="Basically what our trailer implies, that all nations team together to “Take it all back!!”" controller="" points="1">
+<level title="Rebels United" number="4" map="1" story="All rebels armys join together to crush the Order Empire." controller="" points="1">
+<hasInsaneWall>true</hasInsaneWall>
 <unlock>Magikill</unlock>
 <unlock>Monk</unlock>
-<normal>1.7</normal>
-<hard>1.3</hard>
-<insane>.90</insane>
+<normal>1.8</normal>
+<hard>1.4</hard>
+<insane>.75</insane>
 <normalHealthScale>.65</normalHealthScale>
-<tip>Use everything you have learned in combination and create a strategy to defend and conquer.</tip>
+<tip>Use your abilities in combination and create a strategy to defend and conquer.</tip>
 
 <player race="Order" statueHealth="1500">
 <unit>Swordwrath</unit>
@@ -126,6 +132,8 @@
 <unit>Ninja</unit>
 <unit>Magikill</unit>
 <unit>Monk</unit>
+<startingUnit>Miner</startingUnit>
+<startingUnit>Miner</startingUnit>
 <startingUnit>Miner</startingUnit>
 <startingUnit>Miner</startingUnit>
 <startingUnit>Swordwrath</startingUnit>
@@ -144,10 +152,11 @@
 <unit>Monk</unit>
 <startingUnit>Miner</startingUnit>
 <startingUnit>Miner</startingUnit>
+<startingUnit>Miner</startingUnit>
+<startingUnit>Miner</startingUnit>
 <startingUnit>Swordwrath</startingUnit>
 <startingUnit>Spearton</startingUnit>
 <startingUnit>Ninja</startingUnit>
-<startingUnit>Magikill</startingUnit>
 <startingUnit>Monk</startingUnit>
 <UnitComposition>
 <Swordwrath>4</Swordwrath>
@@ -159,15 +168,16 @@
 </oponent>
 </level>
 
-<level title="Massive Battle: Giants Decalre War" number="6" map="3" story="We will have 1 chaos giant attacking you and when you are about to kill it we will need a cut scene of him being chained and captured as your unit type, Then we need to show medusa declaring war saying basically  “ You fools thought Inamorta belonged to you, we have been here all along (show the map and zooming out showing a large area of land) biding our time growing with a power you have never known. I have been waiting years, for the perfect time to strike, but your army’s have been fighting with each other for so long you would have wiped each other out.  But now You have enslaved my babies and I will wait no more, now will feel the wrath of the Chaos army!" controller="CampaignCutScene1" points="1">
-
+<level title="Massive Battle" number="6" map="3" story="Sometimes what seems like the end is merely the beginning of the end." controller="CampaignCutScene1" points="1">
+<hasInsaneWall>true</hasInsaneWall>
 <normal>1.4</normal>
 <hard>.95</hard>
 <insane>.8</insane>
 <normalHealthScale>.5</normalHealthScale>
-<tip>Use your enslaved Giants to counter their army, and absorb the area effect damage of the bombers.</tip>
+<tip>Giants attack very slowly, try attacking once then run your units behind them, attack and repeat.</tip>
 
 <player race="Order" statueHealth="1500">
+<statue>swordwrath</statue>
 <unit>Swordwrath</unit>
 <unit>Spearton</unit>
 <unit>Archidon</unit>
@@ -191,16 +201,17 @@
 </oponent>
 </level>
 
-<level title="Explosive Battle: Bombers Declare War" number="7" map="2" story="Medusa sends some of her minions bombers, and Giants  to destroy you" controller="" points="1">
-
+<level title="Explosive War: Bombers Attack" number="7" map="2" story="Medusas vows to whipe Order Empire out of Inamorta.  Her first display of power is to  send some of her minion bombers, and Giants  to destroy you." controller="CampaignBomber" points="1">
+<hasInsaneWall>true</hasInsaneWall>
 <unlock>EnslavedGiant</unlock>
 <normal>1.4</normal>
 <hard>.95</hard>
 <insane>.8</insane>
 <normalHealthScale>.7</normalHealthScale>
-<tip>Use your enslaved Giants to counter their army, and absorb the area effect damage of the bombers.</tip>
+<tip>Bombers do area effect damage keep your units spread out.</tip>
 
 <player race="Order" statueHealth="1500">
+<statue>swordwrath</statue>
 <unit>Swordwrath</unit>
 <unit>Spearton</unit>
 <unit>Archidon</unit>
@@ -210,12 +221,17 @@
 <unit>EnslavedGiant</unit>
 <startingUnit>Miner</startingUnit>
 <startingUnit>Miner</startingUnit>
+<startingUnit>Miner</startingUnit>
+<startingUnit>Miner</startingUnit>
 <startingUnit>Swordwrath</startingUnit>
 </player>
 
 <oponent race="Chaos" statueHealth="1500">
+<statue>giant</statue>
 <unit>Bomber</unit>
 <unit>Giant</unit>
+<startingUnit>ChaosMiner</startingUnit>
+<startingUnit>ChaosMiner</startingUnit>
 <startingUnit>ChaosMiner</startingUnit>
 <startingUnit>ChaosMiner</startingUnit>
 <startingUnit>ChaosMiner</startingUnit>
@@ -225,14 +241,14 @@
 <startingUnit>Bomber</startingUnit>
 <castleArcher>1</castleArcher>
 <UnitComposition>
-<Bomber>5</Bomber>
+<Bomber>0</Bomber>
 <Giant>8</Giant>
 </UnitComposition>
 </oponent>
 </level>
 
-<level title="The night is Dark: Knights Attack" number="8" map="3" story="Medusa unleashes the Dark knights" controller="" points="1">
-
+<level title="The Night is Dark: Juggerknights Attack" number="8" map="3" story="Medusa unleashes her most ferocious heavily armored infantry." controller="" points="1">
+<hasInsaneWall>true</hasInsaneWall>
 <normal>1.7</normal>
 <hard>1.3</hard>
 <insane>.83</insane>
@@ -240,6 +256,7 @@
 <tip>Use your advantage of a variety of Units.</tip>
 
 <player race="Order" statueHealth="1500">
+<statue>swordwrath</statue>
 <unit>Swordwrath</unit>
 <unit>Spearton</unit>
 <unit>Archidon</unit>
@@ -247,22 +264,22 @@
 <unit>Magikill</unit>
 <unit>Monk</unit>
 <unit>EnslavedGiant</unit>
+<startingUnit>Swordwrath</startingUnit>
+<startingUnit>Swordwrath</startingUnit>
+<startingUnit>Swordwrath</startingUnit>
 <startingUnit>Miner</startingUnit>
 <startingUnit>Miner</startingUnit>
 <startingUnit>Miner</startingUnit>
 <startingUnit>Miner</startingUnit>
-<startingUnit>Miner</startingUnit>
-<startingUnit>Miner</startingUnit>
-
-
 </player>
 
 <oponent race="Chaos" statueHealth="1500">
 <unit>Bomber</unit>
 <unit>Knight</unit>
 <unit>Giant</unit>
-<startingUnit>ChaosMiner</startingUnit>
-<startingUnit>ChaosMiner</startingUnit>
+<startingUnit>Bomber</startingUnit>
+<startingUnit>Bomber</startingUnit>
+<startingUnit>Knight</startingUnit>
 <startingUnit>ChaosMiner</startingUnit>
 <startingUnit>ChaosMiner</startingUnit>
 <startingUnit>ChaosMiner</startingUnit>
@@ -275,15 +292,16 @@
 </oponent>
 </level>
 
-<level title="Undead War: Deadly Deads Attack" number="9" map="2" story="Medusa unleashes the Deads and undead zombie that throws  rheir own poisonous body parts" controller="" points="1">
-
+<level title="Undead War: Deadly Deads Attack" number="9" map="2" story="Medusa attacks by revealing  the Deads, and undead zombie that throws  their own poisonous body parts" controller="" points="1">
+<hasInsaneWall>true</hasInsaneWall>
 <normal>1.6</normal>
-<hard>1.2</hard>
+<hard>1.3</hard>
 <insane>.9</insane>
 <normalHealthScale>.7</normalHealthScale>
-<tip>Use your Monks to cure the poison from the Deads. Garrisoning Units will cure and heal units.</tip>
+<tip>Use your Merics to cure the poison from the Deads. Garrisoning Units will cure and heal units.</tip>
 
 <player race="Order" statueHealth="1500">
+<statue>swordwrath</statue>
 <unit>Swordwrath</unit>
 <unit>Spearton</unit>
 <unit>Archidon</unit>
@@ -299,10 +317,12 @@
 </player>
 
 <oponent race="Chaos" statueHealth="1500">
+<statue>dead</statue>
 <unit>Bomber</unit>
 <unit>Knight</unit>
 <unit>Giant</unit>
 <unit>Dead</unit>
+<startingUnit>ChaosMiner</startingUnit>
 <startingUnit>ChaosMiner</startingUnit>
 <startingUnit>ChaosMiner</startingUnit>
 <startingUnit>ChaosMiner</startingUnit>
@@ -316,15 +336,16 @@
 </oponent>
 </level>
 
-<level title=" 4 legged Fury: Crawlers Attack" number="10" map="4" story="Medusa Unleashes the Crawlers a fast assassin that becomes more powerful in numbers" controller="" points="1">
-
+<level title=" 4 legged Fury: Crawlers Attack" number="10" map="4" story="Medusa Unleashes the Crawlers a fast assassin that becomes more powerful in a pack." controller="" points="1">
+<hasInsaneWall>true</hasInsaneWall>
 <normal>1.6</normal>
 <hard>1.2</hard>
 <insane>.88</insane>
 <normalHealthScale>.7</normalHealthScale>
-<tip>Crawlers are more powerful in numbers so you must attack early to keep the crawlers in small numbers.</tip>
+<tip>Crawlers are more powerful in numbers. Spash damage from a castle archer will help.  Archidons are a good choice but not without protection.</tip>
 
 <player race="Order" statueHealth="1500">
+<statue>swordwrath</statue>
 <unit>Swordwrath</unit>
 <unit>Spearton</unit>
 <unit>Archidon</unit>
@@ -344,6 +365,7 @@
 <unit>Giant</unit>
 <unit>Dead</unit>
 <unit>Cat</unit>
+<startingUnit>ChaosMiner</startingUnit>
 <startingUnit>ChaosMiner</startingUnit>
 <startingUnit>ChaosMiner</startingUnit>
 <startingUnit>Cat</startingUnit>
@@ -357,15 +379,16 @@
 </oponent>
 </level>
 
-<level title="Wingadon" number="11" map="0" story="Medusa unleashes the Wingadon a flying archer that can only be hit by projectile units" controller="" points="1">
-
+<level title="Shadow of the moon: Eclipsors Attack." number="11" map="0" story="Medusa tricks seem to never end, and a flying has never been seen before until the Eclipsor. A flying archer that can only be hit by projectile units." controller="" points="1">
+<hasInsaneWall>true</hasInsaneWall>
 <normal>1.6</normal>
 <hard>1.2</hard>
 <insane>.8</insane>
 <normalHealthScale>.7</normalHealthScale>
-<tip>Use your archers in large numbers to pick the wingidons out of the sky</tip>
+<tip>Use your Archidons in large numbers to pick the Eclipsors out of the sky.</tip>
 
 <player race="Order" statueHealth="1500">
+<statue>swordwrath</statue>
 <unit>Swordwrath</unit>
 <unit>Spearton</unit>
 <unit>Archidon</unit>
@@ -375,10 +398,14 @@
 <unit>EnslavedGiant</unit>
 <startingUnit>Miner</startingUnit>
 <startingUnit>Miner</startingUnit>
+<startingUnit>Miner</startingUnit>
 <startingUnit>Swordwrath</startingUnit>
+<startingUnit>Archidon</startingUnit>
+
 </player>
 
 <oponent race="Chaos" statueHealth="1500">
+<statue>wingadon</statue>
 <unit>Bomber</unit>
 <unit>Knight</unit>
 <unit>Giant</unit>
@@ -388,7 +415,7 @@
 <startingUnit>ChaosMiner</startingUnit>
 <startingUnit>ChaosMiner</startingUnit>
 <startingUnit>ChaosMiner</startingUnit>
-<startingUnit>Swordwrath</startingUnit>
+<startingUnit>Wingadon</startingUnit>
 <UnitComposition>
 <Bomber>3</Bomber>
 <Knight>1</Knight>
@@ -400,16 +427,17 @@
 </oponent>
 </level>
 
-<level title="Bone Pile: Skelatons attack" number="12" map="2" story="After seeing the way the wingadon can fly the your army crafts technology to have their own flying unit that wields a crossbow" controller="" points="1">
-
+<level title="Bone Pile: Marrowkai summon war" number="12" map="2" story="You have mimiced the flight of the Eclipsor and crafte  technology to have your own  flying unit that wields a crossbow, Meanwhile a new Chaos Mage is reaping havoc called the Marrowkia." controller="" points="1">
+<hasInsaneWall>true</hasInsaneWall>
 <unlock>FlyingCrossbowman</unlock>
 <normal>1.6</normal>
 <hard>1.2</hard>
 <insane>.8</insane>
 <normalHealthScale>.7</normalHealthScale>
-<tip>After seeing the way the wingadon can fly the your army crafts technology to have their own flying unit that wields a crossbow</tip>
+<tip>Shadowrath while cloaked can not be targetted or rept.</tip>
 
 <player race="Order" statueHealth="1500">
+<statue>swordwrath</statue>
 <unit>Swordwrath</unit>
 <unit>Spearton</unit>
 <unit>Archidon</unit>
@@ -418,6 +446,7 @@
 <unit>FlyingCrossbowman</unit>
 <unit>Monk</unit>
 <unit>EnslavedGiant</unit>
+<startingUnit>Miner</startingUnit>
 <startingUnit>Miner</startingUnit>
 <startingUnit>Miner</startingUnit>
 <startingUnit>Miner</startingUnit>
@@ -437,6 +466,7 @@
 <startingUnit>ChaosMiner</startingUnit>
 <startingUnit>ChaosMiner</startingUnit>
 <startingUnit>ChaosMiner</startingUnit>
+<startingUnit>ChaosMiner</startingUnit>
 <startingUnit>Cat</startingUnit>
 <startingUnit>SkelatalMage</startingUnit>
 <startingUnit>Wingadon</startingUnit>
@@ -452,15 +482,16 @@
 </oponent>
 </level>
 
-<level title="Medusa's Gates" number="13" map="6" story="You are on the outskirts of Medusas homeland and one battle away from the finali" controller="" points="1">
-
+<level title="Medusa's Gates: The Chaos Capital is in sight. " number="13" map="6" story="You are on the outskirts of Medusas homeland.  A final push is near." controller="" points="1">
+<hasInsaneWall>true</hasInsaneWall>
 <normal>1.6</normal>
 <hard>1.2</hard>
 <insane>.8</insane>
 <normalHealthScale>.7</normalHealthScale>
-<tip>You are on the outskirts of Medusas homeland and one battle away from the finali</tip>
+<tip></tip>
 
 <player race="Order" statueHealth="1500">
+<statue>swordwrath</statue>
 <unit>Swordwrath</unit>
 <unit>Spearton</unit>
 <unit>Archidon</unit>
@@ -512,8 +543,8 @@
 </oponent>
 </level>
 
-<level title="Medusa and the Full Chaos army: Final battle" number="14" map="7" story="Should we have a big twist ending? Like the giant out of the statue?  Im thinking we make it look like a giant will come out of the statue again but instead a massive something comes out of the ground for a final Boss fight." controller="CampaignCutScene2" points="1">
-
+<level title="Medusa and the Full Chaos Empire: Final battle" number="14" map="7" story="After infiltrating the lands Medusas Chaos Empire reigned over you have finally reached her Castle she has no where left to run. Do not hold back! Inamorata is at stake. " controller="CampaignCutScene2" points="1">
+<hasInsaneWall>true</hasInsaneWall>
 <normal>1.45</normal>
 <hard>1.2</hard>
 <insane>.78</insane>
@@ -521,6 +552,9 @@
 <tip>Use everything you have learned up to this point to fight the most difficult battle of all</tip>
 
 <player race="Order" statueHealth="1500">
+<mana>1000</mana>
+<gold>1000</gold>
+<statue>swordwrath</statue>
 <unit>Swordwrath</unit>
 <unit>Spearton</unit>
 <unit>Archidon</unit>
@@ -531,6 +565,8 @@
 <unit>FlyingCrossbowman</unit>
 <startingUnit>Miner</startingUnit>
 <startingUnit>Miner</startingUnit>
+<startingUnit>Miner</startingUnit>
+<startingUnit>Miner</startingUnit>     
 <startingUnit>Swordwrath</startingUnit>
 <startingUnit>Spearton</startingUnit>
 <startingUnit>Archidon</startingUnit>
@@ -541,6 +577,9 @@
 </player>
 
 <oponent race="Chaos" statueHealth="1500">
+<mana>1000</mana>
+<gold>1000</gold>
+<statue>medusa</statue>
 <unit>Bomber</unit>
 <unit>Knight</unit>
 <unit>Giant</unit>
@@ -548,7 +587,7 @@
 <unit>Cat</unit>
 <unit>Wingadon</unit>
 <unit>SkelatalMage</unit>
-<unit>Medusa</unit>
+
 <startingUnit>ChaosMiner</startingUnit>
 <startingUnit>ChaosMiner</startingUnit>
 <startingUnit>ChaosMiner</startingUnit>
@@ -562,7 +601,7 @@
 <startingUnit>Cat</startingUnit>
 <startingUnit>Wingadon</startingUnit>
 <startingUnit>SkelatalMage</startingUnit>
-<startingUnit>Medusa</startingUnit>
+
 <UnitComposition>
 <Bomber>2</Bomber>
 <Knight>2</Knight>
@@ -599,7 +638,6 @@
 <Dead>5</Dead>
 <Cat>6</Cat>
 <Knight>5</Knight>
-<Medusa>1</Medusa>
 <Giant>2</Giant>
 </UnitComposition>
 </Chaos>

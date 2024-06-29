@@ -203,13 +203,16 @@ package com.brockw.stickwar.engine.units
                               _mc.gotoAndStop("stoneAttack");
                               if(MovieClip(_mc.mc).currentFrame == 20)
                               {
-                                    if(this.targetUnit.isArmoured)
+                                    if(Boolean(this.targetUnit))
                                     {
-                                          this.targetUnit.stoneAttack(game.xml.xml.Chaos.Units.medusa.stone.damageToArmour);
-                                    }
-                                    else
-                                    {
-                                          this.targetUnit.stoneAttack(game.xml.xml.Chaos.Units.medusa.stone.damageToNotArmour);
+                                          if(this.targetUnit.isArmoured)
+                                          {
+                                                this.targetUnit.stoneAttack(game.xml.xml.Chaos.Units.medusa.stone.damageToArmour);
+                                          }
+                                          else
+                                          {
+                                                this.targetUnit.stoneAttack(game.xml.xml.Chaos.Units.medusa.stone.damageToNotArmour);
+                                          }
                                     }
                               }
                               if(MovieClip(_mc.mc).totalFrames == MovieClip(_mc.mc).currentFrame)
@@ -299,6 +302,8 @@ package com.brockw.stickwar.engine.units
                   _damageToArmour = team.game.xml.xml.Chaos.Units.medusa.superDamage;
                   _damageToNotArmour = team.game.xml.xml.Chaos.Units.medusa.superDamage;
                   this.stoneSpell = new SpellCooldown(team.game.xml.xml.Chaos.Units.medusa.stone.effect,team.game.xml.xml.Chaos.Units.medusa.stone.superCooldown,team.game.xml.xml.Chaos.Units.medusa.stone.mana);
+                  maxHealth = this.maxHealth;
+                  healthBar.totalHealth = maxHealth;
             }
             
             override public function attack() : void

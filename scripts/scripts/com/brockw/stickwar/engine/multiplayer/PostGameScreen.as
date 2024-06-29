@@ -1,15 +1,22 @@
 package com.brockw.stickwar.engine.multiplayer
 {
       import com.brockw.game.Screen;
+      import com.brockw.game.Util;
       import com.brockw.stickwar.BaseMain;
       import com.brockw.stickwar.Main;
       import com.brockw.stickwar.engine.StickWar;
       import com.brockw.stickwar.engine.Team.Team;
       import com.brockw.stickwar.engine.units.Unit;
+      import com.smartfoxserver.v2.entities.data.SFSObject;
+      import com.smartfoxserver.v2.requests.ExtensionRequest;
       import flash.display.Sprite;
       import flash.events.Event;
       import flash.events.MouseEvent;
+      import flash.events.TimerEvent;
+      import flash.net.URLRequest;
+      import flash.net.navigateToURL;
       import flash.text.*;
+      import flash.utils.Timer;
       
       public class PostGameScreen extends Screen
       {
@@ -43,6 +50,10 @@ package com.brockw.stickwar.engine.multiplayer
             
             private var displayGraph:Sprite;
             
+            private var displayGraphBackground:Sprite;
+            
+            private var displayGraphBackgroundHighlight:Sprite;
+            
             private var D_WIDTH:int = 570;
             
             private var D_HEIGHT:int = 350;
@@ -59,6 +70,18 @@ package com.brockw.stickwar.engine.multiplayer
             
             private var showCard:Boolean;
             
+            private var newRating:int;
+            
+            private var currentRating:int;
+            
+            private var oldRating:int;
+            
+            private var timerToGetProfile:Timer;
+            
+            private var frameCount:int;
+            
+            private var wasWin:Boolean;
+            
             public function PostGameScreen(main:BaseMain)
             {
                   super();
@@ -66,9 +89,11 @@ package com.brockw.stickwar.engine.multiplayer
                   this.textBoxes = [];
                   this.mc = new victoryScreenMc();
                   addChild(this.mc);
-                  this.displayGraph = this.mc.graphArea.graph;
-                  this.D_WIDTH = this.mc.graphArea.graph.width;
-                  this.D_HEIGHT = this.mc.graphArea.graph.height;
+                  this.displayGraph = this.mc.graphArea;
+                  this.displayGraphBackground = this.mc.graphAreaBackground;
+                  this.displayGraphBackgroundHighlight = this.mc.graphAreaBackgroundHighlight;
+                  this.D_WIDTH = 740;
+                  this.D_HEIGHT = 216;
                   this.main = main;
                   this.unitUnlocked = [];
                   this.mc.unlockCard.visible = false;
@@ -77,6 +102,23 @@ package com.brockw.stickwar.engine.multiplayer
                   this.mc.exit.mouseChildren = false;
                   this.id = -1;
                   this.showCard = false;
+            }
+            
+            public static function getTimeFormat(seconds:int) : String
+            {
+                  var minutes:int = Math.floor(seconds / 60);
+                  seconds = Math.floor(seconds % 60);
+                  var result:String = "";
+                  if(minutes < 10)
+                  {
+                        result += "0";
+                  }
+                  result += minutes + ":";
+                  if(seconds < 10)
+                  {
+                        result += "0";
+                  }
+                  return result + ("" + seconds);
             }
             
             public function appendUnitUnlocked(u:int, game:StickWar) : void
@@ -108,12 +150,32 @@ package com.brockw.stickwar.engine.multiplayer
                   }
             }
             
+            public function setRatings(a:int, b:int) : void
+            {
+                  this.mc.ratingA.text = "" + a;
+                  this.mc.ratingB.text = "" + b;
+                  this.oldRating = this.currentRating = this.newRating = a;
+            }
+            
             public function setMode(m:int) : void
             {
                   this.mode = m;
+                  this.mc.userAButton.buttonMode = false;
+                  this.mc.userBButton.buttonMode = false;
+                  this.mc.userAButton.mouseEnabled = false;
+                  this.mc.userBButton.mouseEnabled = false;
+                  this.mc.tip.visible = false;
                   if(this.mode == PostGameScreen.M_CAMPAIGN)
                   {
                         this.mc.exit.text.text = "Continue";
+                        this.mc.singlePlayerOverlay.visible = true;
+                        this.mc.timer.visible = true;
+                        this.mc.saveReplay.text.text = "Play Online";
+                        this.mc.saveReplay.visible = true;
+                        if(!this.wasWin)
+                        {
+                              this.mc.exit.text.text = "Retry";
+                        }
                   }
                   else if(this.mode == PostGameScreen.M_SYNC_ERROR)
                   {
@@ -122,22 +184,70 @@ package com.brockw.stickwar.engine.multiplayer
                         this.displayGraph.graphics.clear();
                         this.mc.saveReplay.visible = false;
                         this.mc.gameStatus.gotoAndStop("syncError");
-                        this.mc.background.gotoAndStop("chaosVictory");
+                        this.mc.singlePlayerOverlay.visible = false;
+                        this.mc.timer.visible = false;
+                  }
+                  else if(this.mode == PostGameScreen.M_SINGLEPLAYER)
+                  {
+                        this.mc.exit.text.text = "Quit";
+                        this.mc.singlePlayerOverlay.visible = true;
+                        this.mc.timer.visible = true;
+                        this.mc.saveReplay.text.text = "Game Guide";
                   }
                   else
                   {
                         this.mc.unlockCard.visible = false;
                         this.mc.exit.text.text = "Quit";
+                        this.mc.singlePlayerOverlay.visible = false;
+                        this.mc.timer.visible = false;
+                        this.mc.saveReplay.text.text = "Game Guide";
+                        this.mc.userAButton.buttonMode = true;
+                        this.mc.userBButton.buttonMode = true;
+                        this.mc.userAButton.mouseEnabled = true;
+                        this.mc.userBButton.mouseEnabled = true;
                   }
+            }
+            
+            private function drawLineGraph(records:Array, max:Number, canvas:Sprite, isEven:Boolean, yOffset:Number = 0) : void
+            {
+                  var gapSize:Number = this.D_WIDTH / (records.length / 2 - 1);
+                  var incrementSize:Number = this.D_HEIGHT / max;
+                  for(var i:int = isEven ? 0 : 1; i < records.length; i += 2)
+                  {
+                        if(i == 0 || i == 1)
+                        {
+                              canvas.graphics.moveTo(gapSize * Math.floor(i / 2),this.D_HEIGHT - incrementSize * records[i] + yOffset);
+                        }
+                        else
+                        {
+                              canvas.graphics.lineTo(gapSize * Math.floor(i / 2),this.D_HEIGHT - incrementSize * records[i] + yOffset);
+                        }
+                  }
+            }
+            
+            private function drawSpecialLine(records:Array, max:Number, canvas:Sprite, isEven:Boolean, colour:int) : void
+            {
+                  this.displayGraphBackground.graphics.lineStyle(10,0);
+                  this.drawLineGraph(records,max,this.displayGraphBackground,isEven);
+                  this.displayGraphBackground.graphics.endFill();
+                  this.displayGraph.graphics.lineStyle(2,colour);
+                  this.drawLineGraph(records,max,canvas,isEven);
+                  this.displayGraph.graphics.endFill();
+                  this.displayGraphBackgroundHighlight.graphics.lineStyle(2,2365457);
+                  this.drawLineGraph(records,max,this.displayGraphBackgroundHighlight,isEven,6);
+                  this.displayGraphBackgroundHighlight.graphics.endFill();
             }
             
             private function drawGraph() : void
             {
                   var i:int = 0;
                   var box:TextField = null;
+                  var prevValue:String = null;
                   var newTxt:TextField = null;
                   var t:TextFormat = null;
                   this.displayGraph.graphics.clear();
+                  this.displayGraphBackground.graphics.clear();
+                  this.displayGraphBackgroundHighlight.graphics.clear();
                   var maxMiners:int = 0;
                   var maxPopulation:int = 0;
                   for(i = 0; i < this.economyRecords.length; i++)
@@ -154,107 +264,57 @@ package com.brockw.stickwar.engine.multiplayer
                               maxPopulation = int(this.militaryRecords[i]);
                         }
                   }
-                  this.displayGraph.graphics.endFill();
+                  var max:int = Math.max(maxMiners,maxPopulation);
                   var gapSize:Number = this.D_WIDTH / (this.economyRecords.length / 2 - 1);
                   var incrementSize:Number = this.D_HEIGHT / Math.max(maxMiners,maxPopulation);
-                  this.displayGraph.graphics.lineStyle(4,255);
-                  for(i = 0; i < this.economyRecords.length; i += 2)
-                  {
-                        if(i == 0)
-                        {
-                              this.displayGraph.graphics.moveTo(gapSize * Math.floor(i / 2),this.D_HEIGHT - incrementSize * this.economyRecords[i]);
-                        }
-                        else
-                        {
-                              this.displayGraph.graphics.lineTo(gapSize * Math.floor(i / 2),this.D_HEIGHT - incrementSize * this.economyRecords[i]);
-                        }
-                  }
-                  this.displayGraph.graphics.endFill();
-                  this.displayGraph.graphics.lineStyle(4,16776960);
-                  for(i = 1; i < this.economyRecords.length; i += 2)
-                  {
-                        if(i == 1)
-                        {
-                              this.displayGraph.graphics.moveTo(gapSize * Math.floor(i / 2),this.D_HEIGHT - incrementSize * this.economyRecords[i]);
-                        }
-                        else
-                        {
-                              this.displayGraph.graphics.lineTo(gapSize * Math.floor(i / 2),this.D_HEIGHT - incrementSize * this.economyRecords[i]);
-                        }
-                  }
-                  this.displayGraph.graphics.endFill();
-                  this.displayGraph.graphics.lineStyle(3,65280);
-                  for(i = 0; i < this.militaryRecords.length; i += 2)
-                  {
-                        if(i == 0)
-                        {
-                              this.displayGraph.graphics.moveTo(gapSize * Math.floor(i / 2),this.D_HEIGHT - incrementSize * this.militaryRecords[i]);
-                        }
-                        else
-                        {
-                              this.displayGraph.graphics.lineTo(gapSize * Math.floor(i / 2),this.D_HEIGHT - incrementSize * this.militaryRecords[i]);
-                        }
-                  }
-                  this.displayGraph.graphics.endFill();
-                  this.displayGraph.graphics.lineStyle(3,16711680);
-                  for(i = 1; i < this.militaryRecords.length; i += 2)
-                  {
-                        if(i == 1)
-                        {
-                              this.displayGraph.graphics.moveTo(gapSize * Math.floor(i / 2),this.D_HEIGHT - incrementSize * this.militaryRecords[i]);
-                        }
-                        else
-                        {
-                              this.displayGraph.graphics.lineTo(gapSize * Math.floor(i / 2),this.D_HEIGHT - incrementSize * this.militaryRecords[i]);
-                        }
-                  }
-                  this.displayGraph.graphics.endFill();
+                  this.drawSpecialLine(this.economyRecords,max,this.displayGraph,true,26367);
+                  this.drawSpecialLine(this.economyRecords,max,this.displayGraph,false,16685313);
+                  this.drawSpecialLine(this.militaryRecords,max,this.displayGraph,true,35840);
+                  this.drawSpecialLine(this.militaryRecords,max,this.displayGraph,false,10223616);
                   for each(box in this.textBoxes)
                   {
                         this.displayGraph.removeChild(box);
                   }
                   this.textBoxes = [];
+                  prevValue = "";
                   for(i = 0; i < this.D_WIDTH / TEXT_SPACING; i++)
                   {
                         newTxt = new TextField();
-                        newTxt.y = this.D_HEIGHT + 10;
+                        newTxt.y = this.D_HEIGHT + 3;
                         newTxt.x = i * TEXT_SPACING - 5;
                         t = new TextFormat();
                         t.color = 16777215;
                         newTxt.defaultTextFormat = t;
-                        newTxt.text = this.getTimeFormat(Math.floor(i / (this.D_WIDTH / TEXT_SPACING) * this.militaryRecords.length / 2 * 2));
+                        newTxt.text = getTimeFormat(Math.floor(i / (this.D_WIDTH / TEXT_SPACING) * this.militaryRecords.length / 2 * 2));
+                        if(newTxt.text == prevValue)
+                        {
+                              newTxt.visible = false;
+                        }
+                        prevValue = newTxt.text;
+                        newTxt.mouseEnabled = false;
                         this.displayGraph.addChild(newTxt);
                         this.textBoxes.push(newTxt);
                   }
+                  prevValue = "";
                   for(i = 0; i < this.D_HEIGHT / TEXT_SPACING + 1; i++)
                   {
                         newTxt = new TextField();
-                        newTxt.y = this.D_HEIGHT - i * TEXT_SPACING - 5;
-                        newTxt.x = 0 - 30;
+                        newTxt.y = this.D_HEIGHT - i * TEXT_SPACING - 6;
+                        newTxt.x = 0 - 20;
                         t = new TextFormat();
                         t.color = 16777215;
                         newTxt.defaultTextFormat = t;
                         newTxt.text = "" + Math.floor(maxPopulation * i / (this.D_WIDTH / TEXT_SPACING));
+                        newTxt.mouseEnabled = false;
+                        if(newTxt.text == prevValue)
+                        {
+                              newTxt.visible = false;
+                        }
+                        prevValue = newTxt.text;
                         this.displayGraph.addChild(newTxt);
                         this.textBoxes.push(newTxt);
                   }
-            }
-            
-            private function getTimeFormat(seconds:int) : String
-            {
-                  var minutes:int = Math.floor(seconds / 60);
-                  seconds = Math.floor(seconds % 60);
-                  var result:String = "";
-                  if(minutes < 10)
-                  {
-                        result += "0";
-                  }
-                  result += minutes + ":";
-                  if(seconds < 10)
-                  {
-                        result += "0";
-                  }
-                  return result + ("" + seconds);
+                  this.mc.timer.text = getTimeFormat(this.militaryRecords.length);
             }
             
             public function setRecords(economyRecords:Array, militaryRecords:Array) : void
@@ -287,19 +347,64 @@ package com.brockw.stickwar.engine.multiplayer
                   }
             }
             
+            private function secondButton(e:Event) : void
+            {
+                  var url:URLRequest = null;
+                  if(this.mode == PostGameScreen.M_CAMPAIGN)
+                  {
+                        url = new URLRequest("http://www.stickempires.com");
+                        navigateToURL(url,"_blank");
+                  }
+                  else if(this.mode == PostGameScreen.M_SINGLEPLAYER)
+                  {
+                        url = new URLRequest("http://www.stickpage.com/stickempiresguide.shtml");
+                        navigateToURL(url,"_blank");
+                  }
+                  else
+                  {
+                        url = new URLRequest("http://www.stickpage.com/stickempiresguide.shtml");
+                        navigateToURL(url,"_blank");
+                  }
+            }
+            
             override public function enter() : void
             {
+                  this.frameCount = 0;
                   stage.frameRate = 30;
                   addEventListener(Event.ENTER_FRAME,this.update);
                   this.mc.exit.addEventListener(MouseEvent.CLICK,this.btnConnectLogin);
-                  this.mc.saveReplay.text.text = "Save Replay";
+                  this.mc.saveReplay.addEventListener(MouseEvent.CLICK,this.secondButton);
+                  this.mc.saveReplay.buttonMode = true;
+                  this.mc.saveReplay.text.mouseEnabled = false;
                   this.mc.userAButton.addEventListener(MouseEvent.CLICK,this.hitUserA);
                   this.mc.userBButton.addEventListener(MouseEvent.CLICK,this.hitUserB);
+                  this.mc.userA.mouseEnabled = false;
+                  this.mc.userB.mouseEnabled = false;
                   this.mc.userAButton.buttonMode = true;
                   this.mc.userBButton.buttonMode = true;
                   this.mc.userA.mouseEnabled = false;
                   this.mc.userB.mouseEnabled = false;
                   this.mc.unlockCard.okButton.addEventListener(MouseEvent.CLICK,this.closeCard);
+                  this.mc.tip.okButton.addEventListener(MouseEvent.CLICK,this.closeTipCard);
+                  if(this.mode == PostGameScreen.M_MULTIPLAYER)
+                  {
+                        this.timerToGetProfile = new Timer(1000,1);
+                        this.timerToGetProfile.addEventListener(TimerEvent.TIMER,this.getProfile);
+                        this.timerToGetProfile.start();
+                  }
+            }
+            
+            private function closeTipCard(e:Event) : void
+            {
+                  this.mc.tip.visible = false;
+            }
+            
+            private function getProfile(e:Event) : void
+            {
+                  var params:SFSObject = new SFSObject();
+                  params.putUtfString("name",this.main.sfs.mySelf.name);
+                  var r:ExtensionRequest = new ExtensionRequest("getProfile",params);
+                  this.main.sfs.send(r);
             }
             
             override public function maySwitchOnDisconnect() : Boolean
@@ -332,6 +437,30 @@ package com.brockw.stickwar.engine.multiplayer
             
             private function update(evt:Event) : void
             {
+                  var sign:String = null;
+                  var difference:int = 0;
+                  ++this.frameCount;
+                  if(this.frameCount % 3 == 0)
+                  {
+                        if(this.currentRating != this.newRating)
+                        {
+                              this.currentRating += Util.sgn(this.newRating - this.currentRating);
+                        }
+                        sign = "+";
+                        difference = Math.abs(this.currentRating - this.oldRating);
+                        if(this.currentRating < this.oldRating)
+                        {
+                              sign = "-";
+                        }
+                        if(this.newRating != this.oldRating)
+                        {
+                              this.mc.ratingA.text = this.currentRating + " (" + sign + difference + ")";
+                        }
+                        else
+                        {
+                              this.mc.ratingA.text = "" + this.currentRating;
+                        }
+                  }
                   if(this.showCard)
                   {
                         this.mc.unlockCard.alpha += (1 - this.mc.unlockCard.alpha) * 0.2;
@@ -353,6 +482,7 @@ package com.brockw.stickwar.engine.multiplayer
                   this.mc.unlockCard.okButton.removeEventListener(MouseEvent.CLICK,this.closeCard);
                   this.mc.userAButton.removeEventListener(MouseEvent.CLICK,this.hitUserA);
                   this.mc.userBButton.removeEventListener(MouseEvent.CLICK,this.hitUserB);
+                  this.mc.tip.okButton.removeEventListener(MouseEvent.CLICK,this.closeTipCard);
             }
             
             public function setReplayFile(s:String) : void
@@ -363,8 +493,32 @@ package com.brockw.stickwar.engine.multiplayer
             
             public function setTipText(s:String) : void
             {
-                  this.mc.replay.text = s;
-                  this.mc.saveReplay.visible = false;
+                  if(s != "")
+                  {
+                        this.mc.tip.tip.text = s;
+                        this.mc.tip.visible = true;
+                  }
+            }
+            
+            public function receiveProfile(data:SFSObject) : void
+            {
+                  var username:String = data.getUtfString("username");
+                  var rating:int = data.getDouble("rating");
+                  var ratingA:int = int(this.mc.ratingA.text);
+                  var ratingB:int = int(this.mc.ratingB.text);
+                  if(this.mc.userA.text.toLowerCase() == username.toLowerCase())
+                  {
+                        if(this.mc.ratingA.text != "" && ratingA != rating)
+                        {
+                              this.startRatingAnimationA(rating);
+                        }
+                  }
+            }
+            
+            private function startRatingAnimationA(newRating:int) : void
+            {
+                  this.newRating = newRating;
+                  trace(newRating);
             }
             
             public function setWinner(id:int, race:int, userAName:String, userBName:String, myId:int) : void
@@ -373,22 +527,24 @@ package com.brockw.stickwar.engine.multiplayer
                   if(race == Team.T_GOOD)
                   {
                         s += "order";
-                        this.mc.background.gotoAndStop("orderVictory");
                   }
                   else
                   {
                         s += "chaos";
-                        this.mc.background.gotoAndStop("chaosVictory");
                   }
                   if(myId != -1)
                   {
                         if(myId == id)
                         {
                               s += "Victory";
+                              this.wasWin = true;
+                              this.main.soundManager.playSoundInBackground("OrderVictory");
                         }
                         else
                         {
+                              this.wasWin = false;
                               s += "Defeat";
+                              this.main.soundManager.playSoundInBackground("OrderDefeat");
                         }
                   }
                   this.mc.userA.text = userAName;

@@ -10,6 +10,8 @@ package com.brockw.stickwar.campaign
             
             private var _unitsAvailable:Dictionary;
             
+            private var _statue:String;
+            
             private var _race:String;
             
             private var _statueHealth:int;
@@ -17,6 +19,10 @@ package com.brockw.stickwar.campaign
             private var _startingUnits:Array;
             
             private var _castleArcherLevel:int;
+            
+            private var _gold:int;
+            
+            private var _mana:int;
             
             public function Player(xml:XMLList)
             {
@@ -46,6 +52,22 @@ package com.brockw.stickwar.campaign
                   if(this.race == "Order")
                   {
                         this.unitsAvailable[Unit.U_MINER] = 1;
+                  }
+                  this.statue = "default";
+                  this.statue = xml.statue;
+                  if(this.statue == "")
+                  {
+                        this.statue = "default";
+                  }
+                  this._mana = 0;
+                  this._gold = 500;
+                  for each(x in xml.mana)
+                  {
+                        this._mana = x;
+                  }
+                  for each(x in xml.gold)
+                  {
+                        this._gold = x;
                   }
             }
             
@@ -102,6 +124,36 @@ package com.brockw.stickwar.campaign
             public function set castleArcherLevel(value:int) : void
             {
                   this._castleArcherLevel = value;
+            }
+            
+            public function get statue() : String
+            {
+                  return this._statue;
+            }
+            
+            public function set statue(value:String) : void
+            {
+                  this._statue = value;
+            }
+            
+            public function get mana() : int
+            {
+                  return this._mana;
+            }
+            
+            public function set mana(value:int) : void
+            {
+                  this._mana = value;
+            }
+            
+            public function get gold() : int
+            {
+                  return this._gold;
+            }
+            
+            public function set gold(value:int) : void
+            {
+                  this._gold = value;
             }
       }
 }
