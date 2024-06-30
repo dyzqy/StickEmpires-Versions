@@ -196,6 +196,8 @@ package com.brockw.stickwar.campaign.controllers
                         u2.py = game.map.height / 3 * 2;
                         u1.ai.setCommand(game,new StandCommand(game));
                         u2.ai.setCommand(game,new StandCommand(game));
+                        gameScreen.team.population += 1;
+                        gameScreen.team.population += 1;
                         delete game.team.unitsAvailable[Unit.U_SWORDWRATH];
                         delete game.team.unitsAvailable[Unit.U_MINER];
                         this.s1 = u1;
@@ -213,6 +215,7 @@ package com.brockw.stickwar.campaign.controllers
                         this.m1.px = gameScreen.team.homeX + 400;
                         this.m1.py = game.map.height / 2;
                         this.m1.ai.setCommand(game,new StandCommand(game));
+                        gameScreen.team.population += 2;
                   }
                   else if(this.state == S_BOX_UNITS)
                   {
@@ -222,7 +225,7 @@ package com.brockw.stickwar.campaign.controllers
                         this.arrow.x = this.s1.x + gameScreen.game.battlefield.x;
                         this.arrow.y = this.s1.y - this.s1.pheight * 0.8 + gameScreen.game.battlefield.y;
                         this.message.setMessage("Left click and drag a box over units to select them.","Step #1",0,"voiceTutorial1",true);
-                        if(!gameScreen.contains(this.skipTutorialButton) && gameScreen.main.campaign.difficultyLevel != 0)
+                        if(!gameScreen.contains(this.skipTutorialButton) && (gameScreen.main.campaign.difficultyLevel != Campaign.D_NORMAL || gameScreen.main.campaign.getCurrentLevel().retries > 0))
                         {
                               gameScreen.addChild(this.skipTutorialButton);
                               this.skipTutorialButton.x = gameScreen.game.map.screenWidth / 2 + 17;
@@ -515,6 +518,7 @@ package com.brockw.stickwar.campaign.controllers
                               gameScreen.team.enemyTeam.spawn(this.o1,gameScreen.game);
                               this.o1.x = this.o1.px = 3350;
                               this.o1.y = this.o1.py = gameScreen.game.map.height / 2;
+                              gameScreen.team.enemyTeam.population += 1;
                         }
                   }
                   else if(this.state == S_MOVE_SCREEN)
@@ -603,6 +607,7 @@ package com.brockw.stickwar.campaign.controllers
                                     gameScreen.userInterface.isGlobalsEnabled = true;
                                     this.spearton1 = Spearton(gameScreen.game.unitFactory.getUnit(Unit.U_SPEARTON));
                                     gameScreen.team.enemyTeam.spawn(this.spearton1,gameScreen.game);
+                                    gameScreen.team.enemyTeam.population += 3;
                                     this.spearton1.x = this.spearton1.px = this.spearton1.team.homeX - 400;
                                     this.spearton1.y = this.spearton1.py = gameScreen.game.map.height / 2;
                               }
@@ -692,6 +697,7 @@ package com.brockw.stickwar.campaign.controllers
                               game = gameScreen.game;
                               game.team.spawnUnitGroup([Unit.U_MINER,Unit.U_MINER]);
                               game.team.enemyTeam.spawnUnitGroup([Unit.U_MINER,Unit.U_MINER,Unit.U_SPEARTON]);
+                              game.team.gold = 500;
                               game.team.defend(true);
                         }
                   }

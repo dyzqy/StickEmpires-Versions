@@ -190,9 +190,8 @@ package com.brockw.stickwar.engine.multiplayer
             
             public function startGameInvite(friend:int, userName:String) : void
             {
-                  var timeRemaining:int = 0;
                   this.currentInviteTime = getTimer();
-                  timeRemaining = GAME_INVITE_TIME_LIMIT - 1;
+                  var timeRemaining:int = GAME_INVITE_TIME_LIMIT - 1;
                   this.chatOverlay.gameInviteWindow.visible = true;
                   this.chatOverlay.gameInviteWindow.invitationText.text = userName + " has invited you to play a game. (" + timeRemaining + ")";
                   this.chatOverlay.gameInviteWindow.acceptButton.addEventListener(MouseEvent.CLICK,this.acceptGameInvite);

@@ -88,7 +88,7 @@ package com.brockw.stickwar.engine.units
                   return this.numMiners == this.miners.length;
             }
             
-            override public function damage(type:int, amount:int, inflictor:Entity) : void
+            override public function damage(type:int, amount:int, inflictor:Entity, modifier:Number = 1) : void
             {
                   var dmg:Number = NaN;
                   if(isTargetable())

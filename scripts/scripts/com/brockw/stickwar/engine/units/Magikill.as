@@ -321,6 +321,8 @@ package com.brockw.stickwar.engine.units
                         this.isNuking = true;
                         hasHit = false;
                         _state = S_ATTACK;
+                        _mc.gotoAndStop("attack_1");
+                        MovieClip(_mc.mc).gotoAndStop(1);
                         team.game.soundManager.playSound("fulminateSound",px,py);
                   }
             }

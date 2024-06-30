@@ -24,6 +24,8 @@ package com.brockw.stickwar.campaign
             
             private var _mana:int;
             
+            private var _raceName:String;
+            
             public function Player(xml:XMLList)
             {
                   var x:* = undefined;
@@ -68,6 +70,11 @@ package com.brockw.stickwar.campaign
                   for each(x in xml.gold)
                   {
                         this._gold = x;
+                  }
+                  this.raceName = "Order";
+                  for each(x in xml.raceName)
+                  {
+                        this.raceName = x;
                   }
             }
             
@@ -154,6 +161,16 @@ package com.brockw.stickwar.campaign
             public function set gold(value:int) : void
             {
                   this._gold = value;
+            }
+            
+            public function get raceName() : String
+            {
+                  return this._raceName;
+            }
+            
+            public function set raceName(value:String) : void
+            {
+                  this._raceName = value;
             }
       }
 }

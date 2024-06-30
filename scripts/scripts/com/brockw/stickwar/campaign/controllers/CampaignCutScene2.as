@@ -107,7 +107,7 @@ package com.brockw.stickwar.campaign.controllers
                         {
                               Medusa(this.medusa).stone(null);
                         }
-                        if(this.counter++ > 150)
+                        if(this.counter++ > 100)
                         {
                               this.state = S_SCROLLING_STONE;
                               this.scrollingStoneX = gameScreen.game.team.enemyTeam.statue.x - 325;
@@ -116,8 +116,13 @@ package com.brockw.stickwar.campaign.controllers
                   else if(this.state == S_SCROLLING_STONE)
                   {
                         gameScreen.game.targetScreenX = this.scrollingStoneX;
-                        this.scrollingStoneX -= 15;
-                        freezePoint = gameScreen.game.screenX + gameScreen.game.map.screenWidth / 2;
+                        gameScreen.game.screenX = this.scrollingStoneX;
+                        if(gameScreen.game.targetScreenX < gameScreen.game.team.statue.px - 300)
+                        {
+                              gameScreen.game.targetScreenX = gameScreen.game.team.statue.px - 300;
+                        }
+                        this.scrollingStoneX -= 20;
+                        freezePoint = this.scrollingStoneX + gameScreen.game.map.screenWidth / 2;
                         gameScreen.game.spatialHash.mapInArea(freezePoint - 100,0,freezePoint + 100,gameScreen.game.map.height,this.freezeUnit);
                         if(freezePoint < gameScreen.team.homeX)
                         {
@@ -145,6 +150,8 @@ package com.brockw.stickwar.campaign.controllers
                               gameScreen.game.soundManager.playSoundFullVolumeRandom("Rage",3);
                               gameScreen.game.soundManager.playSoundFullVolumeRandom("Rage",3);
                               gameScreen.game.soundManager.playSoundFullVolumeRandom("Rage",3);
+                              gameScreen.game.soundManager.playSoundFullVolumeRandom("Rage",3);
+                              gameScreen.game.soundManager.playSoundFullVolumeRandom("Rage",3);
                         }
                   }
                   if(this.state == S_DONE)
@@ -160,11 +167,11 @@ package com.brockw.stickwar.campaign.controllers
                               {
                                     u1 = Bomber(gameScreen.game.unitFactory.getUnit(Unit.U_BOMBER));
                                     gameScreen.team.enemyTeam.spawn(u1,gameScreen.game);
-                                    u1.px = this.medusa.px + 75;
-                                    u1.py = this.medusa.py - 50 + 100 * (i / numToSpawn);
+                                    u1.px = this.medusa.px + 100;
+                                    u1.py = this.medusa.py - 100 + 200 * (i / numToSpawn);
                                     u1.ai.setCommand(gameScreen.game,new StandCommand(gameScreen.game));
                                     gameScreen.team.enemyTeam.population += 1;
-                                    gameScreen.game.projectileManager.initTowerSpawn(this.medusa.px + 75,this.medusa.py,gameScreen.game.team.enemyTeam,0.6);
+                                    gameScreen.game.projectileManager.initTowerSpawn(this.medusa.px + 100,this.medusa.py,gameScreen.game.team.enemyTeam,0.6);
                               }
                               ++this.spawnNumber;
                         }

@@ -98,6 +98,8 @@ package com.brockw.stickwar.engine.projectile
             
             private var _areaDamage:Number;
             
+            protected var hasArrowDeath:Boolean;
+            
             public function Projectile()
             {
                   super();
@@ -112,6 +114,7 @@ package com.brockw.stickwar.engine.projectile
                   this.isDebris = false;
                   this.unitNotToHit = null;
                   this.isFire = false;
+                  this.hasArrowDeath = false;
             }
             
             override public function cleanUp() : void
@@ -127,11 +130,13 @@ package com.brockw.stickwar.engine.projectile
             
             public function update(game:StickWar) : void
             {
+                  var effects:Array = null;
                   var effect:Array = null;
                   var dir:int = 0;
                   var w:Wall = null;
                   var cDistance:Number = NaN;
                   var direction:Number = NaN;
+                  var type:int = 0;
                   this.visible = true;
                   this.scaleX = this._scale * (game.backScale + py / game.map.height * (game.frontScale - game.backScale));
                   this.scaleY = this._scale * (game.backScale + py / game.map.height * (game.frontScale - game.backScale));
@@ -141,7 +146,7 @@ package com.brockw.stickwar.engine.projectile
                   {
                         visible = false;
                   }
-                  var effects:Array = game.projectileManager.airEffects;
+                  effects = game.projectileManager.airEffects;
                   px += this.dx;
                   py += this.dy;
                   pz += this.dz;
@@ -190,7 +195,10 @@ package com.brockw.stickwar.engine.projectile
                               {
                                     Unit(this.unitNotToHit).applyVelocity(2 * Util.sgn(direction));
                               }
-                              Entity(this.unitNotToHit.damage(this.isFire ? 1 : 0,this.damageToDeal,this._inflictor));
+                              type = 0;
+                              type |= Unit.D_ARROW * (this.hasArrowDeath ? 1 : 0);
+                              type |= Unit.D_FIRE * (this.isFire ? 1 : 0);
+                              Entity(this.unitNotToHit.damage(type,this.damageToDeal,this._inflictor));
                               if(this.area != 0)
                               {
                                     game.spatialHash.mapInArea(px - this.area,py - this.area,px + this.area,py + this.area,this.projectileArea);

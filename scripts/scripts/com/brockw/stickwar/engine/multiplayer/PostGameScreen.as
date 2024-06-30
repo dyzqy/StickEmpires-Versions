@@ -9,6 +9,7 @@ package com.brockw.stickwar.engine.multiplayer
       import com.brockw.stickwar.engine.units.Unit;
       import com.smartfoxserver.v2.entities.data.SFSObject;
       import com.smartfoxserver.v2.requests.ExtensionRequest;
+      import flash.display.MovieClip;
       import flash.display.Sprite;
       import flash.events.Event;
       import flash.events.MouseEvent;
@@ -82,6 +83,8 @@ package com.brockw.stickwar.engine.multiplayer
             
             private var wasWin:Boolean;
             
+            private var lastAddImage:MovieClip;
+            
             public function PostGameScreen(main:BaseMain)
             {
                   super();
@@ -94,6 +97,7 @@ package com.brockw.stickwar.engine.multiplayer
                   this.displayGraphBackgroundHighlight = this.mc.graphAreaBackgroundHighlight;
                   this.D_WIDTH = 740;
                   this.D_HEIGHT = 216;
+                  this.lastAddImage = null;
                   this.main = main;
                   this.unitUnlocked = [];
                   this.mc.unlockCard.visible = false;
@@ -132,6 +136,7 @@ package com.brockw.stickwar.engine.multiplayer
             public function showNextUnitUnlocked() : void
             {
                   var nextUnit:Array = null;
+                  var m:MovieClip = null;
                   if(this.unitUnlocked.length == 0)
                   {
                         this.mc.unlockCard.visible = false;
@@ -145,8 +150,17 @@ package com.brockw.stickwar.engine.multiplayer
                         this.mc.unlockCard.alpha = 0;
                         this.mc.unlockCard.description.text = nextUnit[1];
                         this.mc.unlockCard.unitName.text = nextUnit[0];
+                        m = MovieClip(this.mc.unlockCard.profilePictureBacking);
+                        if(this.lastAddImage != null)
+                        {
+                              if(Boolean(this.mc.unlockCard.profilePictureBacking.contains(this.lastAddImage)))
+                              {
+                                    this.mc.unlockCard.profilePictureBacking.removeChild(this.lastAddImage);
+                              }
+                        }
                         this.mc.unlockCard.profilePictureBacking.addChild(nextUnit[2]);
                         this.main.soundManager.playSoundFullVolume("UnitUnlock");
+                        this.lastAddImage = nextUnit[2];
                   }
             }
             

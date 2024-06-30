@@ -210,8 +210,7 @@ package com.brockw.stickwar.engine.projectile
             
             public function initArrow(x:Number, y:Number, rotation:Number, velocity:Number, targetY:Number, dy:Number, unit:Unit, damage:Number, poison:Number, isFire:Boolean, area:Number = 0, areaDamage:Number = 0) : void
             {
-                  var n:Arrow = null;
-                  n = Arrow(this._projectileMap[Projectile.ARROW].getItem());
+                  var n:Arrow = Arrow(this._projectileMap[Projectile.ARROW].getItem());
                   n.setArrowGraphics(isFire > 0 ? true : false);
                   n.isFire = isFire;
                   if(n == null)

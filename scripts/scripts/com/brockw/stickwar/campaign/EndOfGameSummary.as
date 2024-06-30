@@ -1,8 +1,8 @@
 package com.brockw.stickwar.campaign
 {
       import com.brockw.game.Screen;
-      import com.brockw.stickwar.CampaignMain;
       import com.brockw.stickwar.engine.multiplayer.PostGameScreen;
+      import com.brockw.stickwar.stickwar2;
       import flash.events.Event;
       import flash.events.MouseEvent;
       import flash.net.URLRequest;
@@ -15,13 +15,13 @@ package com.brockw.stickwar.campaign
             
             private var summaryMc:endOfGameSummaryMc;
             
-            private var main:CampaignMain;
+            private var main:stickwar2;
             
             private var selectInCount:int;
             
             private var hasShared:Boolean;
             
-            public function EndOfGameSummary(main:CampaignMain)
+            public function EndOfGameSummary(main:stickwar2)
             {
                   super();
                   this.main = main;
@@ -101,16 +101,19 @@ package com.brockw.stickwar.campaign
                         total += l.totalTime;
                         best += l.bestTime;
                   }
-                  this.summaryMc.endOfGameText.text += "\n\n" + "Total time (including retries):" + total;
-                  this.summaryMc.endOfGameText.text += "\n" + "Best time:" + best;
+                  this.summaryMc.endOfGameText.text += "\n\n" + "Total time (including retries): " + PostGameScreen.getTimeFormat(total);
+                  this.summaryMc.endOfGameText.text += "\n" + "Best time: " + PostGameScreen.getTimeFormat(best);
                   addEventListener(Event.ENTER_FRAME,this.update);
                   this.summaryMc.buttonFade.mouseEnabled = false;
                   this.summaryMc.share.addEventListener(MouseEvent.CLICK,this.share);
                   this.summaryMc.playOnline.addEventListener(MouseEvent.CLICK,this.playOnline);
                   this.summaryMc.mainMenu.addEventListener(MouseEvent.CLICK,this.mainMenu);
                   this.summaryMc.endOfGameText.mouseWheelEnabled = false;
-                  this.main.tracker.trackEvent("hostname","totalPlayTime",stage.loaderInfo.url,total);
-                  this.main.tracker.trackEvent("hostname","bestPlayTime",stage.loaderInfo.url,best);
+                  if(this.main.tracker != null)
+                  {
+                        this.main.tracker.trackEvent("hostname","totalPlayTime",stage.loaderInfo.url,total);
+                        this.main.tracker.trackEvent("hostname","bestPlayTime",stage.loaderInfo.url,best);
+                  }
                   this.summaryMc.credits.creditsScroll.text = this.main.xml.xml.credits;
             }
             
@@ -118,7 +121,10 @@ package com.brockw.stickwar.campaign
             {
                   var url:URLRequest = new URLRequest("http://www.stickempires.com");
                   navigateToURL(url,"_blank");
-                  this.main.tracker.trackEvent("link","http://www.stickempires.com");
+                  if(this.main.tracker != null)
+                  {
+                        this.main.tracker.trackEvent("link","http://www.stickempires.com");
+                  }
             }
             
             private function mainMenu(e:Event) : void
@@ -130,6 +136,7 @@ package com.brockw.stickwar.campaign
             {
                   this.selectInCount = 2;
                   this.hasShared = true;
+                  System.setClipboard(this.summaryMc.endOfGameText.text);
             }
             
             override public function leave() : void
@@ -139,15 +146,14 @@ package com.brockw.stickwar.campaign
             
             private function update(e:Event) : void
             {
-                  this.summaryMc.credits.creditsScroll.y -= 1;
+                  this.summaryMc.credits.creditsScroll.y -= 0.5;
                   if(this.summaryMc.credits.creditsScroll.y + this.summaryMc.credits.creditsScroll.height < 0)
                   {
-                        this.summaryMc.credits.creditsScroll.y = 300;
+                        this.summaryMc.credits.creditsScroll.y = 382;
                   }
                   --this.selectInCount;
                   if(this.selectInCount == 0)
                   {
-                        System.setClipboard(this.summaryMc.endOfGameText.text);
                         this.main.stage.focus = this.summaryMc.endOfGameText;
                         this.summaryMc.endOfGameText.setSelection(0,this.summaryMc.endOfGameText.text.length);
                   }

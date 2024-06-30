@@ -21,13 +21,15 @@ package com.brockw.stickwar.campaign
             
             public var points:int;
             
+            private var _normalDamageModifier:Number;
+            
             private var _normalModifier:Number;
             
             private var _hardModifier:Number;
             
             private var _insaneModifier:Number;
             
-            private var _normalHealthScale:Number;
+            private var _normalHealthModifier:Number;
             
             private var _tip:String;
             
@@ -84,11 +86,26 @@ package com.brockw.stickwar.campaign
                   this.hardModifier = xml.hard;
                   this.insaneModifier = xml.insane;
                   this.normalHealthScale = xml.normalHealthScale;
+                  this.normalDamageModifier = 1;
+                  for each(x in xml.normalDamageScale)
+                  {
+                        this.normalDamageModifier = x;
+                  }
                   this.tip = xml.tip;
                   this.totalTime = 0;
                   this.bestTime = -1;
                   this.retries = 0;
                   this.hasInsaneWall = xml.hasInsaneWall == true;
+            }
+            
+            public function get normalDamageModifier() : Number
+            {
+                  return this._normalDamageModifier;
+            }
+            
+            public function set normalDamageModifier(value:Number) : void
+            {
+                  this._normalDamageModifier = value;
             }
             
             public function get hasInsaneWall() : Boolean
@@ -154,12 +171,12 @@ package com.brockw.stickwar.campaign
             
             public function get normalHealthScale() : Number
             {
-                  return this._normalHealthScale;
+                  return this._normalHealthModifier;
             }
             
             public function set normalHealthScale(value:Number) : void
             {
-                  this._normalHealthScale = value;
+                  this._normalHealthModifier = value;
             }
             
             public function get tip() : String

@@ -14,6 +14,7 @@ package com.brockw.stickwar.engine.projectile
                   super();
                   isFire = false;
                   type = ARROW;
+                  hasArrowDeath = true;
                   this.mc = new arrowMc();
                   addChild(this.mc);
             }

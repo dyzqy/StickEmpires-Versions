@@ -321,6 +321,7 @@ package com.brockw.stickwar.campaign
                   {
                         this.keyboard = new KeyboardState(this.main.stage);
                         this.mouseState = new MouseState(this.main.stage);
+                        stage.frameRate = 30;
                   }
                   this.main.campaign = new Campaign(0,0);
                   this.mc.version.text = this.version;
@@ -336,8 +337,6 @@ package com.brockw.stickwar.campaign
                   this.isFirst = false;
                   addEventListener(Event.ENTER_FRAME,this.update);
                   this.addNewButton(this.mc.mainPanel.campaignButton,15,this.campaignButton);
-                  this.addNewButton(this.mc.mainPanel.onlineButton,15,this.onlineButton);
-                  this.addNewButton(this.mc.mainPanel.stickWarButton,15,this.stickWarButton);
                   this.addNewButton(this.mc.newOrContinuePanel.newGameButton,15,this.newGameButton);
                   this.addNewButton(this.mc.newOrContinuePanel.continueButton,15,this.continueButton);
                   this.addNewButton(this.mc.difficultyPanel.normalButton,15,this.normalButton);
@@ -347,6 +346,8 @@ package com.brockw.stickwar.campaign
                   this.mc.backButton.addEventListener(MouseEvent.CLICK,this.backButton);
                   this.addNewButton(this.mc.introPanel.skipButton,15,this.skipButton);
                   this.main.soundManager.playSoundInBackground("lobbyMusic");
+                  this.mc.mainPanel.onlineButton.addEventListener(MouseEvent.CLICK,this.onlineButton);
+                  this.mc.mainPanel.stickWarButton.addEventListener(MouseEvent.CLICK,this.stickWarButton);
                   this.mc.creditsScreen.visible = false;
             }
             
@@ -411,18 +412,24 @@ package com.brockw.stickwar.campaign
                   this.main.showScreen("campaignMap");
             }
             
-            private function onlineButton() : void
+            private function onlineButton(e:Event) : void
             {
                   var url:URLRequest = new URLRequest("http://www.stickempires.com");
                   navigateToURL(url,"_blank");
-                  this.main.tracker.trackEvent("link","http://www.stickempires.com");
+                  if(this.main.tracker != null)
+                  {
+                        this.main.tracker.trackEvent("link","http://www.stickempires.com");
+                  }
             }
             
-            private function stickWarButton() : void
+            private function stickWarButton(e:Event) : void
             {
                   var url:URLRequest = new URLRequest("http://www.stickpage.com/stickwargameplay.shtml");
                   navigateToURL(url,"_blank");
-                  this.main.tracker.trackEvent("link","http://www.stickpage.com/stickwargameplay.shtml");
+                  if(this.main.tracker != null)
+                  {
+                        this.main.tracker.trackEvent("link","http://www.stickpage.com/stickwargameplay.shtml");
+                  }
             }
             
             override public function leave() : void
@@ -435,6 +442,8 @@ package com.brockw.stickwar.campaign
                   this.keyboard.cleanUp();
                   this.youtubeLoader.stopVideo();
                   this.mouseState.cleanUp();
+                  this.mc.mainPanel.onlineButton.removeEventListener(MouseEvent.CLICK,this.onlineButton);
+                  this.mc.mainPanel.stickWarButton.removeEventListener(MouseEvent.CLICK,this.stickWarButton);
             }
             
             private function backButton(evt:Event) : void

@@ -285,7 +285,7 @@ package com.brockw.stickwar.engine
                   return this._currentId++;
             }
             
-            public function initTeams(race1:int, race2:int, health1:int, health2:int, techAllowedA:Dictionary = null, techAllowedB:Dictionary = null, handicap1:Number = 1, handicap2:Number = 1, healthModifierA:Number = 1, healthModifierB:Number = 1) : void
+            public function initTeams(race1:int, race2:int, health1:int, health2:int, techAllowedA:Dictionary = null, techAllowedB:Dictionary = null, handicap1:Number = 1, handicap2:Number = 1, healthModifierA:Number = 1, healthModifierB:Number = 1, damageModifierA:Number = 1, damageModifierB:Number = 1) : void
             {
                   this._teamA = Team.getTeamFromId(race1,this,health1,techAllowedA,handicap1,healthModifierA);
                   this._teamB = Team.getTeamFromId(race2,this,health2,techAllowedB,handicap2,healthModifierB);
@@ -323,6 +323,8 @@ package com.brockw.stickwar.engine
                   this.battlefield.addChild(this._teamB.base);
                   this._teamA.init();
                   this._teamB.init();
+                  this._teamA.damageModifier = damageModifierA;
+                  this._teamB.damageModifier = damageModifierB;
             }
             
             public function setPaused(p:Boolean) : void

@@ -75,7 +75,12 @@ package com.brockw.stickwar.campaign.controllers
                   {
                         this.message.update();
                   }
+                  gameScreen.team.enemyTeam.statue.health = 180;
                   gameScreen.team.enemyTeam.gold = 0;
+                  if(Boolean(this.medusa))
+                  {
+                        this.medusa.faceDirection(-1);
+                  }
                   if(this.state != S_BEFORE_CUTSCENE)
                   {
                         for each(unit in gameScreen.game.team.units)
@@ -154,6 +159,7 @@ package com.brockw.stickwar.campaign.controllers
                               u1.ai.setCommand(game,new HoldCommand(game));
                               u1 = Medusa(game.unitFactory.getUnit(Unit.U_MEDUSA));
                               gameScreen.team.enemyTeam.spawn(u1,game);
+                              this.medusa = u1;
                               u1.ai.setCommand(game,new HoldCommand(game));
                               u1.flyingHeight = 380;
                               u1.pz = -u1.flyingHeight;
@@ -166,8 +172,8 @@ package com.brockw.stickwar.campaign.controllers
                   }
                   else if(this.state == S_FADE_IN)
                   {
-                        gameScreen.game.targetScreenX = gameScreen.game.team.enemyTeam.statue.x - 325;
-                        gameScreen.game.screenX = gameScreen.game.team.enemyTeam.statue.x - 325;
+                        gameScreen.game.targetScreenX = gameScreen.game.team.enemyTeam.statue.x - 350;
+                        gameScreen.game.screenX = gameScreen.game.team.enemyTeam.statue.x - 350;
                         ++this.counter;
                         this.overlay.alpha = (60 - this.counter) / 60;
                         if(this.counter > 60)
@@ -185,8 +191,8 @@ package com.brockw.stickwar.campaign.controllers
                   }
                   else if(this.state == S_MEDUSA_TALKS_1)
                   {
-                        gameScreen.game.targetScreenX = gameScreen.game.team.enemyTeam.statue.x - 325;
-                        gameScreen.game.screenX = gameScreen.game.team.enemyTeam.statue.x - 325;
+                        gameScreen.game.targetScreenX = gameScreen.game.team.enemyTeam.statue.x - 350;
+                        gameScreen.game.screenX = gameScreen.game.team.enemyTeam.statue.x - 350;
                         this.message.setMessage("You fools thought Inamorta belonged to you!","",0,"medusaVoice1");
                         ++this.counter;
                         if(this.counter > 150)
@@ -197,8 +203,8 @@ package com.brockw.stickwar.campaign.controllers
                   }
                   else if(this.state == S_MEDUSA_TALKS_2)
                   {
-                        gameScreen.game.targetScreenX = gameScreen.game.team.enemyTeam.statue.x - 325;
-                        gameScreen.game.screenX = gameScreen.game.team.enemyTeam.statue.x - 325;
+                        gameScreen.game.targetScreenX = gameScreen.game.team.enemyTeam.statue.x - 350;
+                        gameScreen.game.screenX = gameScreen.game.team.enemyTeam.statue.x - 350;
                         this.message.setMessage("We\'ve been here all along biding our time growing with power while your armys destroy themselves in battles over land that belongs to me!","",0,"medusaVoice2");
                         ++this.counter;
                         if(this.message.hasFinishedPlayingSound())
@@ -209,8 +215,8 @@ package com.brockw.stickwar.campaign.controllers
                   }
                   else if(this.state == S_MEDUSA_TALKS_3)
                   {
-                        gameScreen.game.targetScreenX = gameScreen.game.team.enemyTeam.statue.x - 325;
-                        gameScreen.game.screenX = gameScreen.game.team.enemyTeam.statue.x - 325;
+                        gameScreen.game.targetScreenX = gameScreen.game.team.enemyTeam.statue.x - 350;
+                        gameScreen.game.screenX = gameScreen.game.team.enemyTeam.statue.x - 350;
                         this.message.setMessage("But now You have enslaved my babies and I will wait no more... now you will feel the wrath of the Chaos Empire!","",0,"medusaVoice3");
                         ++this.counter;
                         if(this.message.hasFinishedPlayingSound())
@@ -228,7 +234,7 @@ package com.brockw.stickwar.campaign.controllers
                               this.state = S_ENTER_REBELS;
                               for each(unit in gameScreen.game.team.units)
                               {
-                                    unit.faceDirection(-1);
+                                    unit.forceFaceDirection(-1);
                               }
                               frontPosition = gameScreen.team.enemyTeam.statue.x - 600 - 400;
                               game = gameScreen.game;

@@ -175,6 +175,8 @@ package com.brockw.stickwar.engine.Team
             
             private var _rating:int;
             
+            private var _damageModifier:Number;
+            
             private var _statueType:String;
             
             public function Team(game:StickWar)
@@ -219,6 +221,7 @@ package com.brockw.stickwar.engine.Team
                   this._isMember = true;
                   this.towerSpawnDelay = game.xml.xml.towerSpawnDelay;
                   this._statueType = "default";
+                  this._damageModifier = 1;
             }
             
             public static function getTeamFromId(id:int, game:StickWar, health:int, techAllowed:Dictionary, handicap:* = 1, healthModifier:Number = 1) : Team
@@ -274,6 +277,16 @@ package com.brockw.stickwar.engine.Team
                         return "Random";
                   }
                   return "";
+            }
+            
+            public function get damageModifier() : Number
+            {
+                  return this._damageModifier;
+            }
+            
+            public function set damageModifier(value:Number) : void
+            {
+                  this._damageModifier = value;
             }
             
             public function addWall(x:Number) : Wall
@@ -1031,7 +1044,11 @@ package com.brockw.stickwar.engine.Team
                   {
                         game.battlefield.removeChild(unit);
                   }
-                  this.unitGroups[unit.type].splice(this.unitGroups[unit.type].indexOf(unit),1);
+                  var index:int = int(this.unitGroups[unit.type].indexOf(unit));
+                  if(index != -1)
+                  {
+                        this.unitGroups[unit.type].splice(index,1);
+                  }
                   game.unitFactory.returnUnit(unit.type,unit);
                   if(unit.id in this.garrisonedUnits)
                   {
@@ -1255,7 +1272,7 @@ package com.brockw.stickwar.engine.Team
                   {
                         this._deadUnits[unit].update(game);
                   }
-                  if(this._deadUnits.length > 0 && Unit(this._deadUnits[0]).timeOfDeath > 30 * 10)
+                  if(this._deadUnits.length > 0 && Unit(this._deadUnits[0]).timeOfDeath > 30 * 20)
                   {
                         this.removeUnitCompletely(this._deadUnits.shift(),game);
                   }

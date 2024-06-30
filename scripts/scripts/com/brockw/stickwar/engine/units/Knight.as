@@ -254,11 +254,18 @@ package com.brockw.stickwar.engine.units
                               isDead = true;
                         }
                   }
-                  if(!isDead && MovieClip(_mc.mc).currentFrame == MovieClip(_mc.mc).totalFrames)
+                  if(isDead)
                   {
-                        MovieClip(_mc.mc).gotoAndStop(1);
+                        Util.animateMovieClip(_mc,0);
                   }
-                  Util.animateMovieClipBasic(_mc.mc);
+                  else
+                  {
+                        if(MovieClip(_mc.mc).currentFrame == MovieClip(_mc.mc).totalFrames)
+                        {
+                              MovieClip(_mc.mc).gotoAndStop(1);
+                        }
+                        MovieClip(_mc.mc).nextFrame();
+                  }
                   if(Boolean(_mc.mc.dust))
                   {
                         Util.animateMovieClipBasic(_mc.mc.dust);

@@ -95,6 +95,10 @@ package com.brockw.stickwar.campaign
             private function saveButtonClick(evt:Event) : void
             {
                   this.main.campaign.save();
+                  if(this.main.tracker != null)
+                  {
+                        this.main.tracker.trackEvent(this.main.campaign.getLevelDescription(),"save");
+                  }
                   this.mc.saveGamePrompt.visible = true;
                   this.mc.saveGamePrompt.messageText.text = "Game saved at " + this.main.campaign.getCurrentLevel().title;
             }
@@ -109,7 +113,7 @@ package com.brockw.stickwar.campaign
             
             public function update(evt:Event) : void
             {
-                  if(this.main.isCampaignDebug && this.keyboard.isDown(78))
+                  if(this.main.isCampaignDebug && this.keyboard.isDown(78) && this.keyboard.isShift)
                   {
                         ++this.main.campaign.currentLevel;
                         ++this.main.campaign.campaignPoints;

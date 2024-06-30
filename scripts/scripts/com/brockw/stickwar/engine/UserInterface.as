@@ -100,7 +100,7 @@ package com.brockw.stickwar.engine
             
             public function init() : void
             {
-                  this.isMusic = true;
+                  this.isMusic = this.main.soundManager.isMusic;
                   this.isSound = true;
                   this.lastSentScreenPosition = 0;
                   this.spacePressTimer = getTimer();
@@ -408,6 +408,7 @@ package com.brockw.stickwar.engine
                         {
                               this.gameScreen.game.gameOver = true;
                         }
+                        loser.updateStatue();
                   }
                   var speed:int = (this.gameScreen.game.targetScreenX - this.gameScreen.game.screenX) * this.SCROLL_GAIN * 1;
                   if(this.isSlowCamera)

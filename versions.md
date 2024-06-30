@@ -1,3 +1,16 @@
+## version 1.29
+- First version of campaign with stickwar2 class.
+- Campaign saves now save best times.
+- Added a damage modifier for normal difficulty.
+- Modified No Man's Land cutscene.
+- Modified Tutorial.
+- Added new death by arrow effect.
+- Enslaved Giant now finally has his own profile picture.
+- Added may attack functions to units.
+- You can't open chat messages anymore if not playing multiplayer.
+- Increased shadowrath reach from 100 to 120.
+- Modified alot of parts of the campaign.
+
 ## version 1.28
 - Many updates to the campaign, such as more starting miners, new messages, startign walls & tips
 - Added Main Menu screen and difficulties.
@@ -15,11 +28,10 @@
   - Reap now costs 0 mana.
   - Reap lasts for 100 frames(3.3s) instead of 150 frames(5s).
   - Shadowrath's weapon reach decrease from 120 to 100.
-  - Electric wall area increase from 50 to 75(a 50% increase!).
-  - 
+  - Electric wall area increase from 50 to 75.
 
 ## version 1.27
-- Replaced campaign "Scroll" with new desctription and text holder.
+- Replaced campaign "Scroll" with new description and text holder.
 - Fixed bug where Swordwrath don't have double attack speed while using rage.
 
 ## version 1.26
@@ -162,7 +174,7 @@
 - Joining a match now logs you out of the server.
 - Fixed error where non-member player is shown to have membership when in profile.
 - TowerSpawn 2's effect when spawning a giant now has the correct size.
-- Enslaved Giant now has his own profile, not the shadowrath's.
+- Enslaved Giant now has the chaos giant's profile, not the shadowrath's.
 - Fixed mispell when opponent times out in race selection screen.
 - Registering a new account is now done by a seperate class.
 - When playing in "singleplayerGameScreen" both teams have 10,000 gold and mana.

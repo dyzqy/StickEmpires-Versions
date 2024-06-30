@@ -3,7 +3,7 @@ package com.brockw.stickwar.campaign
       import mx.core.ByteArrayAsset;
       
       [ExcludeClass]
-      [Embed(source="/_assets/22_com.brockw.stickwar.campaign.Campaign_CampaignConstants_com.brockw.stickwar.campaign.Campaign_CampaignConstants.bin", mimeType="application/octet-stream")]
+      [Embed(source="/_assets/26_com.brockw.stickwar.campaign.Campaign_CampaignConstants_com.brockw.stickwar.campaign.Campaign_CampaignConstants.bin", mimeType="application/octet-stream")]
       public class Campaign_CampaignConstants extends ByteArrayAsset
       {
              

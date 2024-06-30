@@ -2,6 +2,7 @@ package com.brockw.stickwar.engine
 {
       import com.brockw.game.*;
       import com.brockw.stickwar.GameScreen;
+      import com.brockw.stickwar.engine.multiplayer.MultiplayerGameScreen;
       import com.brockw.stickwar.engine.multiplayer.moves.*;
       import com.smartfoxserver.v2.entities.*;
       import com.smartfoxserver.v2.entities.data.*;
@@ -84,7 +85,7 @@ package com.brockw.stickwar.engine
                   }
                   var isDisabledState:Boolean = this.gameScreen.userInterface.keyBoardState.isDisabled;
                   this.gameScreen.userInterface.keyBoardState.isDisabled = false;
-                  if(this.gameScreen.userInterface.keyBoardState.isPressed(13))
+                  if(this.gameScreen.userInterface.keyBoardState.isPressed(13) && this.gameScreen is MultiplayerGameScreen)
                   {
                         if(this.isInput)
                         {

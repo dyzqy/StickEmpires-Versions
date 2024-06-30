@@ -280,7 +280,6 @@ package com.brockw.stickwar.engine.units
                               fireDamage = Number(game.xml.xml.Order.Units.archer.fire.damage);
                         }
                         game.soundManager.playSoundRandom("launchArrow",5,px,py);
-                        trace("Angle of bow:",bowAngle);
                         if(mc.scaleX < 0)
                         {
                               game.projectileManager.initArrow(p.x,p.y,180 - bowAngle,v,target.y,angleToTargetW(target,v,angleToTarget(target)),this,damage,poison,this.isFire,this.area,this.areaDamage);
@@ -306,6 +305,32 @@ package com.brockw.stickwar.engine.units
                   {
                         bowAngle += normalise(angleToBowSpace(a) - bowAngle) * 0.1;
                   }
+            }
+            
+            override public function mayAttack(target:Unit) : Boolean
+            {
+                  var CASTLE_WIDTH:int = 200;
+                  if(!this.isCastleArcher && team.direction * px < team.direction * (this.team.homeX + team.direction * CASTLE_WIDTH))
+                  {
+                        return false;
+                  }
+                  if(isIncapacitated())
+                  {
+                        return false;
+                  }
+                  if(target == null)
+                  {
+                        return false;
+                  }
+                  if(this.isDualing == true)
+                  {
+                        return false;
+                  }
+                  if(aimedAtUnit(target,angleToTarget(target)) && this.inRange(target))
+                  {
+                        return true;
+                  }
+                  return false;
             }
             
             override public function walk(x:Number, y:Number, intendedX:int) : void

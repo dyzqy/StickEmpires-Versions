@@ -97,6 +97,7 @@ package com.brockw.stickwar.singleplayer
             
             override protected function updateUnitCreation(game:StickWar) : void
             {
+                  var i:int = 0;
                   var numOfUnit:int = 0;
                   var t:TechItem = null;
                   if(!enemyIsAttacking() && (team.population < 6 || this.enemyAtHome()))
@@ -107,17 +108,30 @@ package com.brockw.stickwar.singleplayer
                               game.requestToSpawn(team.id,Unit.U_CHAOS_MINER);
                         }
                   }
-                  for(var i:int = 0; i < this.buildOrder.length; i++)
+                  var overCompCount:int = 0;
+                  for(i = 0; i < this.buildOrder.length; i++)
                   {
                         numOfUnit = int(team.unitGroups[this.buildOrder[i]].length);
                         if(!(this.buildOrder[i] == Unit.U_BOMBER && team.attackingForcePopulation < 6))
                         {
-                              if(numOfUnit < unitComposition[this.buildOrder[i]])
+                              if(numOfUnit >= unitComposition[this.buildOrder[i]])
                               {
-                                    if(team.unitProductionQueue[team.unitInfo[this.buildOrder[i]][2]].length == 0)
-                                    {
-                                          game.requestToSpawn(team.id,this.buildOrder[i]);
-                                    }
+                                    overCompCount++;
+                              }
+                              else if(team.unitProductionQueue[team.unitInfo[this.buildOrder[i]][2]].length == 0)
+                              {
+                                    game.requestToSpawn(team.id,this.buildOrder[i]);
+                              }
+                        }
+                  }
+                  if(overCompCount >= this.buildOrder.length)
+                  {
+                        for(i = 0; i < this.buildOrder.length; i++)
+                        {
+                              numOfUnit = int(team.unitGroups[this.buildOrder[i]].length);
+                              if(team.unitProductionQueue[team.unitInfo[this.buildOrder[i]][2]].length == 0)
+                              {
+                                    game.requestToSpawn(team.id,this.buildOrder[i]);
                               }
                         }
                   }

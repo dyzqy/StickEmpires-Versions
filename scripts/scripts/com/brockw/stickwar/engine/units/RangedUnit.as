@@ -131,7 +131,7 @@ package com.brockw.stickwar.engine.units
             override public function mayAttack(target:Unit) : Boolean
             {
                   var CASTLE_WIDTH:int = 200;
-                  if(team.direction * px < team.direction * (this.team.homeX - team.direction * CASTLE_WIDTH))
+                  if(team.direction * px < team.direction * (this.team.homeX + team.direction * CASTLE_WIDTH))
                   {
                         return false;
                   }

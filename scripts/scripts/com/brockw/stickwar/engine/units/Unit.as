@@ -28,6 +28,8 @@ package com.brockw.stickwar.engine.units
             
             public static const D_NO_BLOOD:* = 4;
             
+            public static const D_ARROW:* = 8;
+            
             private static const COLLISION_DAMPNING:Number = 0.6;
             
             public static const U_MINER:int = 1;
@@ -243,7 +245,7 @@ package com.brockw.stickwar.engine.units
             
             private var chaosHealRate:Number;
             
-            private var stoned:Boolean;
+            private var _stoned:Boolean;
             
             private var isStoneable:Boolean;
             
@@ -270,6 +272,8 @@ package com.brockw.stickwar.engine.units
             private var towerSpawnGlow:GlowFilter;
             
             private var lastHealthAnimation:int;
+            
+            private var _arrowDeath:Boolean;
             
             public function Unit(game:StickWar)
             {
@@ -305,6 +309,7 @@ package com.brockw.stickwar.engine.units
                   this.towerSpawnGlow = new GlowFilter(glowColor,glowAlpha,glowBlurX,glowBlurY,glowStrength,glowQuality,glowInner,glowKnockout);
                   this.attackStartFrame = 0;
                   this.framesInAttack = 0;
+                  this.arrowDeath = false;
                   super();
             }
             
@@ -1077,6 +1082,10 @@ package com.brockw.stickwar.engine.units
             private function checkCollision(u:Unit) : void
             {
                   var f:Number = NaN;
+                  var myCommand:int = 0;
+                  var opponentCommand:int = 0;
+                  var meStanding:Boolean = false;
+                  var himStanding:Boolean = false;
                   var hitWidth:Number = NaN;
                   var hitAmount:Number = NaN;
                   if(u == this || u.pz != 0)
@@ -1093,6 +1102,10 @@ package com.brockw.stickwar.engine.units
                         if(!u.mayWalkThrough && u.stunTimeLeft == 0 && u.isCollision(this,this.dx,this.dy))
                         {
                               f = 0.15;
+                              myCommand = this.ai.currentCommand.type;
+                              opponentCommand = u.ai.currentCommand.type;
+                              meStanding = myCommand == UnitCommand.STAND;
+                              himStanding = opponentCommand == UnitCommand.STAND;
                               hitWidth = (u.hitBoxWidth * u.perspectiveScale + this.hitBoxWidth * this.perspectiveScale) / 2;
                               hitAmount = Math.abs(px - u.px) / hitWidth;
                               if(hitAmount <= 1)
@@ -1103,16 +1116,16 @@ package com.brockw.stickwar.engine.units
                                     }
                                     if(px != u.px)
                                     {
-                                          if(Util.sgn(this._dx) == Util.sgn(u.dx) || this.team != u.team)
+                                          if(Util.sgn(this._dx) != -Util.sgn(u.dx) || this.team != u.team)
                                           {
                                                 if(Math.abs(this.dx) < 1 && Math.abs(u.dx) < 1 || u.isMiner() && this.isMiner())
                                                 {
                                                       this.nudgeFrame = this.team.game.frame;
-                                                      if(this.mass < u.mass)
+                                                      if(this.mass < u.mass || meStanding)
                                                       {
                                                             this._dx += (1 - hitAmount) * Util.sgn(px - u.px) * 0.51;
                                                       }
-                                                      else
+                                                      if(this.mass >= u.mass || himStanding)
                                                       {
                                                             u._dx += (1 - hitAmount) * Util.sgn(u.px - px) * 0.51;
                                                       }
@@ -1135,11 +1148,11 @@ package com.brockw.stickwar.engine.units
                                                 this.nudgeFrame = this.team.game.frame;
                                                 if(Math.abs(this.dy) < 1 && Math.abs(u.dy) < 1 || u.isMiner() && this.isMiner())
                                                 {
-                                                      if(this.mass < u.mass)
+                                                      if(this.mass < u.mass || meStanding)
                                                       {
                                                             this._dy += (1 - hitAmount) * Util.sgn(py - u.py) * 0.51;
                                                       }
-                                                      else
+                                                      if(this.mass >= u.mass || himStanding)
                                                       {
                                                             u._dy += (1 - hitAmount) * Util.sgn(u.py - py) * 0.51;
                                                       }
@@ -1256,7 +1269,7 @@ package com.brockw.stickwar.engine.units
                   return false;
             }
             
-            override public function damage(type:int, amount:int, inflictor:Entity) : void
+            override public function damage(type:int, amount:int, inflictor:Entity, modifier:Number = 1) : void
             {
                   var dmg:Number = NaN;
                   if(this.isTargetable() && !this.isDualing)
@@ -1275,11 +1288,11 @@ package com.brockw.stickwar.engine.units
                         dmg = 0;
                         if(inflictor != null)
                         {
-                              dmg = inflictor.getDamageToUnit(this);
+                              dmg = inflictor.getDamageToUnit(this) * modifier;
                         }
                         else
                         {
-                              dmg = amount;
+                              dmg = amount * modifier;
                         }
                         if(!(Unit.D_NO_BLOOD & type))
                         {
@@ -1290,13 +1303,20 @@ package com.brockw.stickwar.engine.units
                               dmg *= 1 + this.reaperAmplification;
                         }
                         dmg /= this.team.healthModifier;
+                        dmg *= this.team.enemyTeam.damageModifier;
                         this._health -= dmg;
                         if(this._health <= 0)
                         {
+                              this.arrowDeath = false;
                               this.playDeathSound();
-                              if(type == 1 && this.isFirable)
+                              if(Boolean(type & D_FIRE) && this.isFirable)
                               {
                                     this.isOnFire = true;
+                              }
+                              else if(Boolean(type & Unit.D_ARROW))
+                              {
+                                    this.arrowDeath = true;
+                                    this.forceFaceDirection(Util.sgn(inflictor.px - px));
                               }
                               this.isDieing = true;
                               if(Boolean(this.reaperMc) && this.mc.contains(this.reaperMc))
@@ -1802,6 +1822,26 @@ package com.brockw.stickwar.engine.units
             public function set isTowerSpawned(value:Boolean) : void
             {
                   this._isTowerSpawned = value;
+            }
+            
+            public function get arrowDeath() : Boolean
+            {
+                  return this._arrowDeath;
+            }
+            
+            public function set arrowDeath(value:Boolean) : void
+            {
+                  this._arrowDeath = value;
+            }
+            
+            public function get stoned() : Boolean
+            {
+                  return this._stoned;
+            }
+            
+            public function set stoned(value:Boolean) : void
+            {
+                  this._stoned = value;
             }
       }
 }

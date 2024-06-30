@@ -14,6 +14,7 @@ package com.brockw.stickwar.engine.projectile
                   super();
                   isFire = false;
                   type = BOLT;
+                  hasArrowDeath = true;
                   this.mc = new boltMc();
                   addChild(this.mc);
             }

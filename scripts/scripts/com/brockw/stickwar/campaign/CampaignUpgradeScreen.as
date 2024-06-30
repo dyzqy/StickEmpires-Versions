@@ -177,6 +177,10 @@ package com.brockw.stickwar.campaign
                   this.mc.confirmTech.visible = false;
                   this.mc.confirmTech.yesButton.addEventListener(MouseEvent.CLICK,this.yesButton);
                   this.mc.confirmTech.noButton.addEventListener(MouseEvent.CLICK,this.noButton);
+                  if(this.main.campaign.campaignPoints == 0)
+                  {
+                        this.main.showScreen("campaignMap",false,true);
+                  }
             }
             
             override public function leave() : void

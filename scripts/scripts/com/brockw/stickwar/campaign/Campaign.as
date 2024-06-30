@@ -164,6 +164,9 @@ package com.brockw.stickwar.campaign
             public function save() : void
             {
                   var u:CampaignUpgrade = null;
+                  var levels:Array = null;
+                  var l:Level = null;
+                  var level:Object = null;
                   var cookie:SharedObject = SharedObject.getLocal("stickempiresSave");
                   cookie.data.currentLevel = this.currentLevel;
                   cookie.data.campaignPoints = this.campaignPoints;
@@ -177,6 +180,16 @@ package com.brockw.stickwar.campaign
                               tech.push(u.name);
                         }
                   }
+                  levels = new Array();
+                  for each(l in this.levels)
+                  {
+                        level = new Object();
+                        level["bestTime"] = l.bestTime;
+                        level["totalTime"] = l.totalTime;
+                        level["retries"] = l.retries;
+                        levels.push(level);
+                  }
+                  cookie.data.levels = levels;
                   cookie.data.techAllowed = tech;
                   cookie.flush();
                   trace("Saved the game");
@@ -191,6 +204,9 @@ package com.brockw.stickwar.campaign
             public function load() : void
             {
                   var t:String = null;
+                  var i:int = 0;
+                  var level:Object = null;
+                  var l:Level = null;
                   var cookie:SharedObject = SharedObject.getLocal("stickempiresSave");
                   if(cookie.data.currentLevel <= 0)
                   {
@@ -205,6 +221,16 @@ package com.brockw.stickwar.campaign
                         this.upgradeMap[t].upgraded = 1;
                         this.techAllowed[this.upgradeMap[t].tech] = 1;
                   }
+                  i = 0;
+                  for each(level in cookie.data.levels)
+                  {
+                        l = Level(this.levels[i]);
+                        l.retries = level["retries"];
+                        l.totalTime = level["totalTime"];
+                        l.bestTime = level["bestTime"];
+                        i++;
+                  }
+                  cookie.data.levels = this.levels;
                   trace("Loaded campaign at level ",this.currentLevel);
             }
             

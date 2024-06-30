@@ -2,6 +2,7 @@ package com.brockw.stickwar.engine
 {
       import com.brockw.stickwar.GameScreen;
       import com.brockw.stickwar.engine.multiplayer.moves.ForfeitMove;
+      import com.brockw.stickwar.stickwar2;
       import flash.events.Event;
       import flash.events.MouseEvent;
       import flash.net.URLRequest;
@@ -35,9 +36,17 @@ package com.brockw.stickwar.engine
             
             private function quitButton(evt:Event) : void
             {
-                  var f:ForfeitMove = new ForfeitMove();
-                  gameScreen.doMove(f,gameScreen.team.id);
-                  this.hideMenu();
+                  var f:ForfeitMove = null;
+                  if(gameScreen.main is stickwar2)
+                  {
+                        gameScreen.main.showScreen("mainMenu",true,true);
+                  }
+                  else
+                  {
+                        f = new ForfeitMove();
+                        gameScreen.doMove(f,gameScreen.team.id);
+                        this.hideMenu();
+                  }
             }
             
             private function restartButton(evt:Event) : void

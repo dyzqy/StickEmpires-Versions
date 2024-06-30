@@ -120,6 +120,7 @@ package com.brockw.stickwar.singleplayer
             {
                   var i:int = 0;
                   var gold:Ore = null;
+                  var found:Boolean = false;
                   if(this.team.direction == 1)
                   {
                         for(i = 0; i < game.map.gold.length; i++)
@@ -127,6 +128,7 @@ package com.brockw.stickwar.singleplayer
                               gold = game.map.gold[i];
                               if(this.getFreeMine(miner,game,gold))
                               {
+                                    found = true;
                                     break;
                               }
                         }
@@ -138,9 +140,14 @@ package com.brockw.stickwar.singleplayer
                               gold = game.map.gold[i];
                               if(this.getFreeMine(miner,game,gold))
                               {
+                                    found = true;
                                     break;
                               }
                         }
+                  }
+                  if(!found)
+                  {
+                        MinerAi(miner.ai).targetOre = null;
                   }
             }
             
@@ -268,7 +275,11 @@ package com.brockw.stickwar.singleplayer
             protected function updateGlobalStrategy(game:StickWar) : void
             {
                   var movePos:Number = NaN;
-                  if(this.enemyIsWeak())
+                  if(this.isArmyHealers())
+                  {
+                        this.defendGroup();
+                  }
+                  else if(this.enemyIsWeak())
                   {
                         this.attackMoveGroupTo(this.team.medianPosition + this.team.direction * 250);
                   }
@@ -301,6 +312,11 @@ package com.brockw.stickwar.singleplayer
             
             protected function updateSpellCasters(game:StickWar) : void
             {
+            }
+            
+            protected function isArmyHealers() : Boolean
+            {
+                  return false;
             }
             
             protected function enemyIsWeak() : Boolean

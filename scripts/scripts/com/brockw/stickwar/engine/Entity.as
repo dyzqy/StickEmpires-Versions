@@ -73,7 +73,7 @@ package com.brockw.stickwar.engine
                   MovieClip(canvas).graphics.drawRect(x,y,1,1);
             }
             
-            public function damage(type:int, amount:int, inflictor:Entity) : void
+            public function damage(type:int, amount:int, inflictor:Entity, modifier:Number = 1) : void
             {
             }
             

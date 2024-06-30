@@ -318,11 +318,11 @@ package com.brockw.stickwar.engine.units
                   }
             }
             
-            override public function damage(type:int, amount:int, inflictor:Entity) : void
+            override public function damage(type:int, amount:int, inflictor:Entity, modifier:Number = 1) : void
             {
                   if(this.inBlock)
                   {
-                        super.damage(type,amount - amount * this.shieldwallDamageReduction,inflictor);
+                        super.damage(type,amount - amount * this.shieldwallDamageReduction,inflictor,1 - this.shieldwallDamageReduction);
                   }
                   else
                   {

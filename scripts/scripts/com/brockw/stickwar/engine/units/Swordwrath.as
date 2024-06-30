@@ -32,6 +32,8 @@ package com.brockw.stickwar.engine.units
             
             private var rageMaxVelocity:Number;
             
+            private var lastWasStanding:Boolean;
+            
             public function Swordwrath(game:StickWar)
             {
                   super(game);
@@ -45,6 +47,7 @@ package com.brockw.stickwar.engine.units
                   this.rageSpellGlow.color = 16711680;
                   this.rageSpellGlow.blurX = 10;
                   this.rageSpellGlow.blurY = 10;
+                  this.lastWasStanding = false;
             }
             
             public static function setItem(mc:MovieClip, weapon:String, armor:String, misc:String) : void
@@ -111,6 +114,7 @@ package com.brockw.stickwar.engine.units
             
             override public function update(game:StickWar) : void
             {
+                  var currentLabel:String = null;
                   this.rageSpell.update();
                   updateCommon(game);
                   if(this.rageSpell.inEffect())
@@ -149,7 +153,18 @@ package com.brockw.stickwar.engine.units
                               }
                               else
                               {
-                                    _mc.gotoAndStop("stand");
+                                    currentLabel = _mc.currentFrameLabel;
+                                    if(!(currentLabel == "stand" || currentLabel == "stand_breath"))
+                                    {
+                                          if(game.random.nextNumber() < 0.1)
+                                          {
+                                                _mc.gotoAndStop("stand");
+                                          }
+                                          else
+                                          {
+                                                _mc.gotoAndStop("stand_breath");
+                                          }
+                                    }
                               }
                         }
                         else if(_state == S_ATTACK)
@@ -188,7 +203,7 @@ package com.brockw.stickwar.engine.units
                         }
                         else
                         {
-                              _mc.gotoAndStop(getDeathLabel(game));
+                              _mc.gotoAndStop(this.getDeathLabel(game));
                               this.team.removeUnit(this,game);
                               isDead = true;
                         }
@@ -206,6 +221,24 @@ package com.brockw.stickwar.engine.units
                         MovieClip(_mc.mc).nextFrame();
                   }
                   Swordwrath.setItem(_swordwrath(mc),team.loadout.getItem(this.type,MarketItem.T_WEAPON),"","");
+            }
+            
+            override protected function getDeathLabel(game:StickWar) : String
+            {
+                  if(arrowDeath)
+                  {
+                        return "arrow_death";
+                  }
+                  if(isOnFire)
+                  {
+                        return "fireDeath";
+                  }
+                  if(stoned)
+                  {
+                        return "stone";
+                  }
+                  var id:int = team.game.random.nextInt() % this._deathLabels.length;
+                  return "death_" + this._deathLabels[id];
             }
             
             override public function get damageToArmour() : Number

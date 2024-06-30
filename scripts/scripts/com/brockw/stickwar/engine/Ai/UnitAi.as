@@ -279,7 +279,14 @@ package com.brockw.stickwar.engine.Ai
                               yMovement = 0;
                               if(target.type != Unit.U_WALL && Math.abs(this.unit.px - target.px) < 200)
                               {
-                                    yMovement = target.py - this.unit.py;
+                                    if(Math.abs(this.unit.py - target.py) < 40)
+                                    {
+                                          yMovement = 0;
+                                    }
+                                    else
+                                    {
+                                          yMovement = target.py - this.unit.py;
+                                    }
                               }
                               if(Util.sgn(target.dx) == Util.sgn(this.unit.dx) && Math.abs(target.dx) > 1)
                               {
@@ -408,8 +415,7 @@ package com.brockw.stickwar.engine.Ai
                         {
                               this.unit.ungarrison();
                         }
-                        this.currentTarget = null;
-                        this.checkForUnitAttack(game);
+                        this.currentTarget = this.checkForUnitAttack(game);
                         if(this.unit.type == Unit.U_MONK && this.currentTarget != null)
                         {
                               this.mayAttack = true;

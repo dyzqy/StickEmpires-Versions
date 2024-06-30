@@ -108,7 +108,7 @@ package com.brockw.stickwar.engine.units
                   ai.update(game);
             }
             
-            override public function damage(type:int, amount:int, inflictor:Entity) : void
+            override public function damage(type:int, amount:int, inflictor:Entity, modifier:Number = 1) : void
             {
                   var healthBefore:* = _health;
                   super.damage(type,amount,inflictor);
