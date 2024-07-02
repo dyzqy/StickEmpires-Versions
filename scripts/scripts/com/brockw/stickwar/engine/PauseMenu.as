@@ -58,6 +58,11 @@ package com.brockw.stickwar.engine
                   this.isShowing = true;
                   this.mouseChildren = true;
                   this.mouseEnabled = true;
+                  if(this.gameScreen.contains(this))
+                  {
+                        this.gameScreen.removeChild(this);
+                        this.gameScreen.addChild(this);
+                  }
             }
             
             public function hideMenu() : void

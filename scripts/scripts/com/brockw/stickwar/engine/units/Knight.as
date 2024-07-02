@@ -270,7 +270,10 @@ package com.brockw.stickwar.engine.units
                   {
                         Util.animateMovieClipBasic(_mc.mc.dust);
                   }
-                  Knight.setItem(_knight(mc),team.loadout.getItem(this.type,MarketItem.T_WEAPON),team.loadout.getItem(this.type,MarketItem.T_ARMOR),team.loadout.getItem(this.type,MarketItem.T_MISC));
+                  if(!hasDefaultLoadout)
+                  {
+                        Knight.setItem(_knight(mc),team.loadout.getItem(this.type,MarketItem.T_WEAPON),team.loadout.getItem(this.type,MarketItem.T_ARMOR),team.loadout.getItem(this.type,MarketItem.T_MISC));
+                  }
             }
             
             override public function get damageToArmour() : Number

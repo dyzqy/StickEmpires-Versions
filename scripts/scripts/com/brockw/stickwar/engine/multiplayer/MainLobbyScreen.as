@@ -87,6 +87,7 @@ package com.brockw.stickwar.engine.multiplayer
                   this.mc.playButton.addEventListener(MouseEvent.CLICK,this.playButton);
                   this.mc.tutorialButton.addEventListener(MouseEvent.CLICK,this.tutorialButton);
                   this.mc.gameGuideButton.addEventListener(MouseEvent.CLICK,this.gameGuideButton);
+                  this.mc.campaignButton.addEventListener(MouseEvent.CLICK,this.campaignButton);
                   addEventListener(Event.ENTER_FRAME,this.update);
                   params = new SFSObject();
                   params.putInt("index",0);
@@ -122,11 +123,23 @@ package com.brockw.stickwar.engine.multiplayer
                   this.main.soundManager.playSoundFullVolume("StartMatchmaking");
             }
             
+            private function campaignButton(e:Event) : void
+            {
+                  var url:URLRequest = new URLRequest("http://www.stickpage.com/stickwar2gameplay.shtml");
+                  navigateToURL(url,"_blank");
+                  if(Boolean(this.main.tracker))
+                  {
+                        this.main.tracker.trackEvent("link","http://www.stickpage.com/stickwar2gameplay.shtml");
+                  }
+            }
+            
             private function tutorialButton(evt:MouseEvent) : void
             {
                   this.main.campaign.currentLevel = 0;
                   this.main.campaign.justTutorial = true;
                   this.main.showScreen("campaignGameScreen");
+                  var s:SFSObject = new SFSObject();
+                  this.main.sfs.send(new ExtensionRequest("cancelMatch",s));
             }
             
             override public function leave() : void
@@ -134,6 +147,8 @@ package com.brockw.stickwar.engine.multiplayer
                   this.mc.playButton.removeEventListener(MouseEvent.CLICK,this.playButton);
                   removeEventListener(Event.ENTER_FRAME,this.update);
                   this.mc.gameGuideButton.removeEventListener(MouseEvent.CLICK,this.gameGuideButton);
+                  this.mc.campaignButton.removeEventListener(MouseEvent.CLICK,this.campaignButton);
+                  this.mc.tutorialButton.removeEventListener(MouseEvent.CLICK,this.tutorialButton);
             }
       }
 }

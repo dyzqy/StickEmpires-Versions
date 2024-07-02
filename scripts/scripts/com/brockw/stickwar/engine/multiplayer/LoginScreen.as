@@ -164,7 +164,7 @@ package com.brockw.stickwar.engine.multiplayer
                   }
                   else
                   {
-                        this.loginMc.failBox.loginError.text = "Error loging in";
+                        this.loginMc.failBox.loginError.text = "Error logging in";
                   }
                   this.loginMc.loginBox.usernameInput.buttonMode = true;
                   this.justFailed = true;

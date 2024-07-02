@@ -100,6 +100,11 @@ package com.brockw.stickwar.market
                   }
             }
             
+            public function unitHasDefaultLoadout(unit:int) : Boolean
+            {
+                  return this.getItem(unit,MarketItem.T_WEAPON) == "Default" && this.getItem(unit,MarketItem.T_ARMOR) == "Default" && this.getItem(unit,MarketItem.T_MISC) == "Default";
+            }
+            
             public function getItem(unit:int, part:int) : String
             {
                   if(!(unit in this._data))

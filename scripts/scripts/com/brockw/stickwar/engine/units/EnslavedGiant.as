@@ -200,7 +200,10 @@ package com.brockw.stickwar.engine.units
                   }
                   MovieClip(_mc.mc).nextFrame();
                   _mc.mc.stop();
-                  EnslavedGiant.setItem(mc,team.loadout.getItem(this.type,MarketItem.T_WEAPON),"","");
+                  if(!hasDefaultLoadout)
+                  {
+                        EnslavedGiant.setItem(mc,team.loadout.getItem(this.type,MarketItem.T_WEAPON),"","");
+                  }
             }
             
             override public function aim(target:Unit) : void

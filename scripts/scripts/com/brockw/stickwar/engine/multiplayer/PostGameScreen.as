@@ -211,7 +211,7 @@ package com.brockw.stickwar.engine.multiplayer
                   else
                   {
                         this.mc.unlockCard.visible = false;
-                        this.mc.exit.text.text = "Quit";
+                        this.mc.exit.text.text = "Continue";
                         this.mc.singlePlayerOverlay.visible = false;
                         this.mc.timer.visible = false;
                         this.mc.saveReplay.text.text = "Game Guide";

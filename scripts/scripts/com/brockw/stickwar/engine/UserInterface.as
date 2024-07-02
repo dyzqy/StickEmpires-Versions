@@ -89,13 +89,19 @@ package com.brockw.stickwar.engine
             
             private var _isSound:Boolean;
             
+            private var mouseOverFrames:int;
+            
+            private var lastButton:SimpleButton;
+            
             public function UserInterface(main:BaseMain, gameScreen:GameScreen)
             {
                   ++main.loadingFraction;
+                  this.lastButton = null;
                   this.main = main;
                   this.gameScreen = gameScreen;
                   super();
                   ++main.loadingFraction;
+                  this.mouseOverFrames = 0;
             }
             
             public function init() : void
@@ -137,7 +143,7 @@ package com.brockw.stickwar.engine
                   this._chat = new Chat(this.gameScreen);
                   ++this.main.loadingFraction;
                   addChild(this._chat);
-                  this.addChild(this.pauseMenu);
+                  this.gameScreen.addChild(this.pauseMenu);
                   this.helpMessage = new HelpMessage(this.gameScreen.game);
                   ++this.main.loadingFraction;
                   addChild(this.helpMessage);
@@ -169,6 +175,7 @@ package com.brockw.stickwar.engine
                         this.hud.hud.leftMinerButton.addEventListener(MouseEvent.CLICK,this.unGarrisonMinerButton);
                         this.hud.hud.rightMinerButton.addEventListener(MouseEvent.CLICK,this.garrisonMinerButton);
                   }
+                  this.hud.hud.menuButton.addEventListener(MouseEvent.CLICK,this.openMenu);
                   ++this.main.loadingFraction;
                   this.gameScreen.team.initTeamButtons(this.gameScreen);
                   ++this.main.loadingFraction;
@@ -181,6 +188,9 @@ package com.brockw.stickwar.engine
                         this.gameScreen.game.soundManager.playSoundInBackground("chaosInGame");
                   }
                   this.addChild(this.gameScreen.game.cursorSprite);
+                  this.hud.hud.lowButton.addEventListener(MouseEvent.CLICK,this.lowButton);
+                  this.hud.hud.medButton.addEventListener(MouseEvent.CLICK,this.medButton);
+                  this.hud.hud.highButton.addEventListener(MouseEvent.CLICK,this.highButton);
             }
             
             private function exitButton(evt:Event) : void
@@ -194,6 +204,26 @@ package com.brockw.stickwar.engine
             {
                   trace("PAUSE GAME");
                   this.gameScreen.doMove(new PauseMove(),this.team.id);
+            }
+            
+            private function openMenu(e:Event) : void
+            {
+                  this.pauseMenu.showMenu();
+            }
+            
+            private function lowButton(e:Event) : void
+            {
+                  this.gameScreen.quality = GameScreen.S_HIGH_QUALITY;
+            }
+            
+            private function medButton(e:Event) : void
+            {
+                  this.gameScreen.quality = GameScreen.S_LOW_QUALITY;
+            }
+            
+            private function highButton(e:Event) : void
+            {
+                  this.gameScreen.quality = GameScreen.S_MEDIUM_QUALITY;
             }
             
             public function cleanUp() : void
@@ -216,6 +246,12 @@ package com.brockw.stickwar.engine
                         this.hud.hud.garrisonButton.removeEventListener(MouseEvent.CLICK,this.attackButton);
                   }
                   this.hud.hud.defendButton.removeEventListener(MouseEvent.CLICK,this.defendButton);
+                  this.hud.hud.menuButton.removeEventListener(MouseEvent.CLICK,this.openMenu);
+                  this.hud.hud.lowButton.removeEventListener(MouseEvent.CLICK,this.lowButton);
+                  this.hud.hud.medButton.removeEventListener(MouseEvent.CLICK,this.medButton);
+                  this.hud.hud.highButton.removeEventListener(MouseEvent.CLICK,this.highButton);
+                  this.hud.hud.leftMinerButton.removeEventListener(MouseEvent.CLICK,this.unGarrisonMinerButton);
+                  this.hud.hud.rightMinerButton.removeEventListener(MouseEvent.CLICK,this.garrisonMinerButton);
                   this._hud = null;
                   Util.recursiveRemoval(Sprite(this));
             }
@@ -342,6 +378,104 @@ package com.brockw.stickwar.engine
                   var unit:String = null;
                   var x:int = 0;
                   var y:int = 0;
+                  var delayOnShow:int = 23;
+                  if(Boolean(this.hud.hud.attackButton.hitTestPoint(stage.mouseX,stage.mouseY,true)))
+                  {
+                        if(this.lastButton != this.hud.hud.attackButton)
+                        {
+                              this.mouseOverFrames = 0;
+                        }
+                        ++this.mouseOverFrames;
+                        if(this.mouseOverFrames > delayOnShow)
+                        {
+                              this.gameScreen.game.tipBox.displayTip("Attack","Command all units to attack the enemy.",0,0,0,0,true);
+                        }
+                        this.lastButton = this.hud.hud.attackButton;
+                  }
+                  else if(Boolean(this.hud.hud.defendButton.hitTestPoint(stage.mouseX,stage.mouseY,true)))
+                  {
+                        if(this.lastButton != this.hud.hud.defendButton)
+                        {
+                              this.mouseOverFrames = 0;
+                        }
+                        ++this.mouseOverFrames;
+                        if(this.mouseOverFrames > delayOnShow)
+                        {
+                              this.gameScreen.game.tipBox.displayTip("Defend","Command all units to defend the statue.",0,0,0,0,true);
+                        }
+                        this.lastButton = this.hud.hud.defendButton;
+                  }
+                  else if(Boolean(this.hud.hud.garrisonButton.hitTestPoint(stage.mouseX,stage.mouseY,true)))
+                  {
+                        if(this.lastButton != this.hud.hud.garrisonButton)
+                        {
+                              this.mouseOverFrames = 0;
+                        }
+                        ++this.mouseOverFrames;
+                        if(this.mouseOverFrames > delayOnShow)
+                        {
+                              this.gameScreen.game.tipBox.displayTip("Garrison","Command all units to garrison inside the castle.",0,0,0,0,true);
+                        }
+                        this.lastButton = this.hud.hud.garrisonButton;
+                  }
+                  else if(Boolean(this.hud.hud.rightMinerButton.hitTestPoint(stage.mouseX,stage.mouseY,true)))
+                  {
+                        if(this.lastButton != this.hud.hud.rightMinerButton)
+                        {
+                              this.mouseOverFrames = 0;
+                        }
+                        ++this.mouseOverFrames;
+                        if(this.mouseOverFrames > delayOnShow)
+                        {
+                              if(this.gameScreen.team == this.gameScreen.game.teamB)
+                              {
+                                    this.gameScreen.game.tipBox.displayTip("Garrison Miners","Command all miners to garrison within the castle.",0,0,0,0,true);
+                              }
+                              else
+                              {
+                                    this.gameScreen.game.tipBox.displayTip("Resume Mining","Command all miners to resume mining.",0,0,0,0,true);
+                              }
+                        }
+                        this.lastButton = this.hud.hud.rightMinerButton;
+                  }
+                  else if(Boolean(this.hud.hud.leftMinerButton.hitTestPoint(stage.mouseX,stage.mouseY,true)))
+                  {
+                        if(this.lastButton != this.hud.hud.leftMinerButton)
+                        {
+                              this.mouseOverFrames = 0;
+                        }
+                        ++this.mouseOverFrames;
+                        if(this.mouseOverFrames > delayOnShow)
+                        {
+                              if(this.gameScreen.team == this.gameScreen.game.teamA)
+                              {
+                                    this.gameScreen.game.tipBox.displayTip("Garrison Miners","Command all miners to garrison within the castle.",0,0,0,0,true);
+                              }
+                              else
+                              {
+                                    this.gameScreen.game.tipBox.displayTip("Resume Mining","Command all miners to resume mining.",0,0,0,0,true);
+                              }
+                        }
+                        this.lastButton = this.hud.hud.leftMinerButton;
+                  }
+                  else if(Boolean(this.hud.hud.lowButton.hitTestPoint(stage.mouseX,stage.mouseY,true)))
+                  {
+                        if(this.lastButton != this.hud.hud.lowButton)
+                        {
+                              this.mouseOverFrames = 0;
+                        }
+                        ++this.mouseOverFrames;
+                        if(this.mouseOverFrames > delayOnShow)
+                        {
+                              this.gameScreen.game.tipBox.displayTip("Toggle Quality","Toggles graphics quality to improve performance for slower computers.",0,0,0,0,true);
+                        }
+                        this.lastButton = this.hud.hud.lowButton;
+                  }
+                  else
+                  {
+                        this.mouseOverFrames = 0;
+                        this.lastButton = null;
+                  }
                   this.helpMessage.update(this.gameScreen.game);
                   this.pauseMenu.update();
                   this.selectedUnits.update(this.gameScreen.game);
@@ -611,6 +745,22 @@ package com.brockw.stickwar.engine
                         }
                   }
                   this._hud.update(this.gameScreen.game,this.team);
+                  this.hud.hud.lowButton.visible = false;
+                  this.hud.hud.medButton.visible = false;
+                  this.hud.hud.highButton.visible = false;
+                  if(this.gameScreen.quality == GameScreen.S_LOW_QUALITY)
+                  {
+                        this.hud.hud.lowButton.visible = true;
+                  }
+                  else if(this.gameScreen.quality == GameScreen.S_MEDIUM_QUALITY)
+                  {
+                        this.hud.hud.medButton.visible = true;
+                  }
+                  else if(this.gameScreen.quality == GameScreen.S_HIGH_QUALITY)
+                  {
+                        this.hud.hud.highButton.visible = true;
+                  }
+                  this.actionInterface.updateActionAlpha(this.gameScreen);
             }
             
             public function mouseUpEvent(evt:MouseEvent) : void

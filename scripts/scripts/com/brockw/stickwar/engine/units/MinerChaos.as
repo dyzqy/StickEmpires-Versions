@@ -363,7 +363,7 @@ package com.brockw.stickwar.engine.units
                   {
                         setItem(_mc,"Default","Default","Bone Bag");
                   }
-                  else
+                  else if(!hasDefaultLoadout)
                   {
                         setItem(_mc,team.loadout.getItem(this.type,MarketItem.T_WEAPON),team.loadout.getItem(this.type,MarketItem.T_ARMOR),team.loadout.getItem(this.type,MarketItem.T_MISC));
                   }

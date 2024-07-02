@@ -9,6 +9,7 @@ package com.brockw.stickwar.campaign.controllers
       import com.brockw.stickwar.engine.multiplayer.moves.*;
       import com.brockw.stickwar.engine.units.*;
       import flash.display.MovieClip;
+      import flash.geom.ColorTransform;
       
       public class CampaignCutScene1 extends CampaignController
       {
@@ -52,6 +53,10 @@ package com.brockw.stickwar.campaign.controllers
             
             private var message:InGameMessage;
             
+            private var rebelsAreEvil:Boolean;
+            
+            private var rebels:Array;
+            
             public function CampaignCutScene1(gameScreen:GameScreen)
             {
                   super(gameScreen);
@@ -60,17 +65,21 @@ package com.brockw.stickwar.campaign.controllers
                   this.overlay = new MovieClip();
                   this.overlay.graphics.beginFill(0,1);
                   this.overlay.graphics.drawRect(0,0,850,750);
+                  this.rebels = [];
+                  this.rebelsAreEvil = true;
             }
             
             override public function update(gameScreen:GameScreen) : void
             {
                   var unit:Unit = null;
+                  var c:ColorTransform = null;
                   var numGiants:int = 0;
                   var giant:Giant = null;
                   var game:StickWar = null;
                   var u1:Unit = null;
                   var frontPosition:Number = NaN;
                   var m:MoveCommand = null;
+                  var r:int = 0;
                   if(Boolean(this.message))
                   {
                         this.message.update();
@@ -80,6 +89,17 @@ package com.brockw.stickwar.campaign.controllers
                   if(Boolean(this.medusa))
                   {
                         this.medusa.faceDirection(-1);
+                  }
+                  if(!this.rebelsAreEvil)
+                  {
+                        for each(unit in this.rebels)
+                        {
+                              c = unit.mc.transform.colorTransform;
+                              c.redOffset = 0;
+                              c.blueOffset = 0;
+                              c.greenOffset = 0;
+                              unit.mc.transform.colorTransform = c;
+                        }
                   }
                   if(this.state != S_BEFORE_CUTSCENE)
                   {
@@ -248,6 +268,7 @@ package com.brockw.stickwar.campaign.controllers
                               u1.ai.setCommand(game,m);
                               u1.ai.mayAttack = false;
                               u1.ai.mayMoveToAttack = false;
+                              this.rebels.push(u1);
                               u1 = game.unitFactory.getUnit(Unit.U_MAGIKILL);
                               gameScreen.team.spawn(u1,game);
                               u1.px = frontPosition;
@@ -258,6 +279,7 @@ package com.brockw.stickwar.campaign.controllers
                               u1.ai.setCommand(game,m);
                               u1.ai.mayAttack = false;
                               u1.ai.mayMoveToAttack = false;
+                              this.rebels.push(u1);
                               u1 = game.unitFactory.getUnit(Unit.U_MONK);
                               gameScreen.team.spawn(u1,game);
                               u1.px = frontPosition - 75;
@@ -268,6 +290,7 @@ package com.brockw.stickwar.campaign.controllers
                               u1.ai.setCommand(game,m);
                               u1.ai.mayAttack = false;
                               u1.ai.mayMoveToAttack = false;
+                              this.rebels.push(u1);
                               u1 = game.unitFactory.getUnit(Unit.U_ARCHER);
                               gameScreen.team.spawn(u1,game);
                               u1.px = frontPosition - 75;
@@ -278,6 +301,7 @@ package com.brockw.stickwar.campaign.controllers
                               u1.ai.setCommand(game,m);
                               u1.ai.mayAttack = false;
                               u1.ai.mayMoveToAttack = false;
+                              this.rebels.push(u1);
                               u1 = game.unitFactory.getUnit(Unit.U_SPEARTON);
                               gameScreen.team.spawn(u1,game);
                               u1.px = frontPosition - 75;
@@ -288,6 +312,16 @@ package com.brockw.stickwar.campaign.controllers
                               u1.ai.setCommand(game,m);
                               u1.ai.mayAttack = false;
                               u1.ai.mayMoveToAttack = false;
+                              this.rebels.push(u1);
+                              for each(unit in this.rebels)
+                              {
+                                    c = unit.mc.transform.colorTransform;
+                                    r = game.random.nextInt();
+                                    c.redOffset = 75;
+                                    c.blueOffset = 0;
+                                    c.greenOffset = 0;
+                                    unit.mc.transform.colorTransform = c;
+                              }
                               this.counter = 0;
                         }
                   }
@@ -350,6 +384,11 @@ package com.brockw.stickwar.campaign.controllers
                         if(this.message.hasFinishedPlayingSound())
                         {
                               this.state = S_REBELS_TALK_4;
+                              this.rebelsAreEvil = false;
+                              for each(unit in this.rebels)
+                              {
+                                    unit.team.game.projectileManager.initTowerSpawn(unit.px,unit.py,unit.team);
+                              }
                         }
                   }
                   else if(this.state == S_REBELS_TALK_4)

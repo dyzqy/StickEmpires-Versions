@@ -235,7 +235,10 @@ package com.brockw.stickwar.engine.units
                               MovieClip(_mc.mc.quiver).gotoAndStop(1);
                         }
                   }
-                  Wingidon.setItem(mc,team.loadout.getItem(this.type,MarketItem.T_WEAPON),team.loadout.getItem(this.type,MarketItem.T_ARMOR),team.loadout.getItem(this.type,MarketItem.T_MISC));
+                  if(!hasDefaultLoadout)
+                  {
+                        Wingidon.setItem(mc,team.loadout.getItem(this.type,MarketItem.T_WEAPON),team.loadout.getItem(this.type,MarketItem.T_ARMOR),team.loadout.getItem(this.type,MarketItem.T_MISC));
+                  }
             }
             
             override public function mayAttack(target:Unit) : Boolean

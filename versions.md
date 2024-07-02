@@ -1,3 +1,11 @@
+## version 1.30
+- Eclipsor damage decreased from 15 to 14.
+- Miner tower now does +4 damage to armored.
+- Rage cost increased form 50 to 100.
+- Shadowrath damage decreased from 15 to 14.
+- game now doesn't automatically change res, but instead there is a button to do so.
+- New pause menu button on hud.
+
 ## version 1.29
 - First version of campaign with stickwar2 class.
 - Campaign saves now save best times.

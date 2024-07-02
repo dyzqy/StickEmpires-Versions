@@ -46,6 +46,16 @@ package com.brockw.stickwar.campaign
                   this.shouldCompliment = this.compliment = false;
             }
             
+            public function isMessageShowing() : Boolean
+            {
+                  return !this.isTransitioning && this.mc.text.text == this.newTxt;
+            }
+            
+            public function isShowingNewMessage() : Boolean
+            {
+                  return this.mc.text.text == this.newTxt;
+            }
+            
             public function hasFinishedPlayingSound() : Boolean
             {
                   return this.mc.text.text == this.newTxt && getTimer() - this.startPlayingTime > this.length;

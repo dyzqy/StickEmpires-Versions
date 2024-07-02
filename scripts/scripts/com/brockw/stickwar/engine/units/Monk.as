@@ -259,7 +259,10 @@ package com.brockw.stickwar.engine.units
                         MovieClip(_mc.mc).nextFrame();
                         _mc.mc.stop();
                   }
-                  Monk.setItem(_cleric(mc),team.loadout.getItem(this.type,MarketItem.T_WEAPON),"","");
+                  if(!hasDefaultLoadout)
+                  {
+                        Monk.setItem(_cleric(mc),team.loadout.getItem(this.type,MarketItem.T_WEAPON),"","");
+                  }
             }
             
             override public function setActionInterface(a:ActionInterface) : void

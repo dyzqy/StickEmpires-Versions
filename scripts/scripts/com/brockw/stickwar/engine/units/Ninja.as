@@ -308,7 +308,7 @@ package com.brockw.stickwar.engine.units
                         }
                         else if(_state == S_ATTACK)
                         {
-                              if(MovieClip(mc.mc).currentFrameLabel == "swing")
+                              if(mc.mc.swing != null)
                               {
                                     team.game.soundManager.playSoundRandom("ninjaSwipe",4,px,py);
                               }
@@ -367,7 +367,10 @@ package com.brockw.stickwar.engine.units
                         mc.filters = [];
                         mc.mc.alpha = 1;
                   }
-                  Ninja.setItem(_ninja(mc),team.loadout.getItem(this.type,MarketItem.T_WEAPON),team.loadout.getItem(this.type,MarketItem.T_ARMOR),team.loadout.getItem(this.type,MarketItem.T_MISC));
+                  if(!hasDefaultLoadout)
+                  {
+                        Ninja.setItem(_ninja(mc),team.loadout.getItem(this.type,MarketItem.T_WEAPON),team.loadout.getItem(this.type,MarketItem.T_ARMOR),team.loadout.getItem(this.type,MarketItem.T_MISC));
+                  }
             }
             
             override public function isTargetable() : Boolean

@@ -169,7 +169,7 @@ package com.brockw.stickwar.engine.units
                         }
                         else if(_state == S_ATTACK)
                         {
-                              if(MovieClip(mc.mc).currentFrameLabel == "swing")
+                              if(mc.mc.swing != null)
                               {
                                     team.game.soundManager.playSound("swordwrathSwing1",px,py);
                               }
@@ -208,7 +208,7 @@ package com.brockw.stickwar.engine.units
                               isDead = true;
                         }
                   }
-                  if(isDead)
+                  if(isDead || _isDualing)
                   {
                         Util.animateMovieClip(_mc,0);
                   }
@@ -220,7 +220,10 @@ package com.brockw.stickwar.engine.units
                         }
                         MovieClip(_mc.mc).nextFrame();
                   }
-                  Swordwrath.setItem(_swordwrath(mc),team.loadout.getItem(this.type,MarketItem.T_WEAPON),"","");
+                  if(!hasDefaultLoadout)
+                  {
+                        Swordwrath.setItem(_swordwrath(mc),team.loadout.getItem(this.type,MarketItem.T_WEAPON),"","");
+                  }
             }
             
             override protected function getDeathLabel(game:StickWar) : String

@@ -240,7 +240,7 @@ package com.brockw.stickwar.engine.units
                   {
                         Archer.setItem(mc,"Default","Basic Helmet","Default");
                   }
-                  else
+                  else if(!hasDefaultLoadout)
                   {
                         Archer.setItem(mc,team.loadout.getItem(this.type,MarketItem.T_WEAPON),team.loadout.getItem(this.type,MarketItem.T_ARMOR),team.loadout.getItem(this.type,MarketItem.T_MISC));
                   }

@@ -43,23 +43,33 @@ package com.brockw.stickwar.engine
                   field.visible = true;
             }
             
-            public function displayTip(title:String, info:String, time:int, gold:int, mana:int, population:int) : void
+            public function displayTip(title:String, info:String, time:int = 0, gold:int = 0, mana:int = 0, population:int = 0, hideStats:Boolean = false) : void
             {
-                  this.setField(info,this.toolBox.text);
+                  this.setField(info,this.toolBox.textBox.text);
                   this.setField(title,this.toolBox.title);
-                  this.setField("" + gold,this.toolBox.gold);
-                  this.setField("" + time,this.toolBox.time);
-                  this.setField("" + mana,this.toolBox.mana);
-                  if(population == 0)
+                  if(!hideStats)
                   {
-                        this.toolBox.population.visible = false;
-                        this.toolBox.populationSymbol.visible = false;
+                        this.toolBox.statDisplay.visible = true;
+                        this.toolBox.textBox.y = 497.6;
+                        this.setField("" + gold,this.toolBox.statDisplay.gold);
+                        this.setField("" + Math.round(time / 30) + "s",this.toolBox.statDisplay.time);
+                        this.setField("" + mana,this.toolBox.statDisplay.mana);
+                        if(population == 0)
+                        {
+                              this.toolBox.statDisplay.population.visible = false;
+                              this.toolBox.statDisplay.populationSymbol.visible = false;
+                        }
+                        else
+                        {
+                              this.toolBox.statDisplay.population.visible = true;
+                              this.toolBox.statDisplay.populationSymbol.visible = true;
+                              this.setField("" + population,this.toolBox.statDisplay.population);
+                        }
                   }
                   else
                   {
-                        this.toolBox.population.visible = true;
-                        this.toolBox.populationSymbol.visible = true;
-                        this.setField("" + population,this.toolBox.population);
+                        this.toolBox.statDisplay.visible = false;
+                        this.toolBox.textBox.y = 421.6;
                   }
                   if(!this.contains(this.toolBox))
                   {

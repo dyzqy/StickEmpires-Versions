@@ -319,7 +319,6 @@ package com.brockw.stickwar.engine.units
                               else
                               {
                                     t = MovieClip(_mc).currentFrameLabel;
-                                    Util.animateMovieClip(mc.mc);
                                     if(t != "bendDownToPray" && t != "pray")
                                     {
                                           MovieClip(_mc).gotoAndStop("bendDownToPray");
@@ -331,10 +330,17 @@ package com.brockw.stickwar.engine.units
                                                 MovieClip(_mc).gotoAndStop("pray");
                                           }
                                     }
-                                    else if(MovieClip(_mc.mc).currentFrame == MovieClip(_mc.mc).totalFrames)
+                                    else
                                     {
-                                          MovieClip(_mc.mc).gotoAndStop(1);
-                                          this.oreInBag += MinerAi(ai).targetOre.mine(game.xml.xml.Order.Units.miner.miningRate,this);
+                                          if(game.gameScreen.hasEffects)
+                                          {
+                                                Util.animateMovieClip(mc.mc);
+                                          }
+                                          if(MovieClip(_mc.mc).currentFrame == MovieClip(_mc.mc).totalFrames)
+                                          {
+                                                MovieClip(_mc.mc).gotoAndStop(1);
+                                                this.oreInBag += MinerAi(ai).targetOre.mine(game.xml.xml.Order.Units.miner.miningRate,this);
+                                          }
                                     }
                               }
                         }
@@ -353,12 +359,22 @@ package com.brockw.stickwar.engine.units
                         }
                         this.team.removeUnit(this,game);
                   }
-                  if(!isDead && MovieClip(_mc.mc).currentFrame == MovieClip(_mc.mc).totalFrames)
+                  if(isDead)
                   {
-                        MovieClip(_mc.mc).gotoAndStop(1);
+                        Util.animateMovieClip(_mc,0);
                   }
-                  Util.animateMovieClip(_mc,0);
-                  setItem(_mc,team.loadout.getItem(this.type,MarketItem.T_WEAPON),team.loadout.getItem(this.type,MarketItem.T_ARMOR),team.loadout.getItem(this.type,MarketItem.T_MISC));
+                  else
+                  {
+                        if(!isDead && MovieClip(_mc.mc).currentFrame == MovieClip(_mc.mc).totalFrames)
+                        {
+                              MovieClip(_mc.mc).gotoAndStop(1);
+                        }
+                        MovieClip(_mc.mc).nextFrame();
+                  }
+                  if(!hasDefaultLoadout)
+                  {
+                        setItem(_mc,team.loadout.getItem(this.type,MarketItem.T_WEAPON),team.loadout.getItem(this.type,MarketItem.T_ARMOR),team.loadout.getItem(this.type,MarketItem.T_MISC));
+                  }
             }
             
             public function isBagFull() : Boolean

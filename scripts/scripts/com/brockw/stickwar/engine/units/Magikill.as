@@ -146,7 +146,7 @@ package com.brockw.stickwar.engine.units
                         else if(this.isNuking == true)
                         {
                               _mc.gotoAndStop("attack_1");
-                              if(MovieClip(_mc.mc).currentFrame == 37 && !hasHit)
+                              if(MovieClip(_mc.mc).currentFrame == 36 && !hasHit)
                               {
                                     game.soundManager.playSoundRandom("mediumExplosion",3,this.spellX,this.spellY);
                                     game.projectileManager.initNuke(this.spellX,this.spellY,this,this.explosionDamage);
@@ -161,7 +161,7 @@ package com.brockw.stickwar.engine.units
                         else if(this.isStunning == true)
                         {
                               _mc.gotoAndStop("electricAttack");
-                              if(MovieClip(_mc.mc).currentFrame == 49 && !hasHit)
+                              if(MovieClip(_mc.mc).currentFrame == 47 && !hasHit)
                               {
                                     game.soundManager.playSound("electricWall",this.spellX,this.spellY);
                                     game.projectileManager.initStun(this.spellX,this.spellY,game.xml.xml.Order.Units.magikill.electricWallDamage,this);
@@ -176,7 +176,7 @@ package com.brockw.stickwar.engine.units
                         else if(this.isPoisonDarting == true)
                         {
                               _mc.gotoAndStop("poisonAttack");
-                              if(MovieClip(_mc.mc).currentFrame == 49 && !hasHit)
+                              if(MovieClip(_mc.mc).currentFrame == 44 && !hasHit)
                               {
                                     game.soundManager.playSound("AcidSpraySound",px,py);
                                     game.projectileManager.initPoisonSpray(this.spellX,this.spellY,this);
@@ -253,7 +253,10 @@ package com.brockw.stickwar.engine.units
                               }
                         }
                   }
-                  Magikill.setItem(_magikill(mc),team.loadout.getItem(this.type,MarketItem.T_WEAPON),team.loadout.getItem(this.type,MarketItem.T_ARMOR),team.loadout.getItem(this.type,MarketItem.T_MISC));
+                  if(!hasDefaultLoadout)
+                  {
+                        Magikill.setItem(_magikill(mc),team.loadout.getItem(this.type,MarketItem.T_WEAPON),team.loadout.getItem(this.type,MarketItem.T_ARMOR),team.loadout.getItem(this.type,MarketItem.T_MISC));
+                  }
             }
             
             override public function setActionInterface(a:ActionInterface) : void

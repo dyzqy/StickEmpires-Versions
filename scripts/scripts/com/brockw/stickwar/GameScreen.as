@@ -9,7 +9,6 @@ package com.brockw.stickwar
       import com.brockw.stickwar.engine.multiplayer.moves.ScreenPositionUpdateMove;
       import flash.events.Event;
       import flash.events.TimerEvent;
-      import flash.external.ExternalInterface;
       import flash.ui.Mouse;
       import flash.utils.Timer;
       import flash.utils.getTimer;
@@ -21,11 +20,11 @@ package com.brockw.stickwar
             
             protected static const MAX_SKIPS:int = 3;
             
-            private static const S_HIGH_QUALITY:int = 0;
+            public static const S_HIGH_QUALITY:int = 0;
             
-            private static const S_LOW_QUALITY:int = 1;
+            public static const S_MEDIUM_QUALITY:int = 1;
             
-            private static const S_ULTRA_LOW:int = 2;
+            public static const S_LOW_QUALITY:int = 2;
              
             
             protected var _game:StickWar;
@@ -66,7 +65,7 @@ package com.brockw.stickwar
             
             private var _isPaused:Boolean;
             
-            private var slowLevel:int;
+            private var _quality:int;
             
             private var skipHeuristic:Number;
             
@@ -101,7 +100,7 @@ package com.brockw.stickwar
                   this._hasScreenReduction = true;
                   this.main = main;
                   this.isDebug = false;
-                  this.slowLevel = S_HIGH_QUALITY;
+                  this.quality = S_HIGH_QUALITY;
                   this.skipHeuristic = 0;
                   main.loadingFraction = 0;
                   this.lastSwitchInQuality = getTimer();
@@ -126,7 +125,7 @@ package com.brockw.stickwar
                   this.messagePrompt = new inGameMessagePromptMc();
                   this.lastSwitchInQuality = getTimer();
                   this.isFirstSwitch = true;
-                  this.hasChanged = false;
+                  this.hasChanged = true;
                   this._hasMovingBackground = true;
                   this._hasEffects = true;
                   this._hasAlphaOnFogOfWar = true;
@@ -177,27 +176,6 @@ package com.brockw.stickwar
                   }
                   if(this.overTime < 35 || this.consecutiveSkips > 0)
                   {
-                        if(stage != null)
-                        {
-                              if(this.slowLevel != S_ULTRA_LOW)
-                              {
-                                    if(this.slowLevel == S_LOW_QUALITY)
-                                    {
-                                          if(this.simulation.fps > 29 && getTimer() - this.lastSwitchInQuality > 60000)
-                                          {
-                                                this.slowLevel = S_HIGH_QUALITY;
-                                                this.hasChanged = true;
-                                                this.lastSwitchInQuality = getTimer();
-                                          }
-                                    }
-                                    else if(this.simulation.fps < 22 && getTimer() - this.lastSwitchInQuality > 5000)
-                                    {
-                                          this.slowLevel = S_LOW_QUALITY;
-                                          this.hasChanged = true;
-                                          this.lastSwitchInQuality = getTimer();
-                                    }
-                              }
-                        }
                         if(this.game.frame == 30 * 15)
                         {
                               this.judgementFrame();
@@ -205,17 +183,25 @@ package com.brockw.stickwar
                         if(this.hasChanged)
                         {
                               this.hasChanged = false;
-                              if(this.slowLevel == S_HIGH_QUALITY)
+                              if(this.quality == S_HIGH_QUALITY)
                               {
+                                    this._hasMovingBackground = true;
                                     this._hasEffects = true;
                                     stage.quality = "HIGH";
                               }
-                              else
+                              else if(this.quality == S_MEDIUM_QUALITY)
                               {
+                                    this._hasMovingBackground = true;
                                     stage.quality = "LOW";
                                     this._hasEffects = false;
                               }
-                              trace("QUALITY: ",this.slowLevel);
+                              else if(this.quality == S_LOW_QUALITY)
+                              {
+                                    stage.quality = "LOW";
+                                    this._hasEffects = false;
+                                    this._hasMovingBackground = false;
+                              }
+                              trace("QUALITY: ",this.quality);
                         }
                         evt.updateAfterEvent();
                         this.consecutiveSkips = 0;
@@ -319,7 +305,6 @@ package com.brockw.stickwar
             
             public function cleanUp() : void
             {
-                  var result:uint = 0;
                   this.gameTimer.removeEventListener(TimerEvent.TIMER,this.updateGameLoop);
                   this.gameTimer.stop();
                   this.userInterface.cleanUp();
@@ -330,10 +315,6 @@ package com.brockw.stickwar
                   this.game = null;
                   this.gameTimer = null;
                   this.stage.quality = "HIGH";
-                  if(ExternalInterface.available)
-                  {
-                        result = ExternalInterface.call("changeSize",false);
-                  }
             }
             
             public function get game() : StickWar
@@ -445,6 +426,17 @@ package com.brockw.stickwar
             public function set hasScreenReduction(value:Boolean) : void
             {
                   this._hasScreenReduction = value;
+            }
+            
+            public function get quality() : int
+            {
+                  return this._quality;
+            }
+            
+            public function set quality(value:int) : void
+            {
+                  this.hasChanged = true;
+                  this._quality = value;
             }
       }
 }

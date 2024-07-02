@@ -251,7 +251,10 @@ package com.brockw.stickwar.engine.units
                   {
                         Util.animateMovieClip(_mc);
                   }
-                  Spearton.setItem(_speartonMc(mc),team.loadout.getItem(this.type,MarketItem.T_WEAPON),team.loadout.getItem(this.type,MarketItem.T_ARMOR),team.loadout.getItem(this.type,MarketItem.T_MISC));
+                  if(!hasDefaultLoadout)
+                  {
+                        Spearton.setItem(_speartonMc(mc),team.loadout.getItem(this.type,MarketItem.T_WEAPON),team.loadout.getItem(this.type,MarketItem.T_ARMOR),team.loadout.getItem(this.type,MarketItem.T_MISC));
+                  }
             }
             
             private function shieldHit(unit:Unit) : *

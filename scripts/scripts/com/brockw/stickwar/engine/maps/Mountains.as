@@ -34,7 +34,6 @@ package com.brockw.stickwar.engine.maps
             {
                   var vector:Vector.<MovieClip> = new Vector.<MovieClip>();
                   vector.push(new mountainsForeground());
-                  vector.push(new mountainsFog());
                   vector.push(new mountainsMidground());
                   vector.push(new mountainsBackground());
                   game.background = new Background(vector,game);

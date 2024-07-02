@@ -224,7 +224,10 @@ package com.brockw.stickwar.engine.units
                   }
                   MovieClip(_mc.mc).nextFrame();
                   _mc.mc.stop();
-                  Giant.setItem(_giant(mc),team.loadout.getItem(this.type,MarketItem.T_WEAPON),"","");
+                  if(!hasDefaultLoadout)
+                  {
+                        Giant.setItem(_giant(mc),team.loadout.getItem(this.type,MarketItem.T_WEAPON),"","");
+                  }
             }
             
             override public function canAttackAir() : Boolean

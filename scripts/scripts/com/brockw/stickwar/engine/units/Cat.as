@@ -217,7 +217,10 @@ package com.brockw.stickwar.engine.units
                         MovieClip(_mc.mc).gotoAndStop(1);
                   }
                   Util.animateMovieClip(_mc);
-                  Cat.setItem(_cat(mc),team.loadout.getItem(this.type,MarketItem.T_WEAPON),"","");
+                  if(!hasDefaultLoadout)
+                  {
+                        Cat.setItem(_cat(mc),team.loadout.getItem(this.type,MarketItem.T_WEAPON),"","");
+                  }
             }
             
             override public function get damageToArmour() : Number

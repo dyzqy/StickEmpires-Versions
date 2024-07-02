@@ -266,7 +266,7 @@ package com.brockw.stickwar.engine.units
                   {
                         Dead.setItem(mc,"Default","Wrapped Helmet","Default");
                   }
-                  else
+                  else if(!hasDefaultLoadout)
                   {
                         Dead.setItem(mc,team.loadout.getItem(this.type,MarketItem.T_WEAPON),team.loadout.getItem(this.type,MarketItem.T_ARMOR),team.loadout.getItem(this.type,MarketItem.T_MISC));
                   }

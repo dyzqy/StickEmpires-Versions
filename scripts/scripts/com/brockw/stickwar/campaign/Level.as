@@ -75,6 +75,14 @@ package com.brockw.stickwar.campaign
                   {
                         this.controller = CampaignShadow;
                   }
+                  else if(controllerName == "CampaignDeads")
+                  {
+                        this.controller = CampaignDeads;
+                  }
+                  else if(controllerName == "CampaignKnight")
+                  {
+                        this.controller = CampaignKnight;
+                  }
                   this.unlocks = [];
                   for each(x in xml.unlock)
                   {

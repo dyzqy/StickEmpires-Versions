@@ -154,6 +154,36 @@ package com.brockw.stickwar.engine
                   s.graphics.drawCircle(width * 0.75,height * 0.25,6);
             }
             
+            public function updateActionAlpha(gameScreen:GameScreen) : void
+            {
+                  var i:int = 0;
+                  if(this.currentEntity != null)
+                  {
+                        for(i = 0; i < this.currentActions.length; i++)
+                        {
+                              if(this.currentActions[i] < 0)
+                              {
+                                    if(this.team.tech.isResearching(this.currentActions[i]))
+                                    {
+                                          this.drawCoolDown(this.actionsToButtonMap[this.currentActions[i]],this.team.tech.getResearchCooldown(this.currentActions[i]));
+                                    }
+                                    else
+                                    {
+                                          this.drawCoolDown(this.actionsToButtonMap[this.currentActions[i]],0);
+                                    }
+                                    if(!this.team.tech.getTechAllowed(this.currentActions[i]))
+                                    {
+                                          MovieClip(this.actionsToButtonMap[this.currentActions[i]]).getChildByName("mc").alpha = 0.2;
+                                    }
+                                    else
+                                    {
+                                          MovieClip(this.actionsToButtonMap[this.currentActions[i]]).getChildByName("mc").alpha = 1;
+                                    }
+                              }
+                        }
+                  }
+            }
+            
             public function update(gameScreen:GameScreen) : void
             {
                   var i:int = 0;
@@ -399,7 +429,7 @@ package com.brockw.stickwar.engine
                               this._currentMove.drawCursorPreClick(Sprite(gameScreen.game.cursorSprite),gameScreen);
                         }
                   }
-                  if(gameScreen.userInterface.selectedUnits.hasFinishedSelecting && this._currentMove == null && gameScreen.userInterface.selectedUnits.interactsWith != 0)
+                  if(gameScreen.userInterface.selectedUnits.hasFinishedSelecting && this._currentMove == null && gameScreen.userInterface.selectedUnits.interactsWith != 0 && gameScreen.userInterface.selectedUnits.interactsWith != Unit.I_IS_BUILDING)
                   {
                         this._currentMove = UnitCommand(this.actions[UnitCommand.MOVE]);
                         Mouse.hide();

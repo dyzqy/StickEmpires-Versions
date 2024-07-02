@@ -314,6 +314,7 @@ package com.brockw.stickwar.engine.multiplayer
                   newTab.status.gotoAndStop(Buddy.statusFromCode(b.statusType));
                   newTab.buddy = b;
                   this.updateChatTabs();
+                  this.main.stage.focus = newTab.chatWindow.chatInput;
             }
             
             private function startChat(evt:MouseEvent) : void

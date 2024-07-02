@@ -1007,6 +1007,7 @@ package com.brockw.stickwar.engine.Team
                   {
                         game.soundManager.playSoundFullVolume("UnitReady");
                   }
+                  unit.hasDefaultLoadout = this.loadout.unitHasDefaultLoadout(unit.type);
             }
             
             public function spawnMiners() : void

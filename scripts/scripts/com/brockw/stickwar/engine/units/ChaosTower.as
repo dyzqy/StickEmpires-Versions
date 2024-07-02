@@ -161,7 +161,7 @@ package com.brockw.stickwar.engine.units
             
             override public function setActionInterface(a:ActionInterface) : void
             {
-                  super.setActionInterface(a);
+                  a.clear();
                   a.setAction(0,0,UnitCommand.REMOVE_TOWER_COMMAND);
             }
             

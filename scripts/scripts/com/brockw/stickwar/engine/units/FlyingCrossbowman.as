@@ -216,7 +216,10 @@ package com.brockw.stickwar.engine.units
                               _mc.mc.arms.gotoAndStop(1);
                         }
                   }
-                  FlyingCrossbowman.setItem(mc,team.loadout.getItem(this.type,MarketItem.T_WEAPON),team.loadout.getItem(this.type,MarketItem.T_ARMOR),team.loadout.getItem(this.type,MarketItem.T_MISC));
+                  if(!hasDefaultLoadout)
+                  {
+                        FlyingCrossbowman.setItem(mc,team.loadout.getItem(this.type,MarketItem.T_WEAPON),team.loadout.getItem(this.type,MarketItem.T_ARMOR),team.loadout.getItem(this.type,MarketItem.T_MISC));
+                  }
             }
             
             override public function get damageToArmour() : Number

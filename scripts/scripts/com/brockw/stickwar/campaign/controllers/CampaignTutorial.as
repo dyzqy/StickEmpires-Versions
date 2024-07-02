@@ -65,6 +65,14 @@ package com.brockw.stickwar.campaign.controllers
             private static const S_PRAY_INFO:int = 23;
             
             private static const S_GOLD_INFO:int = 24;
+            
+            private static const S_PRESS_ATTACK_WAIT:int = 25;
+            
+            private static const S_PRESS_ATTACK:int = 26;
+            
+            private static const S_LAG_WAIT:int = 27;
+            
+            private static const S_LAG:int = 28;
              
             
             private var state:int;
@@ -87,6 +95,8 @@ package com.brockw.stickwar.campaign.controllers
             
             private var message:InGameMessage;
             
+            private var miniMessage:InGameMessage;
+            
             private var arrow:tutorialArrow;
             
             private var spawnSpeartonCounter:int;
@@ -99,9 +109,12 @@ package com.brockw.stickwar.campaign.controllers
             
             private var frameShownHillTip:int;
             
+            private var hasShownBuildSwordwrath:Boolean;
+            
             public function CampaignTutorial(gameScreen:GameScreen)
             {
                   super(gameScreen);
+                  this.hasShownBuildSwordwrath = false;
                   this._gameScreen = gameScreen;
                   this.state = S_SET_UP;
                   this.spawnSpeartonCounter = -1;
@@ -109,6 +122,8 @@ package com.brockw.stickwar.campaign.controllers
                   this.frameShownHillTip = 0;
                   this.hasShownhillTip = false;
                   this.skipTutorialButton.addEventListener(MouseEvent.CLICK,this.skipTutorialClick,false,0,true);
+                  this.miniMessage = null;
+                  this.message = null;
             }
             
             private function skipTutorialClick(e:Event) : void
@@ -150,14 +165,23 @@ package com.brockw.stickwar.campaign.controllers
                   var game:StickWar = null;
                   var u1:Swordwrath = null;
                   var u2:Swordwrath = null;
+                  var unit:Unit = null;
                   var g:Unit = null;
                   var u:UnitMove = null;
                   var notGarrisoned:Boolean = false;
                   var notDefending:Boolean = false;
                   super.update(gameScreen);
+                  if(gameScreen.game.showGameOverAnimation)
+                  {
+                        return;
+                  }
                   if(Boolean(this.message))
                   {
                         this.message.update();
+                  }
+                  if(Boolean(this.miniMessage))
+                  {
+                        this.miniMessage.update();
                   }
                   if(this.state == S_ALL_DONE)
                   {
@@ -248,12 +272,26 @@ package com.brockw.stickwar.campaign.controllers
                         this.message.setMessage("Right click here to move your selected units.","Step #2",0,"voiceTutorial2");
                         gameScreen.game.screenX = 2200;
                         gameScreen.game.targetScreenX = 2200;
+                        this.arrow.visible = true;
                         this.arrow.x = 2350 + gameScreen.game.battlefield.x;
                         this.arrow.y = 100 + gameScreen.game.battlefield.y;
                   }
                   else if(this.state == S_MOVE_SCREEN)
                   {
                         this.message.setMessage("Move your mouse here to scroll the screen sideways.","Step #3",0,"voiceTutorial3");
+                        this.arrow.visible = true;
+                        if(gameScreen.game.targetScreenX > 2900)
+                        {
+                              gameScreen.game.targetScreenX = 2900;
+                        }
+                        if(gameScreen.game.targetScreenX < 1800)
+                        {
+                              gameScreen.game.targetScreenX = 1800;
+                        }
+                        if(gameScreen.game.targetScreenX > 2850)
+                        {
+                              this.arrow.visible = false;
+                        }
                         if(this.s1.selected == false)
                         {
                               gameScreen.userInterface.selectedUnits.add(this.s1);
@@ -274,8 +312,13 @@ package com.brockw.stickwar.campaign.controllers
                               this.s1.selected = true;
                               this.s2.selected = true;
                         }
+                        for each(unit in gameScreen.team.units)
+                        {
+                              unit.health = unit.maxHealth;
+                        }
                         gameScreen.game.targetScreenX = 2800;
                         this.message.setMessage("Right click on this enemy unit to attack.","Step #4",0,"voiceTutorial4",true);
+                        this.arrow.visible = true;
                         this.arrow.x = this.o1.x + gameScreen.game.battlefield.x;
                         this.arrow.y = this.o1.y - this.o1.pheight * 0.8 + gameScreen.game.battlefield.y;
                         this.arrow.rotation = 0;
@@ -289,6 +332,7 @@ package com.brockw.stickwar.campaign.controllers
                               this.s2.selected = false;
                         }
                         this.message.setMessage("Click down here on the mini map to quickly navigate back to you castle.","Step #5",0,"voiceTutorial5",true);
+                        this.arrow.visible = true;
                         this.arrow.x = gameScreen.game.stage.stageWidth / 2 - 90;
                         this.arrow.y = gameScreen.game.stage.stageHeight - 115;
                   }
@@ -297,6 +341,7 @@ package com.brockw.stickwar.campaign.controllers
                         this.message.setMessage("Click on this miner.","Step #6",0,"voiceTutorial6");
                         gameScreen.userInterface.isSlowCamera = true;
                         gameScreen.game.targetScreenX = gameScreen.team.homeX;
+                        this.arrow.visible = true;
                         this.arrow.x = this.m1.x + gameScreen.game.battlefield.x;
                         this.arrow.y = this.m1.y - this.m1.pheight * 0.8 + gameScreen.game.battlefield.y;
                   }
@@ -305,6 +350,7 @@ package com.brockw.stickwar.campaign.controllers
                         this.message.setMessage("Right click the statue to begin praying.","Step #7",0,"voiceTutorial8");
                         gameScreen.userInterface.isSlowCamera = true;
                         gameScreen.game.targetScreenX = gameScreen.team.homeX;
+                        this.arrow.visible = true;
                         this.arrow.x = gameScreen.game.team.statue.x + gameScreen.game.battlefield.x;
                         this.arrow.y = gameScreen.game.team.statue.y - gameScreen.game.team.statue.height / 2 + gameScreen.game.battlefield.y;
                         gameScreen.userInterface.selectedUnits.add(this.m1);
@@ -333,18 +379,21 @@ package com.brockw.stickwar.campaign.controllers
                         this.message.setMessage("Your gold, mana and population are shown here.","",75,"voiceTutorial10");
                         this.arrow.x = 675;
                         this.arrow.y = 40;
+                        this.arrow.visible = true;
                   }
                   else if(this.state == S_BUILD_UNIT)
                   {
-                        if(gameScreen.team.buttonInfoMap[Unit.U_SWORDWRATH][3] != 0 || this.arrow.visible == false)
+                        this.arrow.visible = true;
+                        if(gameScreen.team.buttonInfoMap[Unit.U_SWORDWRATH][3] != 0)
                         {
                               this.message.setMessage("The Swordwrath is a basic infantry unit. Once finished training, he will appear from the castle gates.","",0,"voiceTutorial12");
                               this.arrow.visible = false;
                         }
-                        else
+                        else if(!this.hasShownBuildSwordwrath)
                         {
                               this.message.setMessage("Click the icon below to build a Swordwrath unit.","Step #9",0,"voiceTutorial11",true);
                               this.arrow.x = 95;
+                              this.hasShownBuildSwordwrath = true;
                               this.arrow.y = gameScreen.game.stage.stageHeight - 100;
                               this.arrow.visible = true;
                         }
@@ -371,6 +420,10 @@ package com.brockw.stickwar.campaign.controllers
                         this.arrow.x = gameScreen.game.stage.stageWidth / 2 - 90;
                         this.arrow.y = gameScreen.game.stage.stageHeight - 75;
                         this.arrow.visible = true;
+                        if(gameScreen.game.team.currentAttackState == Team.G_ATTACK)
+                        {
+                              gameScreen.game.team.defend(true);
+                        }
                   }
                   else if(this.state == S_GARRISON)
                   {
@@ -403,6 +456,7 @@ package com.brockw.stickwar.campaign.controllers
                         Unit(gameScreen.team.buildings["ArcheryBuilding"]).selected = true;
                         this.arrow.x = gameScreen.game.stage.stageWidth - 170;
                         this.arrow.y = gameScreen.game.stage.stageHeight - 100;
+                        this.arrow.visible = true;
                   }
                   else if(this.state == S_TALK_ABOUT_BUILDINGS)
                   {
@@ -425,6 +479,10 @@ package com.brockw.stickwar.campaign.controllers
                         this.arrow.visible = true;
                         this.arrow.x = gameScreen.game.stage.stageWidth / 2;
                         this.arrow.y = gameScreen.game.stage.stageHeight - 75;
+                        if(this.spearton1.health < 50)
+                        {
+                              this.spearton1.health = 50;
+                        }
                   }
                   else if(this.state == S_HIT_DEFEND)
                   {
@@ -446,6 +504,7 @@ package com.brockw.stickwar.campaign.controllers
                   {
                         this.arrow.x = this.spearton1.x + gameScreen.game.battlefield.x;
                         this.arrow.y = this.spearton1.y - this.spearton1.pheight * 0.8 + gameScreen.game.battlefield.y;
+                        this.arrow.visible = true;
                   }
                   else if(this.state == S_GOOD_LUCK)
                   {
@@ -504,14 +563,14 @@ package com.brockw.stickwar.campaign.controllers
                   }
                   else if(this.state == S_BOX_UNITS)
                   {
-                        if(this.s1.selected == true && this.s2.selected == true)
+                        if(this.message.hasFinishedPlayingSound() && this.s1.selected == true && this.s2.selected == true)
                         {
                               this.state = S_MOVE_UNITS;
                         }
                   }
                   else if(this.state == S_MOVE_UNITS)
                   {
-                        if(this.s1.px < 2500 && this.s2.px < 2500)
+                        if(this.message.hasFinishedPlayingSound() && this.s1.px < 2500 && this.s2.px < 2500)
                         {
                               this.state = S_MOVE_SCREEN;
                               this.o1 = Swordwrath(gameScreen.game.unitFactory.getUnit(Unit.U_SWORDWRATH));
@@ -523,14 +582,14 @@ package com.brockw.stickwar.campaign.controllers
                   }
                   else if(this.state == S_MOVE_SCREEN)
                   {
-                        if(gameScreen.game.screenX > 2800)
+                        if(this.message.hasFinishedPlayingSound() && gameScreen.game.screenX > 2800)
                         {
                               this.state = S_ATTACK_UNITS;
                         }
                   }
                   else if(this.state == S_ATTACK_UNITS)
                   {
-                        if(this.o1.isDead == true)
+                        if(this.message.hasFinishedPlayingSound() && this.o1.isDead == true)
                         {
                               this.o1 = null;
                               this.state = S_MOVE_TO_BASE;
@@ -538,21 +597,21 @@ package com.brockw.stickwar.campaign.controllers
                   }
                   else if(this.state == S_MOVE_TO_BASE)
                   {
-                        if(gameScreen.game.screenX < gameScreen.team.homeX + 300)
+                        if(this.message.hasFinishedPlayingSound() && gameScreen.game.screenX < gameScreen.team.homeX + 300)
                         {
                               this.state = S_SELECT_MINER;
                         }
                   }
                   else if(this.state == S_SELECT_MINER)
                   {
-                        if(this.m1.selected == true)
+                        if(this.message.hasFinishedPlayingSound() && this.m1.selected == true)
                         {
                               this.state = S_PRAY;
                         }
                   }
                   else if(this.state == S_PRAY)
                   {
-                        if(MinerAi(this.m1.ai).targetOre == gameScreen.game.team.statue)
+                        if(this.message.hasFinishedPlayingSound() && MinerAi(this.m1.ai).targetOre == gameScreen.game.team.statue)
                         {
                               this.state = CampaignTutorial.S_PRAY_INFO;
                               this.counter = 0;
@@ -560,21 +619,21 @@ package com.brockw.stickwar.campaign.controllers
                   }
                   else if(this.state == S_PRAY_INFO)
                   {
-                        if(gameScreen.game.team.mana > 10)
+                        if(this.message.hasFinishedPlayingSound() && gameScreen.game.team.mana > 10)
                         {
                               this.state = CampaignTutorial.S_START_MINING;
                         }
                   }
                   else if(this.state == S_SELECT_MINER_2)
                   {
-                        if(MinerAi(this.m1.ai).targetOre != null && MinerAi(this.m1.ai).targetOre != gameScreen.game.team.statue)
+                        if(this.message.hasFinishedPlayingSound() && MinerAi(this.m1.ai).targetOre != null && MinerAi(this.m1.ai).targetOre != gameScreen.game.team.statue)
                         {
                               this.state = CampaignTutorial.S_START_MINING;
                         }
                   }
                   else if(this.state == S_START_MINING)
                   {
-                        if(MinerAi(this.m1.ai).targetOre != null && MinerAi(this.m1.ai).targetOre != gameScreen.game.team.statue)
+                        if(this.message.hasFinishedPlayingSound() && MinerAi(this.m1.ai).targetOre != null && MinerAi(this.m1.ai).targetOre != gameScreen.game.team.statue)
                         {
                               this.state = S_GOLD_INFO;
                               gameScreen.team.gold = 150;
@@ -588,7 +647,7 @@ package com.brockw.stickwar.campaign.controllers
                   else if(this.state == S_GOLD_INFO)
                   {
                         ++this.counter;
-                        if(this.counter > 150)
+                        if(this.message.hasFinishedPlayingSound() && this.counter > 150)
                         {
                               this.state = S_BUILD_UNIT;
                               this.arrow.visible = true;
@@ -597,12 +656,14 @@ package com.brockw.stickwar.campaign.controllers
                   }
                   else if(this.state == S_BUILD_UNIT)
                   {
-                        if(gameScreen.team.units.length > this.popBefore)
+                        if(this.message.hasFinishedPlayingSound() && gameScreen.team.units.length > this.popBefore)
                         {
+                              this.arrow.visible = false;
                               ++this.counter;
                               delete gameScreen.team.unitsAvailable[Unit.U_SWORDWRATH];
                               if(this.counter > 150)
                               {
+                                    this.arrow.visible = false;
                                     this.state = S_SHOW_ENEMY;
                                     gameScreen.userInterface.isGlobalsEnabled = true;
                                     this.spearton1 = Spearton(gameScreen.game.unitFactory.getUnit(Unit.U_SPEARTON));
@@ -615,7 +676,7 @@ package com.brockw.stickwar.campaign.controllers
                   }
                   else if(this.state == S_SHOW_ENEMY)
                   {
-                        if(this.spearton1.px < gameScreen.team.enemyTeam.homeX - 1000)
+                        if(this.message.hasFinishedPlayingSound() && this.spearton1.px < gameScreen.team.enemyTeam.homeX - 1000)
                         {
                               this.state = S_SPEARTON_ATTACKING;
                         }
@@ -637,30 +698,31 @@ package com.brockw.stickwar.campaign.controllers
                   }
                   else if(this.state == S_GARRISON)
                   {
-                        if(gameScreen.game.team.forwardUnit.px < gameScreen.team.homeX + 200)
+                        if(this.message.hasFinishedPlayingSound() && gameScreen.game.team.forwardUnit.px < gameScreen.team.homeX + 200)
                         {
                               this.state = S_CLICK_ON_ARCHERY_RANGE;
                         }
                   }
                   else if(this.state == S_CLICK_ON_ARCHERY_RANGE)
                   {
-                        if(Unit(gameScreen.team.buildings["ArcheryBuilding"]).selected)
+                        if(this.message.hasFinishedPlayingSound() && Unit(gameScreen.team.buildings["ArcheryBuilding"]).selected)
                         {
                               this.state = S_UPGRADE_CASTLE_ARCHER;
                         }
                   }
                   else if(this.state == S_UPGRADE_CASTLE_ARCHER)
                   {
-                        if(gameScreen.team.tech.isResearching(Tech.CASTLE_ARCHER_1))
+                        if(this.message.hasFinishedPlayingSound() && gameScreen.team.tech.isResearching(Tech.CASTLE_ARCHER_1))
                         {
                               this.state = S_TALK_ABOUT_BUILDINGS;
                         }
                   }
                   else if(this.state == CampaignTutorial.S_TALK_ABOUT_BUILDINGS)
                   {
-                        if(gameScreen.team.tech.isResearched(Tech.CASTLE_ARCHER_1))
+                        if(this.message.hasFinishedPlayingSound() && gameScreen.team.tech.isResearched(Tech.CASTLE_ARCHER_1))
                         {
                               this.spearton1.px = gameScreen.team.homeX + 700;
+                              this.spearton1.py = gameScreen.game.map.height * 3 / 4;
                               this.state = S_SEND_IN_SPEARTON;
                         }
                   }
@@ -681,14 +743,14 @@ package com.brockw.stickwar.campaign.controllers
                   }
                   else if(this.state == S_HIT_DEFEND)
                   {
-                        if(gameScreen.team.currentAttackState == Team.G_DEFEND)
+                        if(this.message.hasFinishedPlayingSound() && gameScreen.team.currentAttackState == Team.G_DEFEND)
                         {
                               this.state = S_KILL_SPEARTON;
                         }
                   }
                   else if(this.state == S_KILL_SPEARTON)
                   {
-                        if(this.spearton1.isDead)
+                        if(this.message.hasFinishedPlayingSound() && this.spearton1.isDead)
                         {
                               this.state = S_GOOD_LUCK;
                               this.popBefore = gameScreen.team.population;
@@ -716,8 +778,92 @@ package com.brockw.stickwar.campaign.controllers
                         ++this.counter;
                         if(this.counter > 300)
                         {
-                              this.state = S_ALL_DONE;
+                              this.state = S_PRESS_ATTACK_WAIT;
                               this.message.visible = false;
+                              this.counter = 0;
+                        }
+                  }
+                  else if(this.state == S_PRESS_ATTACK_WAIT)
+                  {
+                        ++this.counter;
+                        this.arrow.visible = false;
+                        if(this.counter > 30 * 30)
+                        {
+                              this.state = S_PRESS_ATTACK;
+                              game = gameScreen.game;
+                              this.miniMessage = new InGameMessage("",gameScreen.game);
+                              this.miniMessage.x = game.stage.stageWidth / 2;
+                              this.miniMessage.y = game.stage.stageHeight / 4 - 75;
+                              this.miniMessage.scaleX *= 0.8;
+                              this.miniMessage.scaleY *= 0.8;
+                              gameScreen.addChild(this.miniMessage);
+                              this.miniMessage.setMessage("When you\'re ready, click here to Attack the enemy!","",525);
+                              this.miniMessage.visible = false;
+                              this.arrow.x = gameScreen.game.stage.stageWidth / 2 + 90;
+                              this.arrow.y = gameScreen.game.stage.stageHeight - 75;
+                              this.arrow.visible = false;
+                              this.counter = 0;
+                        }
+                  }
+                  else if(this.state == S_PRESS_ATTACK)
+                  {
+                        ++this.counter;
+                        if(this.miniMessage.isShowingNewMessage())
+                        {
+                              this.miniMessage.visible = true;
+                              if(this.miniMessage.isMessageShowing())
+                              {
+                                    this.arrow.visible = true;
+                              }
+                        }
+                        if(this.counter > 30 * 7)
+                        {
+                              this.state = S_LAG_WAIT;
+                              this.miniMessage.visible = false;
+                              this.arrow.visible = false;
+                              this.counter = 0;
+                        }
+                  }
+                  else if(this.state == S_LAG_WAIT)
+                  {
+                        ++this.counter;
+                        this.miniMessage.visible = false;
+                        this.arrow.visible = false;
+                        if(this.counter > 30 * 5)
+                        {
+                              this.state = S_LAG;
+                              this.miniMessage.setMessage("Click here to toggle the graphics quality if the game is running slow for you.","",525);
+                              this.counter = 0;
+                        }
+                  }
+                  else if(this.state == S_LAG)
+                  {
+                        ++this.counter;
+                        if(this.miniMessage.isShowingNewMessage())
+                        {
+                              this.miniMessage.visible = true;
+                              if(this.miniMessage.isMessageShowing())
+                              {
+                                    this.arrow.visible = true;
+                                    this.arrow.x = gameScreen.game.stage.stageWidth / 2 - 90;
+                                    this.arrow.y = gameScreen.game.stage.stageHeight - 20;
+                              }
+                        }
+                        if(this.counter > 30 * 7)
+                        {
+                              this.state = S_ALL_DONE;
+                              this.miniMessage.visible = false;
+                              this.arrow.visible = false;
+                        }
+                  }
+                  if(Boolean(this.message))
+                  {
+                        if(!this.message.isMessageShowing() || this.miniMessage && !this.miniMessage.isMessageShowing())
+                        {
+                              if(Boolean(this.arrow))
+                              {
+                                    this.arrow.visible = false;
+                              }
                         }
                   }
             }

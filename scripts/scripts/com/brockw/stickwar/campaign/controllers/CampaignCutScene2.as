@@ -160,23 +160,27 @@ package com.brockw.stickwar.campaign.controllers
                         {
                               gameScreen.team.enemyTeam.statue.health = 0;
                         }
-                        else if(gameScreen.game.frame % (30 * 10) == 0 && gameScreen.game.team.enemyTeam.attackingForcePopulation < 20)
+                        else
                         {
-                              numToSpawn = Math.min(this.spawnNumber / 2,4);
-                              for(i = 0; i < numToSpawn; i++)
+                              gameScreen.game.team.enemyTeam.attack(true);
+                              if(gameScreen.game.frame % (30 * 10) == 0)
                               {
-                                    u1 = Bomber(gameScreen.game.unitFactory.getUnit(Unit.U_BOMBER));
-                                    gameScreen.team.enemyTeam.spawn(u1,gameScreen.game);
-                                    u1.px = this.medusa.px + 100;
-                                    u1.py = this.medusa.py - 100 + 200 * (i / numToSpawn);
-                                    u1.ai.setCommand(gameScreen.game,new StandCommand(gameScreen.game));
-                                    gameScreen.team.enemyTeam.population += 1;
-                                    gameScreen.game.projectileManager.initTowerSpawn(this.medusa.px + 100,this.medusa.py,gameScreen.game.team.enemyTeam,0.6);
+                                    numToSpawn = Math.min(this.spawnNumber / 2,4);
+                                    for(i = 0; i < numToSpawn; i++)
+                                    {
+                                          u1 = Bomber(gameScreen.game.unitFactory.getUnit(Unit.U_BOMBER));
+                                          gameScreen.team.enemyTeam.spawn(u1,gameScreen.game);
+                                          u1.px = this.medusa.px + 100;
+                                          u1.py = gameScreen.game.map.height / (numToSpawn * 2) + i / numToSpawn * gameScreen.game.map.height;
+                                          trace(gameScreen.game.map.height / (numToSpawn * 2) + i / numToSpawn * gameScreen.game.map.height);
+                                          u1.ai.setCommand(gameScreen.game,new StandCommand(gameScreen.game));
+                                          gameScreen.team.enemyTeam.population += 1;
+                                          gameScreen.game.projectileManager.initTowerSpawn(this.medusa.px + 100,u1.py,gameScreen.game.team.enemyTeam,0.6);
+                                    }
+                                    ++this.spawnNumber;
                               }
-                              ++this.spawnNumber;
                         }
                   }
-                  gameScreen.game.team.enemyTeam.attack(true);
                   super.update(gameScreen);
             }
             

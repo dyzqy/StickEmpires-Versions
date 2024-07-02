@@ -12,18 +12,27 @@ package com.brockw.stickwar.campaign
             
             private var my_player:Object;
             
+            private var hadError:Boolean;
+            
             private var ready:Boolean;
             
             public function YoutubeLoader(link:String)
             {
                   var my_loader:Loader = null;
                   var onLoaderInit:Function = null;
+                  var onError:Function = null;
                   var onPlayerReady:Function = null;
                   onLoaderInit = function(e:Event):void
                   {
                         addChild(my_loader);
                         my_player = my_loader.content;
                         my_player.addEventListener("onReady",onPlayerReady);
+                        my_player.addEventListener("onError",onError);
+                  };
+                  onError = function(e:Event):void
+                  {
+                        hadError = true;
+                        trace("YOUTUBE LOADER HAD ERROR");
                   };
                   onPlayerReady = function(e:Event):void
                   {
@@ -38,6 +47,12 @@ package com.brockw.stickwar.campaign
                   my_loader = new Loader();
                   my_loader.load(new URLRequest("http://www.youtube.com/apiplayer?version=3"));
                   my_loader.contentLoaderInfo.addEventListener(Event.INIT,onLoaderInit);
+                  this.hadError = false;
+            }
+            
+            public function isWorking() : Boolean
+            {
+                  return !this.hadError && this.ready;
             }
             
             public function playVideo() : void

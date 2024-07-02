@@ -145,7 +145,7 @@ package com.brockw.stickwar.engine.units
             
             protected const _worldScaleX:Number = 1;
             
-            protected const _worldScaleY:Number = 0.4;
+            protected const _worldScaleY:Number = 0.8;
             
             protected var _dx:Number;
             
@@ -275,8 +275,17 @@ package com.brockw.stickwar.engine.units
             
             private var _arrowDeath:Boolean;
             
+            private var _hasDefaultLoadout:Boolean;
+            
+            private var _ddx:Number;
+            
+            private var _ddy:Number;
+            
+            private var lastWalkFrame:int;
+            
             public function Unit(game:StickWar)
             {
+                  this.hasDefaultLoadout = false;
                   this.isTowerSpawned = false;
                   this._isRejoiningFormation = false;
                   this.garrisonHealRate = 0;
@@ -310,6 +319,8 @@ package com.brockw.stickwar.engine.units
                   this.attackStartFrame = 0;
                   this.framesInAttack = 0;
                   this.arrowDeath = false;
+                  this._ddx = this._ddy = 0;
+                  this.lastWalkFrame = 0;
                   super();
             }
             
@@ -432,6 +443,7 @@ package com.brockw.stickwar.engine.units
                   this.healthBar.y = -pheight * 1.2;
                   this.flyingHeight = 0;
                   this._dz = 0;
+                  this.hasDefaultLoadout = false;
             }
             
             public function initBase() : void
@@ -875,6 +887,11 @@ package com.brockw.stickwar.engine.units
                               this.mc.removeChild(this.poisonMc);
                         }
                   }
+                  if(this.team.game.frame != this.lastWalkFrame)
+                  {
+                        this._ddx = 0;
+                        this._ddy = 0;
+                  }
             }
             
             private function removedSelected() : void
@@ -1171,7 +1188,7 @@ package com.brockw.stickwar.engine.units
             
             public function isFeetMoving() : Boolean
             {
-                  return Math.abs(this._dx) + Math.abs(this._dy) > 0.25;
+                  return Math.abs(this._ddy) > 0.03 || Math.abs(this._ddx) > 0.03;
             }
             
             public function stun(s:int) : void
@@ -1451,6 +1468,7 @@ package com.brockw.stickwar.engine.units
                   {
                         return;
                   }
+                  this.lastWalkFrame = this.team.game.frame;
                   if(x > 1)
                   {
                         x = 1;
@@ -1469,6 +1487,8 @@ package com.brockw.stickwar.engine.units
                   }
                   var ddx:Number = x * this._maxForce / this._mass * this._worldScaleX;
                   var ddy:Number = y * this._maxForce / this._mass * this._worldScaleY;
+                  this._ddx = ddx;
+                  this._ddy = ddy;
                   this._state = S_RUN;
                   if(Math.abs(this.dx) > 2 * this._maxVelocity / 5 && this.team.game.frame - this.nudgeFrame > 15)
                   {
@@ -1842,6 +1862,16 @@ package com.brockw.stickwar.engine.units
             public function set stoned(value:Boolean) : void
             {
                   this._stoned = value;
+            }
+            
+            public function get hasDefaultLoadout() : Boolean
+            {
+                  return this._hasDefaultLoadout;
+            }
+            
+            public function set hasDefaultLoadout(value:Boolean) : void
+            {
+                  this._hasDefaultLoadout = value;
             }
       }
 }

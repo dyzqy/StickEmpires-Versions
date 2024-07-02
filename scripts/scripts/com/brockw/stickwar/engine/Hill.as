@@ -152,14 +152,14 @@ package com.brockw.stickwar.engine
                         {
                               if(game.teamA == game.team)
                               {
-                                    game.soundManager.playSoundFullVolume("TowerCapture");
+                                    game.soundManager.playSoundFullVolume("SelectRaceSound");
                               }
                         }
                         else if(this.lastTeamBar != 100 && this.teamBar == 100)
                         {
                               if(game.teamB == game.team)
                               {
-                                    game.soundManager.playSoundFullVolume("TowerCapture");
+                                    game.soundManager.playSoundFullVolume("SelectRaceSound");
                               }
                         }
                   }
